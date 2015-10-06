@@ -1,0 +1,12 @@
+#RewriteEngine on
+#RewriteBase /
+#RewriteRule !(\.cgi|\.ico|\.gif|\.png|\.jpe?g|\.css|\.js|\.php|\.eot|\.svg|\.ttf|\.woff|\.otf|^public/.*)$ index.php [nocase,last]
+
+#RewriteCond %{HTTP_HOST} ^cs\.com\.dev
+#RewriteRule ^(.*)$ http://cs.com.dev/$1 [R=301,L]
+
+
+
+RewriteEngine on
+RewriteCond $1 !^(index\.php|img|js|css|stylesheets|robots\.txt|favicon\.ico)
+RewriteRule ^(.*)$ /index.php/$1 [L]
