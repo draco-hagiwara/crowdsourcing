@@ -114,10 +114,28 @@
     </div>
   </div>
   <div class="form-group">
-    <label for="cl_email1" class="col-sm-4 control-label">メールアドレス（代表）<font color=red>【必須】</font></label>
+    <label for="cl_email1" class="col-sm-4 control-label">メールアドレス（代表）<br>＆　ログインID<font color=red>【必須】</font></label>
     <div class="col-sm-8">
       {form_input('cl_email1' , set_value('cl_email1', '') , 'class="col-sm-4 form-control" placeholder="メールアドレス（代表）を入力してください"')}
       {if form_error('cl_email1')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('cl_email1')}</font></label>{/if}
+      {if $err_email1==TRUE}<span class="label label-danger">Error : </span><label><font color=red>「メールアドレス」欄で入力したアドレスは既に他で使用されています。再度他のアドレスを入力してください。</font></label>{/if}
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="cl_password" class="col-sm-4 control-label">パスワード<font color=red>【必須】</font></label>
+    <div class="col-sm-8">
+      {form_password('cl_password' , set_value('cl_password', '') , 'class="form-control" placeholder="パスワード　(半角英数字・記号：８文字以上)"')}
+      <p class="redText"><small>※お客様のお名前や、生年月日、またはその他の個人情報など、推測されやすい情報は使用しないでください</small></p>
+      {if form_error('cl_password')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('cl_password')}</font></label>{/if}
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="retype_password" class="col-sm-4 control-label">パスワード再入力<font color=red>【必須】</font></label>
+    <div class="col-sm-8">
+      {form_password('retype_password' , set_value('retype_password', '') , 'class="form-control" placeholder="パスワード再入力　(半角英数字・記号：８文字以上)"')}
+      <p><small>確認のため、もう一度入力してください。</small></p>
+      {if form_error('retype_password')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('retype_password')}</font></label>{/if}
+      {if $err_passwd==TRUE}<span class="label label-danger">Error : </span><label><font color=red>「パスワード」欄で入力した文字と違います。再度入力してください。</font></label>{/if}
     </div>
   </div>
   <div class="form-group">
@@ -162,23 +180,7 @@
       {if form_error('cl_hp')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('cl_hp')}</font></label>{/if}
     </div>
   </div>
-  <div class="form-group">
-    <label for="cl_password" class="col-sm-4 control-label">パスワード</label>
-    <div class="col-sm-8">
-      {form_password('cl_password' , set_value('cl_password', '') , 'class="form-control" placeholder="パスワード　(半角英数字・記号：８文字以上)"')}
-      <p class="redText"><small>※お客様のお名前や、生年月日、またはその他の個人情報など、推測されやすい情報は使用しないでください</small></p>
-      {if form_error('cl_password')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('cl_password')}</font></label>{/if}
-    </div>
-  </div>
-  <div class="form-group">
-    <label for="retype_password" class="col-sm-4 control-label">パスワード再入力</label>
-    <div class="col-sm-8">
-      {form_password('retype_password' , set_value('retype_password', '') , 'class="form-control" placeholder="パスワード再入力　(半角英数字・記号：８文字以上)"')}
-      <p><small>確認のため、もう一度入力してください。</small></p>
-      {if form_error('retype_password')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('retype_password')}</font></label>{/if}
-      {if $err_passwd==FALSE}<span class="label label-danger">Error : </span><label><font color=red>「パスワード」欄で入力した文字と違います。再度入力してください。</font></label>{/if}
-    </div>
-  </div>
+
   <div class="form-group">
     <div class="col-sm-offset-4 col-sm-8">
       {$attr02['name'] = 'submit'}
