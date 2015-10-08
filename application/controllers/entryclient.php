@@ -28,7 +28,6 @@ class Entryclient extends MY_Controller
 			$pref_id = $this->input->post('cl_pref');
 			$this->_pref_name = $this->_options_pref[$pref_id];
 		}
-
 	}
 
 	// クライアント新規会員登録TOP
@@ -44,7 +43,8 @@ class Entryclient extends MY_Controller
 			$this->smarty->assign('ticket', $this->ticket);
 		}
 
-		$this->smarty->assign('err_passwd', TRUE);
+		$this->smarty->assign('err_email1', FALSE);
+		$this->smarty->assign('err_passwd', FALSE);
 		$this->view('writer/entryclient.tpl');
 	}
 
@@ -66,13 +66,14 @@ class Entryclient extends MY_Controller
 
 		// バリデーション・チェック
 		if ($this->form_validation->run() == FALSE) {
-			$this->smarty->assign('err_passwd', TRUE);
+			$this->smarty->assign('err_email1', FALSE);
+			$this->smarty->assign('err_passwd', FALSE);
 			$this->view('writer/entryclient.tpl');
 		} else {
 
 			// パスワード再入力チェック
 			if ($this->input->post('cl_password') !== $this->input->post('retype_password')) {
-				$this->smarty->assign('err_passwd', FALSE);
+				$this->smarty->assign('err_passwd', TRUE);
 				$this->view('writer/entryclient.tpl');
 				return;
 			}
@@ -99,12 +100,21 @@ class Entryclient extends MY_Controller
 
 		// 「戻る」ボタン押下の場合
 		if ( $this->input->post('_back') ) {
-			$this->smarty->assign('err_passwd', TRUE);
+			$this->smarty->assign('err_email1', FALSE);
+			$this->smarty->assign('err_passwd', FALSE);
 			$this->view('writer/entryclient.tpl');
 			return;
 		}
 
+		// ログインID(メールアドレス)の重複チェック
+		$this->load->model('Client', 'client', TRUE);
 
+		if ($this->client->check_LoginID($this->input->post('cl_email1'))) {
+			$this->smarty->assign('err_email1', TRUE);
+			$this->smarty->assign('err_passwd', FALSE);
+			$this->view('writer/entryclient.tpl');
+			return;
+		}
 
 		// DB書き込み
 		$this->setData = $this->input->post();
@@ -115,19 +125,12 @@ class Entryclient extends MY_Controller
 		unset($this->setData["submit"]) ;
 		unset($this->setData["retype_password"]) ;
 
-		$this->load->model('Client', 'client', TRUE);
 		if ($this->client->insert_Client($this->setData)) {
 			$this->view('writer/entryclient_end.tpl');
 		} else {
 			echo "会員登録に失敗しました。";
 			$this->view('writer/entryclient_end.tpl');
 		}
-
-
-
-
-
-
 
 		// メール送信先設定
 		$mail['from']      = "";

@@ -19,14 +19,39 @@ class Top extends MY_Controller
 	 * map to /index.php/welcome/<method_name>
 	 * @see http://codeigniter.com/user_guide/general/urls.html
 	 */
+
+	function __construct()
+	{
+		parent::__construct();
+
+		//$this->load->helper('url');
+		//$this->load->library('tank_auth');
+	}
+
 	public function index()
 	{
-		
-		phpinfo();
-		
+
+
 		//$this->view('member_info.tpl');
-		$this->view('writer/top.tpl');
 		//$this->load->view('top');
+		$this->view('writer/top.tpl');
+
+
+		// tank_auth を使用したログインサンプル
+		//if (!$this->tank_auth->is_logged_in()) {
+		//	redirect('/auth/login/');
+		//} else {
+		//	$data['user_id']	= $this->tank_auth->get_user_id();
+		//	$data['username']	= $this->tank_auth->get_username();
+		//	$this->load->view('welcome', $data);
+		//}
+
+
+
+		//phpinfo();
+
+
+
 	}
 }
 
