@@ -45,7 +45,7 @@ class Entryclient extends MY_Controller
 
 		$this->smarty->assign('err_email1', FALSE);
 		$this->smarty->assign('err_passwd', FALSE);
-		$this->view('writer/entryclient.tpl');
+		$this->view('writer/entryclient/index.tpl');
 	}
 
 	// 確認画面表示
@@ -68,17 +68,17 @@ class Entryclient extends MY_Controller
 		if ($this->form_validation->run() == FALSE) {
 			$this->smarty->assign('err_email1', FALSE);
 			$this->smarty->assign('err_passwd', FALSE);
-			$this->view('writer/entryclient.tpl');
+			$this->view('writer/entryclient/index.tpl');
 		} else {
 
 			// パスワード再入力チェック
 			if ($this->input->post('cl_password') !== $this->input->post('retype_password')) {
 				$this->smarty->assign('err_passwd', TRUE);
-				$this->view('writer/entryclient.tpl');
+				$this->view('writer/entryclient/index.tpl');
 				return;
 			}
 
-			$this->view('writer/entryclient_confirm.tpl');
+			$this->view('writer/entryclient/confirm.tpl');
 		}
 	}
 
@@ -102,7 +102,7 @@ class Entryclient extends MY_Controller
 		if ( $this->input->post('_back') ) {
 			$this->smarty->assign('err_email1', FALSE);
 			$this->smarty->assign('err_passwd', FALSE);
-			$this->view('writer/entryclient.tpl');
+			$this->view('writer/entryclient/index.tpl');
 			return;
 		}
 
@@ -112,7 +112,7 @@ class Entryclient extends MY_Controller
 		if ($this->client->check_LoginID($this->input->post('cl_email1'))) {
 			$this->smarty->assign('err_email1', TRUE);
 			$this->smarty->assign('err_passwd', FALSE);
-			$this->view('writer/entryclient.tpl');
+			$this->view('writer/entryclient/index.tpl');
 			return;
 		}
 
@@ -126,10 +126,10 @@ class Entryclient extends MY_Controller
 		unset($this->setData["retype_password"]) ;
 
 		if ($this->client->insert_Client($this->setData)) {
-			$this->view('writer/entryclient_end.tpl');
+			$this->view('writer/entryclient/end.tpl');
 		} else {
 			echo "会員登録に失敗しました。";
-			$this->view('writer/entryclient_end.tpl');
+			$this->view('writer/entryclient/end.tpl');
 		}
 
 		// メール送信先設定
@@ -166,10 +166,10 @@ class Entryclient extends MY_Controller
 		// メール送信
 		$this->load->model('Mailtpl', 'mailtpl', TRUE);
 		if ($this->mailtpl->getMailTpl_contact($mail, $arrRepList, $mail_tpl)) {
-			$this->view('writer/entryclient_end.tpl');
+			$this->view('writer/entryclient/end.tpl');
 		} else {
 			echo "メール送信エラー";
-			$this->view('writer/entryclient_end.tpl');
+			$this->view('writer/entryclient/end.tpl');
 		}
 	}
 

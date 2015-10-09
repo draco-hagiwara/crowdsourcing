@@ -31,14 +31,13 @@
       <h1>C<small>rowd</small> S<small>ourcing</small></h1>
 
       <ul class="list-inline text-right">
-        <li><a href="#">新規会員登録</a></li>
+        <li><a href="/entrywriter/">新規会員登録</a></li>
         <li><a href="#">ログイン</a></li>
       </ul>
 
 
 	  <nav class="navbar navbar-inverse">
-	  <div class="navbar-header">
-	    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#patern05">
+	  <div class="navbar-header">toggle="collapse" data-target="#patern05">
 	      <span class="icon-bar"></span>
 	      <span class="icon-bar"></span>
 	      <span class="icon-bar"></span>

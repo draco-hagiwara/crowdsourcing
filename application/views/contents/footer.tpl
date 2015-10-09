@@ -4,8 +4,8 @@
 	  <li><a href="#">会社概要</a></li>
 	  <li><a href="#">個人情報保護方針</a></li>
 	  <li><a href="#">サイトマップ</a></li>
-	  <li><a href="./contact">問合せ</a></li>
-	  <li><a href="./entryclient">クライアント新規登録</a></li>
+	  <li><a href="../../contact">問合せ</a></li>
+	  <li><a href="../../entryclient">クライアント新規登録</a></li>
 	</ul>
   </div>
   <div class="panel-footer text-center">
