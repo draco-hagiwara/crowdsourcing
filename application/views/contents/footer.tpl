@@ -1,11 +1,18 @@
 <div class="panel panel-default">
   <div class="panel-body">
 	<ul class="list-inline text-center">
-	  <li><a href="#">会社概要</a></li>
-	  <li><a href="#">個人情報保護方針</a></li>
-	  <li><a href="#">サイトマップ</a></li>
-	  <li><a href="./contact">問合せ</a></li>
-	  <li><a href="./entryclient">クライアント新規登録</a></li>
+      {if $login_chk==TRUE}
+	    <li><a href="#">会社概要</a></li>
+	    <li><a href="#">個人情報保護方針</a></li>
+	    <li><a href="#">サイトマップ</a></li>
+	    <li><a href="../../contact">問合せ</a></li>
+ 	  {else}
+	    <li><a href="#">会社概要</a></li>
+	    <li><a href="#">個人情報保護方針</a></li>
+	    <li><a href="#">サイトマップ</a></li>
+	    <li><a href="../../contact">問合せ</a></li>
+	    <li><a href="../../entryclient">クライアント新規登録</a></li>
+  	  {/if}
 	</ul>
   </div>
   <div class="panel-footer text-center">

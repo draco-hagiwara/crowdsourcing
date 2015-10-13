@@ -1,12 +1,12 @@
 {* ヘッダー部分　START *}
-	{include file="../header.tpl" head_index="1"}
+	{include file="../../header.tpl" head_index="1"}
 
 <body>
 {* ヘッダー部分　END *}
 
 <h2>お問い合せ　確認</h2>
 
-{form_open('contact/complete/' , 'name="ConfirmForm" class="form-horizontal"')}
+{form_open('contact/complete/' , 'name="ConmpForm" class="form-horizontal"')}
   <div class="form-group">
     <label for="inputName" class="col-sm-2 control-label">名　前</label>
     <div class="col-sm-10">
@@ -60,7 +60,7 @@
   </section>
 </div>
 
-{include file="../footer.tpl"}
+{include file="../../footer.tpl"}
 {* フッター部分　END *}
 
 </body>

@@ -11,7 +11,8 @@ class Mailtpl extends CI_Model
     }
 
     // メールテンプレートの取得からメール送信
-    public function getMailTpl_contact($mail, $arrRepList = NULL, $mail_tpl)
+    //public function getMailTpl_contact($mail, $arrRepList = NULL, $mail_tpl)
+    public function getMailTpl($mail, $arrRepList = NULL, $mail_tpl)
     {
 
 		$where = array('mt_id' => $mail_tpl);

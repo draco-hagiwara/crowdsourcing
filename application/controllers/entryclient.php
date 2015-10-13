@@ -13,10 +13,24 @@ class Entryclient extends MY_Controller
 		$this->load->library('form_validation');							// バリデーションクラス読み込み
 		$this->config->load('config_pref');									// 都道府県情報読み込み
 
-		// セッション書き込み
+				// セッション書き込み
 		if (!$this->session->userdata('ticket')) {
-			$this->ticket = md5(uniqid(mt_rand(), true));
-			$this->session->set_userdata('ticket', $this->ticket);
+			$setData = array(
+					'ticket' => md5(uniqid(mt_rand(), true)),
+					'login_chk' => '',
+					'login_mem' => '',
+			);
+			$this->session->set_userdata($setData);
+		} else {
+			// ログイン有無のチェック
+			if ($this->session->userdata('login_chk') == TRUE) {
+				// TOPへリダイレクト
+				$this->load->helper('url');
+				redirect(base_url());
+				return;
+			}
+			$this->smarty->assign('login_chk', FALSE);
+			$this->smarty->assign('login_mem', $this->session->userdata('login_mem'));
 		}
 
 		// 都道府県情報設定
@@ -36,6 +50,7 @@ class Entryclient extends MY_Controller
 
 		// セッションのチェック
 		$this->ticket = $this->session->userdata('ticket');
+		//if (!$this->input->post('ticket') || $this->input->post('ticket') !== $this->ticket) {
 		if (!$this->ticket) {
 			$message = 'セッション・エラーが発生しました。';
 			show_error($message, 400);
@@ -45,7 +60,7 @@ class Entryclient extends MY_Controller
 
 		$this->smarty->assign('err_email1', FALSE);
 		$this->smarty->assign('err_passwd', FALSE);
-		$this->view('writer/entryclient.tpl');
+		$this->view('writer/entryclient/index.tpl');
 	}
 
 	// 確認画面表示
@@ -68,17 +83,17 @@ class Entryclient extends MY_Controller
 		if ($this->form_validation->run() == FALSE) {
 			$this->smarty->assign('err_email1', FALSE);
 			$this->smarty->assign('err_passwd', FALSE);
-			$this->view('writer/entryclient.tpl');
+			$this->view('writer/entryclient/index.tpl');
 		} else {
 
 			// パスワード再入力チェック
 			if ($this->input->post('cl_password') !== $this->input->post('retype_password')) {
 				$this->smarty->assign('err_passwd', TRUE);
-				$this->view('writer/entryclient.tpl');
+				$this->view('writer/entryclient/index.tpl');
 				return;
 			}
 
-			$this->view('writer/entryclient_confirm.tpl');
+			$this->view('writer/entryclient/confirm.tpl');
 		}
 	}
 
@@ -102,7 +117,7 @@ class Entryclient extends MY_Controller
 		if ( $this->input->post('_back') ) {
 			$this->smarty->assign('err_email1', FALSE);
 			$this->smarty->assign('err_passwd', FALSE);
-			$this->view('writer/entryclient.tpl');
+			$this->view('writer/entryclient/index.tpl');
 			return;
 		}
 
@@ -112,7 +127,7 @@ class Entryclient extends MY_Controller
 		if ($this->client->check_LoginID($this->input->post('cl_email1'))) {
 			$this->smarty->assign('err_email1', TRUE);
 			$this->smarty->assign('err_passwd', FALSE);
-			$this->view('writer/entryclient.tpl');
+			$this->view('writer/entryclient/index.tpl');
 			return;
 		}
 
@@ -126,10 +141,10 @@ class Entryclient extends MY_Controller
 		unset($this->setData["retype_password"]) ;
 
 		if ($this->client->insert_Client($this->setData)) {
-			$this->view('writer/entryclient_end.tpl');
+			$this->view('writer/entryclient/end.tpl');
 		} else {
 			echo "会員登録に失敗しました。";
-			$this->view('writer/entryclient_end.tpl');
+			$this->view('writer/entryclient/end.tpl');
 		}
 
 		// メール送信先設定
@@ -165,11 +180,11 @@ class Entryclient extends MY_Controller
 
 		// メール送信
 		$this->load->model('Mailtpl', 'mailtpl', TRUE);
-		if ($this->mailtpl->getMailTpl_contact($mail, $arrRepList, $mail_tpl)) {
-			$this->view('writer/entryclient_end.tpl');
+		if ($this->mailtpl->getMailTpl($mail, $arrRepList, $mail_tpl)) {
+			$this->view('writer/entryclient/end.tpl');
 		} else {
 			echo "メール送信エラー";
-			$this->view('writer/entryclient_end.tpl');
+			$this->view('writer/entryclient/end.tpl');
 		}
 	}
 

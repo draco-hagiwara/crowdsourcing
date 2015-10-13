@@ -1,5 +1,5 @@
 {* ヘッダー部分　START *}
-	{include file="../header.tpl" head_index="1"}
+	{include file="../../header.tpl" head_index="1"}
 
 <body>
 {* ヘッダー部分　END *}
@@ -65,7 +65,7 @@
   </section>
 </div>
 
-{include file="../footer.tpl"}
+{include file="../../footer.tpl"}
 {* フッター部分　END *}
 
 </body>

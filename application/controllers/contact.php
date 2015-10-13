@@ -25,6 +25,7 @@ class Contact extends MY_Controller
 
 		// セッションのチェック
 		$this->ticket = $this->session->userdata('ticket');
+		//if (!$this->input->post('ticket') || $this->input->post('ticket') !== $this->ticket) {
 		if (!$this->ticket)
 		{
 			$message = 'セッション・エラーが発生しました。';
@@ -33,7 +34,7 @@ class Contact extends MY_Controller
 			$this->smarty->assign('ticket', $this->ticket);
 		}
 
-		$this->view('writer/contact.tpl');
+		$this->view('writer/contact/index.tpl');
 	}
 
 	// 確認画面表示
@@ -56,9 +57,9 @@ class Contact extends MY_Controller
 		// バリデーション・チェック
 		if ($this->form_validation->run() == FALSE)
 		{
-			$this->view('writer/contact.tpl');
+			$this->view('writer/contact/index.tpl');
 		} else {
-			$this->view('writer/contact_confirm.tpl');
+			$this->view('writer/contact/confirm.tpl');
 		}
 	}
 
@@ -81,7 +82,7 @@ class Contact extends MY_Controller
 
 		// 「戻る」ボタン押下の場合
 		if ( $this->input->post('_back') ) {
-			$this->view('writer/contact.tpl');
+			$this->view('writer/contact/index.tpl');
 			return;
 		}
 
@@ -108,11 +109,11 @@ class Contact extends MY_Controller
 
 		// メール送信
 		$this->load->model('Mailtpl', 'mailtpl', TRUE);
-		if ($this->mailtpl->getMailTpl_contact($mail, $arrRepList, $mail_tpl)) {
-			$this->view('writer/contact_end.tpl');
+		if ($this->mailtpl->getMailTpl($mail, $arrRepList, $mail_tpl)) {
+			$this->view('writer/contact/end.tpl');
 		} else {
 			echo "メール送信エラー";
-			$this->view('writer/contact_end.tpl');
+			$this->view('writer/contact/end.tpl');
 		}
 
 

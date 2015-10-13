@@ -24,35 +24,53 @@ class Top extends MY_Controller
 	{
 		parent::__construct();
 
-		//$this->load->helper('url');
-		//$this->load->library('tank_auth');
+		// セッション書き込み
+		if (!$this->session->userdata('ticket')) {
+			$setData = array(
+					'ticket' => md5(uniqid(mt_rand(), true)),
+					'login_chk' => '',
+					'login_mem' => '',
+			);
+			$this->session->set_userdata($setData);
+		} else {
+			// ログイン有無のチェック
+			$this->smarty->assign('login_chk', $this->session->userdata('login_chk'));
+			$this->smarty->assign('login_mem', $this->session->userdata('login_mem'));
+		}
 	}
 
 	public function index()
 	{
 
-
-		//$this->view('member_info.tpl');
-		//$this->load->view('top');
-		$this->view('writer/top.tpl');
-
-
-		// tank_auth を使用したログインサンプル
-		//if (!$this->tank_auth->is_logged_in()) {
-		//	redirect('/auth/login/');
-		//} else {
-		//	$data['user_id']	= $this->tank_auth->get_user_id();
-		//	$data['username']	= $this->tank_auth->get_username();
-		//	$this->load->view('welcome', $data);
-		//}
-
-
+		$this->smarty->assign('login_chk', $this->session->userdata('login_chk'));
+		$this->smarty->assign('login_mem', $this->session->userdata('login_mem'));
+		$this->view('writer/top/index.tpl');
 
 		//phpinfo();
 
-
-
 	}
+
+	// ログアウト チェック
+	public function logout()
+	{
+		// セッションのチェック
+		$this->ticket = $this->session->userdata('ticket');
+		if (!$this->ticket) {
+			$message = 'セッション・エラーが発生しました。';
+			show_error($message, 400);
+		} else {
+			$this->smarty->assign('ticket', $this->ticket);
+		}
+
+		// SESSION クリア
+		$this->load->model('comm_auth', 'auth', TRUE);
+		$this->auth->logout();
+
+		// TOPへリダイレクト
+		$this->load->helper('url');
+		redirect(base_url());
+	}
+
 }
 
 /* End of file welcome.php */
