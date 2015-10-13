@@ -1,36 +1,8 @@
-<?php /* Smarty version 3.1.27, created on 2015-09-25 13:06:51
-         compiled from "/home/cs/www/cs.com.dev/application/views/contents/writer/top.tpl" */ ?>
-<?php
-/*%%SmartyHeaderCode:5953223515604c85baaadc8_33267480%%*/
-if(!defined('SMARTY_DIR')) exit('no direct access allowed');
-$_valid = $_smarty_tpl->decodeProperties(array (
-  'file_dependency' => 
-  array (
-    '84cbe27f3665ba2b4d3692a301dd1913caf677d8' => 
-    array (
-      0 => '/home/cs/www/cs.com.dev/application/views/contents/writer/top.tpl',
-      1 => 1443153962,
-      2 => 'file',
-    ),
-  ),
-  'nocache_hash' => '5953223515604c85baaadc8_33267480',
-  'has_nocache_code' => false,
-  'version' => '3.1.27',
-  'unifunc' => 'content_5604c85badde26_34645921',
-),false);
-/*/%%SmartyHeaderCode%%*/
-if ($_valid && !is_callable('content_5604c85badde26_34645921')) {
-function content_5604c85badde26_34645921 ($_smarty_tpl) {
-
-$_smarty_tpl->properties['nocache_hash'] = '5953223515604c85baaadc8_33267480';
-?>
-
-	<?php echo $_smarty_tpl->getSubTemplate ("../header.tpl", $_smarty_tpl->cache_id, $_smarty_tpl->compile_id, 0, $_smarty_tpl->cache_lifetime, array('head_index'=>"1"), 0);
-?>
-
+{* ヘッダー部分　START *}
+	{include file="../../header.tpl" head_index="1"}
 
 <body>
-
+{* ヘッダー部分　END *}
 
 
 
@@ -44,7 +16,7 @@ $_smarty_tpl->properties['nocache_hash'] = '5953223515604c85baaadc8_33267480';
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
         </button>
-  			<a href="/" class="navbar-brand">ｸﾗｳﾄﾞｿｰｼﾝｸﾞ</a>
+  			<a href="/" class="navbar-brand">TOP</a>
       </div>
 
       <div id="patern05" class="collapse navbar-collapse">
@@ -285,19 +257,14 @@ $_smarty_tpl->properties['nocache_hash'] = '5953223515604c85baaadc8_33267480';
 
 
 
-
+{* フッター部分　START *}
     <!-- TwitterBootstrapのグリッドシステムclass="row"で終了 -->
     </div>
   </section>
 </div>
 
-<?php echo $_smarty_tpl->getSubTemplate ("../footer.tpl", $_smarty_tpl->cache_id, $_smarty_tpl->compile_id, 0, $_smarty_tpl->cache_lifetime, array(), 0);
-?>
-
-
+{include file="../../footer.tpl"}
+{* フッター部分　END *}
 
 </body>
 </html>
-<?php }
-}
-?>

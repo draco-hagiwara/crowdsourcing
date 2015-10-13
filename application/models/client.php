@@ -21,7 +21,7 @@ class Client extends CI_Model
 
     	$query = $this->db->query($sql, $values);
 
-    	if ($query->num_rows() > 1) {
+    	if ($query->num_rows() > 0) {
     		return TRUE;
     	} else {
     		return FALSE;

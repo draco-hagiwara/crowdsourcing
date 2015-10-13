@@ -13,10 +13,24 @@ class Entryclient extends MY_Controller
 		$this->load->library('form_validation');							// バリデーションクラス読み込み
 		$this->config->load('config_pref');									// 都道府県情報読み込み
 
-		// セッション書き込み
+				// セッション書き込み
 		if (!$this->session->userdata('ticket')) {
-			$this->ticket = md5(uniqid(mt_rand(), true));
-			$this->session->set_userdata('ticket', $this->ticket);
+			$setData = array(
+					'ticket' => md5(uniqid(mt_rand(), true)),
+					'login_chk' => '',
+					'login_mem' => '',
+			);
+			$this->session->set_userdata($setData);
+		} else {
+			// ログイン有無のチェック
+			if ($this->session->userdata('login_chk') == TRUE) {
+				// TOPへリダイレクト
+				$this->load->helper('url');
+				redirect(base_url());
+				return;
+			}
+			$this->smarty->assign('login_chk', FALSE);
+			$this->smarty->assign('login_mem', $this->session->userdata('login_mem'));
 		}
 
 		// 都道府県情報設定
@@ -36,6 +50,7 @@ class Entryclient extends MY_Controller
 
 		// セッションのチェック
 		$this->ticket = $this->session->userdata('ticket');
+		//if (!$this->input->post('ticket') || $this->input->post('ticket') !== $this->ticket) {
 		if (!$this->ticket) {
 			$message = 'セッション・エラーが発生しました。';
 			show_error($message, 400);
@@ -165,7 +180,7 @@ class Entryclient extends MY_Controller
 
 		// メール送信
 		$this->load->model('Mailtpl', 'mailtpl', TRUE);
-		if ($this->mailtpl->getMailTpl_contact($mail, $arrRepList, $mail_tpl)) {
+		if ($this->mailtpl->getMailTpl($mail, $arrRepList, $mail_tpl)) {
 			$this->view('writer/entryclient/end.tpl');
 		} else {
 			echo "メール送信エラー";

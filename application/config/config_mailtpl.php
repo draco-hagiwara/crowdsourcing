@@ -13,5 +13,11 @@ $config['MAILTPL_CONTACT_CL_ID'] = '3';					// 問合せメール（クライア
 $config['MAILTPL_ENT_WRITER_ID'] = '11';				// ライター新規会員登録メール
 $config['MAILTPL_ENT_CLIENT_ID'] = '12';				// クライアント新規会員登録メール
 
+$config['MAILTPL_REPASSWORD_ID'] = '20';				// 仮パスワード登録メール
+
+
+
+
+
 /* End of file config_mailtpl.php */
 /* Location: ./application/config/config_mailtpl.php */

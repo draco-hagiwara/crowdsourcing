@@ -7,9 +7,8 @@
 */
 
 // 各項目のバリデーションルール設定
-
-// お問合せフォーム（全体）
 $config = array(
+		// お問合せフォーム（全体）
 		'contact/contact' => array(
 				array(
 						'field'   => 'inputName',
@@ -76,10 +75,7 @@ $config = array(
 						'rules'   => 'trim|max_length[100]'
 				)
 		),
-);
-
-// クライアント新規登録フォーム
-$config = array(
+		// クライアント新規登録フォーム
 		'entryclient/entryclient' => array(
 				array(
 						'field'   => 'cl_company',

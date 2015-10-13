@@ -25,6 +25,7 @@ class Contact extends MY_Controller
 
 		// セッションのチェック
 		$this->ticket = $this->session->userdata('ticket');
+		//if (!$this->input->post('ticket') || $this->input->post('ticket') !== $this->ticket) {
 		if (!$this->ticket)
 		{
 			$message = 'セッション・エラーが発生しました。';
@@ -108,7 +109,7 @@ class Contact extends MY_Controller
 
 		// メール送信
 		$this->load->model('Mailtpl', 'mailtpl', TRUE);
-		if ($this->mailtpl->getMailTpl_contact($mail, $arrRepList, $mail_tpl)) {
+		if ($this->mailtpl->getMailTpl($mail, $arrRepList, $mail_tpl)) {
 			$this->view('writer/contact/end.tpl');
 		} else {
 			echo "メール送信エラー";
