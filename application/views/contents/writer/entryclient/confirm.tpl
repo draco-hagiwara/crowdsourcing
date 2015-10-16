@@ -104,10 +104,10 @@
     </div>
   </div>
   <div class="form-group">
-    <label for="cl_email1" class="col-sm-4 control-label">メールアドレス（代表）<br>＆　ログインID</label>
+    <label for="cl_email" class="col-sm-4 control-label">メールアドレス（代表）<br>＆　ログインID</label>
     <div class="col-sm-8">
-      {set_value('cl_email1', '')}
-      {form_hidden('cl_email1', set_value('cl_email1', ''))}
+      {set_value('cl_email', '')}
+      {form_hidden('cl_email', set_value('cl_email', ''))}
     </div>
   </div>
   <div class="form-group">

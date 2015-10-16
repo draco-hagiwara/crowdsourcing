@@ -40,7 +40,29 @@ $config['CLIENT_ITIJITEISHI']    = '一時停止';
 $config['CLIENT_TEISHI']         = '強制停止';
 $config['CLIENT_TAIKAI']         = '退会';
 
-
+//$config['CLIENT_SEL_STATUS'] =
+//	array(
+//        ''  => '選択してください',
+//		'0' => $config['CLIENT_SHINSEITYU'],
+//		'1' => $config['CLIENT_SHONIN'],
+//		'2' => $config['CLIENT_HISYONIN'],
+//		'7' => $config['CLIENT_ITIJITEISHI'],
+//		'8' => $config['CLIENT_TEISHI'],
+//		'9' => $config['CLIENT_TAIKAI']
+//);
+//
+//$config['CLIENT_SEL_ORDERBY01'] =
+//	array (
+//			'DESC' => '降順',
+//			'ASC'  => '昇順'
+//);
+//
+//$config['CLIENT_SEL_ORDERBY02'] =
+//	array (
+//			''     => '選択してください',
+//			'DESC' => '降順',
+//			'ASC'  => '昇順'
+//);
 
 
 

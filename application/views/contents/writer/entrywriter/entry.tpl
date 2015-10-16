@@ -67,7 +67,7 @@
       {form_dropdown('wr_pref', $options_pref, set_value('wr_pref', ''))}
       {if form_error('wr_pref')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('wr_pref')}</font></label>{/if}
     </div>
-    <div class=" col-sm-offset-6 col-sm-1">
+    <div class="col-sm-offset-6 col-sm-1">
       <span class="label label-default">非表示</span>
     </div>
   </div>

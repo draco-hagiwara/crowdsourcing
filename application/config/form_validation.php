@@ -163,7 +163,7 @@ $config = array(
 						'rules'   => 'trim|max_length[100]'
 				),
 				array(
-						'field'   => 'cl_email1',
+						'field'   => 'cl_email',
 						'label'   => 'メールアドレス（代表）',
 						'rules'   => 'trim|required|valid_email'
 				),
@@ -200,12 +200,12 @@ $config = array(
 				array(
 						'field'   => 'cl_password',
 						'label'   => 'パスワード',
-						'rules'   => 'trim|required|regex_match[/^[\x21-\x7e]+$/]|min_length[8]|max_length[50]'
+						'rules'   => 'trim|required|regex_match[/^[\x21-\x7e]+$/]|min_length[8]|max_length[50]|matches[retype_password]'
 				),
 				array(
 						'field'   => 'retype_password',
 						'label'   => 'パスワード再入力',
-						'rules'   => 'trim|required|regex_match[/^[\x21-\x7e]+$/]|min_length[8]|max_length[50]'
+						'rules'   => 'trim|required|regex_match[/^[\x21-\x7e]+$/]|min_length[8]|max_length[50]|matches[cl_password]'
 				)
 		),
 		'entryclient/confirm' => array(
@@ -295,7 +295,7 @@ $config = array(
 						'rules'   => 'trim|max_length[100]'
 				),
 				array(
-						'field'   => 'cl_email1',
+						'field'   => 'cl_email',
 						'label'   => 'メールアドレス（代表）',
 						'rules'   => 'trim|required|valid_email'
 				),
@@ -332,12 +332,12 @@ $config = array(
 				array(
 						'field'   => 'cl_password',
 						'label'   => 'パスワード',
-						'rules'   => 'trim|required|regex_match[/^[\x21-\x7e]+$/]|min_length[8]|max_length[50]'
+						'rules'   => 'trim|required|regex_match[/^[\x21-\x7e]+$/]|min_length[8]|max_length[50]|matches[retype_password]'
 				),
 				array(
 						'field'   => 'retype_password',
 						'label'   => 'パスワード再入力',
-						'rules'   => 'trim|required|regex_match[/^[\x21-\x7e]+$/]|min_length[8]|max_length[50]'
+						'rules'   => 'trim|required|regex_match[/^[\x21-\x7e]+$/]|min_length[8]|max_length[50]|matches[cl_password]'
 				)
 		),
 		'entryclient/complete' => array(
@@ -427,7 +427,7 @@ $config = array(
 						'rules'   => 'trim|max_length[100]'
 				),
 				array(
-						'field'   => 'cl_email1',
+						'field'   => 'cl_email',
 						'label'   => 'メールアドレス（代表）',
 						'rules'   => 'trim|required|valid_email'
 				),
@@ -464,12 +464,12 @@ $config = array(
 				array(
 						'field'   => 'cl_password',
 						'label'   => 'パスワード',
-						'rules'   => 'trim|required|regex_match[/^[\x21-\x7e]+$/]|min_length[8]|max_length[50]'
+						'rules'   => 'trim|required|regex_match[/^[\x21-\x7e]+$/]|min_length[8]|max_length[50]|matches[retype_password]'
 				),
 				array(
 						'field'   => 'retype_password',
 						'label'   => 'パスワード再入力',
-						'rules'   => 'trim|required|regex_match[/^[\x21-\x7e]+$/]|min_length[8]|max_length[50]'
+						'rules'   => 'trim|required|regex_match[/^[\x21-\x7e]+$/]|min_length[8]|max_length[50]|matches[cl_password]'
 				)
 		),
 );

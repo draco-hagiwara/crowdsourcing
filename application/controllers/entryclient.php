@@ -124,7 +124,7 @@ class Entryclient extends MY_Controller
 		// ログインID(メールアドレス)の重複チェック
 		$this->load->model('Client', 'client', TRUE);
 
-		if ($this->client->check_LoginID($this->input->post('cl_email1'))) {
+		if ($this->client->check_LoginID($this->input->post('cl_email'))) {
 			$this->smarty->assign('err_email1', TRUE);
 			$this->smarty->assign('err_passwd', FALSE);
 			$this->view('writer/entryclient/index.tpl');
@@ -167,7 +167,7 @@ class Entryclient extends MY_Controller
 				'cl_buil'         => $this->input->post('cl_buil'),
 				'cl_person01'     => $this->input->post('cl_person01'),
 				'cl_person02'     => $this->input->post('cl_person02'),
-				'cl_email1'       => $this->input->post('cl_email1'),
+				'cl_email'        => $this->input->post('cl_email'),
 				'cl_email2'       => $this->input->post('cl_email2'),
 				'cl_tel01'        => $this->input->post('cl_tel01'),
 				'cl_tel02'        => $this->input->post('cl_tel02'),
