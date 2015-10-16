@@ -10,6 +10,7 @@
 
 <script type="text/javascript" src="https://www.google.com/jsapi"></script>
 
+<<<<<<< HEAD
 <link rel="stylesheet" href="{base_url()}../css/bootstrap.min.css">
 <link rel="stylesheet" href="{base_url()}../css/normalize.css">
 <link rel="stylesheet" href="{base_url()}../css/main.css">
@@ -18,6 +19,16 @@
 <script src="{base_url()}../js/jquery-ui-3.0.2.custom.min.js"></script>
 <script src="{base_url()}../js/bootstrap.min.js"></script>
 <script src="{base_url()}../js/main.js"></script>
+=======
+<link rel="stylesheet" href="../../css/bootstrap.min.css">
+<link rel="stylesheet" href="../../css/normalize.css">
+<link rel="stylesheet" href="../../css/main.css">
+
+<script src="../../js/jquery-2.1.4.min.js"></script>
+<script src="../../js/jquery-ui-3.0.2.custom.min.js"></script>
+<script src="../../js/bootstrap.min.js"></script>
+<script src="../../js/main.js"></script>
+>>>>>>> 778364b11983b8ecd0f1ae7ce60860e34a1a71c4
 </head>
 
 
@@ -38,13 +49,18 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
+<<<<<<< HEAD
   		  <a href="#" class="navbar-brand">アドミンTOP</a>
+=======
+  		  <a href="/" class="navbar-brand">アドミンTOP</a>
+>>>>>>> 778364b11983b8ecd0f1ae7ce60860e34a1a71c4
         </div>
 
         <div id="patern05" class="collapse navbar-collapse">
           <ul class="nav navbar-nav">
 		    <li><a href="">TOP</a></li>
 		    <li><a href="">案件申請</a></li>
+<<<<<<< HEAD
 		    <li><a href="">発注管理</a></li>
 		    <li><a href="">投稿記事管理</a></li>
 		    <li><a href="">ライター管理</a></li>
@@ -63,6 +79,18 @@
 				<li><a href="#">会社情報</a></li>
 				<li><a href="#">問合せ</a></li>
 				<li><a href="/admin/login/logout/">ログアウト</a></li>
+=======
+		    <li><a href="">納品案件</a></li>
+		    <li><a href="">支払管理</a></li>
+          </ul>
+
+		  <ul class="nav navbar-nav navbar-right">
+		    <li><a href="#" class="dropdown-toggle" data-toggle="dropdown">会社名<b class="caret"></b></a>
+			  <ul class="dropdown-menu right">
+				<li><a href="#">会社情報</a></li>
+				<li><a href="#">問合せ</a></li>
+				<li><a href="/client/login/logout/">ログアウト</a></li>
+>>>>>>> 778364b11983b8ecd0f1ae7ce60860e34a1a71c4
 			  </ul>
 		    </li>
           </ul>

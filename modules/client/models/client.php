@@ -13,7 +13,11 @@ class Client extends CI_Model
     {
 
     	$sql = 'SELECT * FROM `tb_client` '
+<<<<<<< HEAD
     			. 'WHERE `cl_email` = ? ';
+=======
+    			. 'WHERE `cl_email1` = ? ';
+>>>>>>> 778364b11983b8ecd0f1ae7ce60860e34a1a71c4
 
     	$values = array(
     			$loginid,

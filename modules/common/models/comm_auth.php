@@ -6,7 +6,10 @@ class Comm_auth extends CI_Model
 	private $_hash_passwd;
 	private $_memberID;
 	private $_memberRANK;
+<<<<<<< HEAD
 	private $_memberNAME;
+=======
+>>>>>>> 778364b11983b8ecd0f1ae7ce60860e34a1a71c4
 
     public function __construct()
     {
@@ -23,8 +26,12 @@ class Comm_auth extends CI_Model
 	public function check_Login($loginid, $password, $login_member)
     {
 
+<<<<<<< HEAD
     	switch ($login_member)
     	{
+=======
+    	switch ($login_member){
+>>>>>>> 778364b11983b8ecd0f1ae7ce60860e34a1a71c4
     		case 'writer':
     			$sql = 'SELECT * FROM `tb_writer` '
     					. 'WHERE `wr_email` = ? ';
@@ -36,21 +43,32 @@ class Comm_auth extends CI_Model
     			$query = $this->db->query($sql, $values);
 
     			// 重複チェック
+<<<<<<< HEAD
    				if ($query->num_rows() >= 2)
    				{
+=======
+   				if ($query->num_rows() >= 2) {
+>>>>>>> 778364b11983b8ecd0f1ae7ce60860e34a1a71c4
    					$err_mess = '入力されたログインIDが重複しています。システム管理者に連絡してください。';
    					return $err_mess;
    				}
 
    				// ログインID＆パスワード読み込み
    				$arrData = $query->result('array');
+<<<<<<< HEAD
     			if (is_array($arrData))
     			{
+=======
+    			if (is_array($arrData)) {
+>>>>>>> 778364b11983b8ecd0f1ae7ce60860e34a1a71c4
 
     				$this->_hash_passwd = $arrData[0]['wr_password'];
     				$this->_memberID    = $arrData[0]['wr_id'];
     				$this->_memberRANK  = $arrData[0]['wr_mm_memberrank_id'];
+<<<<<<< HEAD
     				$this->_memberNAME  = $arrData[0]['wr_nickname'];
+=======
+>>>>>>> 778364b11983b8ecd0f1ae7ce60860e34a1a71c4
 
     				$this->_update_Session($login_member);
     			} else {
@@ -60,7 +78,11 @@ class Comm_auth extends CI_Model
 
     			break;
     		case 'client':
+<<<<<<< HEAD
     	    	$sql = 'SELECT * FROM `tb_client` '
+=======
+    	    			$sql = 'SELECT * FROM `tb_client` '
+>>>>>>> 778364b11983b8ecd0f1ae7ce60860e34a1a71c4
     					. 'WHERE `cl_email` = ? ';
 
     			$values = array(
@@ -70,21 +92,32 @@ class Comm_auth extends CI_Model
     			$query = $this->db->query($sql, $values);
 
     			// 重複チェック
+<<<<<<< HEAD
    				if ($query->num_rows() >= 2)
    				{
+=======
+   				if ($query->num_rows() >= 2) {
+>>>>>>> 778364b11983b8ecd0f1ae7ce60860e34a1a71c4
    					$err_mess = '入力されたログインIDが重複しています。システム管理者に連絡してください。';
    					return $err_mess;
    				}
 
    				// ログインID＆パスワード読み込み
    				$arrData = $query->result('array');
+<<<<<<< HEAD
     			if (is_array($arrData))
     			{
+=======
+    			if (is_array($arrData)) {
+>>>>>>> 778364b11983b8ecd0f1ae7ce60860e34a1a71c4
 
     				$this->_hash_passwd = $arrData[0]['cl_password'];
     				$this->_memberID    = $arrData[0]['cl_id'];
     				$this->_memberRANK  = '';
+<<<<<<< HEAD
     				$this->_memberNAME  = $arrData[0]['cl_company'];
+=======
+>>>>>>> 778364b11983b8ecd0f1ae7ce60860e34a1a71c4
 
     				$this->_update_Session($login_member);
     			} else {
@@ -94,6 +127,7 @@ class Comm_auth extends CI_Model
 
     			break;
     		case 'admin':
+<<<<<<< HEAD
     			/*
     			 * ADMIN管理者は クライアント登録(tb_client) の クライアントID(cl_id)=='1' 固定とする。
     			*/
@@ -136,6 +170,8 @@ class Comm_auth extends CI_Model
     				return $err_mess;
     			}
 
+=======
+>>>>>>> 778364b11983b8ecd0f1ae7ce60860e34a1a71c4
     			break;
     		default:
     	}
@@ -173,7 +209,10 @@ class Comm_auth extends CI_Model
     	$this->session->set_userdata('login_mem' , $login_member);				// ログインメンバー(writer/client/admin)
     	$this->session->set_userdata('memberID'  , $this->_memberID);			// メンバーID
     	$this->session->set_userdata('memberRANK', $this->_memberRANK);			// メンバーランキング(writerのみ)
+<<<<<<< HEAD
     	$this->session->set_userdata('memberNAME', $this->_memberNAME);			// メンバー名前(writerはニックネーム)
+=======
+>>>>>>> 778364b11983b8ecd0f1ae7ce60860e34a1a71c4
     }
 
 	/**

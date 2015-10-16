@@ -18,8 +18,12 @@ $config['LOGIN_ADMIN']      = 'admin';					// 管理者
 
 
 
+<<<<<<< HEAD
 // Pagination 設定:1ページ当たりの表示件数
 $config['PAGINATION_PER_PAGE'] = '10';
+=======
+
+>>>>>>> 778364b11983b8ecd0f1ae7ce60860e34a1a71c4
 
 
 // 仮PW発行制限時間
