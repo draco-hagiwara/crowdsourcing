@@ -1,6 +1,6 @@
 <?php
 
-class Clientlist extends MY_Controller
+class Writerlist extends MY_Controller
 {
 
 	public function __construct()
@@ -24,7 +24,7 @@ class Clientlist extends MY_Controller
 
 	}
 
-	// クライアントTOP
+	// ライターTOP
 	public function index()
 	{
 
@@ -49,18 +49,18 @@ class Clientlist extends MY_Controller
 			$tmp_offset = 0;
 		}
 
-		// クライアントメンバーの取得
-		$this->load->model('Client', 'cl', TRUE);
-		list($client_list, $client_countall) = $this->cl->get_clientlist($this->input->post(), $tmp_per_page, $tmp_offset);
-		$this->smarty->assign('client_list', $client_list);
+		// ライターの取得
+		$this->load->model('Writer', 'wr', TRUE);
+		list($writer_list, $writer_countall) = $this->wr->get_writerlist($this->input->post(), $tmp_per_page, $tmp_offset);
+		$this->smarty->assign('writer_list', $writer_list);
 
 		// Pagination 設定
-		$set_pagination = $this->_get_Pagination($client_countall, $tmp_per_page);
+		$set_pagination = $this->_get_Pagination($writer_countall, $tmp_per_page);
 
 		$this->smarty->assign('set_pagination', $set_pagination['page_link']);
-		$this->smarty->assign('countall', $client_countall);
+		$this->smarty->assign('countall', $writer_countall);
 
-		$this->view('admin/clientlist/index.tpl');
+		$this->view('admin/writerlist/index.tpl');
 
 	}
 
@@ -73,10 +73,10 @@ class Clientlist extends MY_Controller
 		{
 			// セッションをフラッシュデータとして保存
 			$data = array(
-					'cl_company'  => $this->input->post('cl_company'),
-					'cl_id'       => $this->input->post('cl_id'),
-					'cl_email'    => $this->input->post('cl_email'),
-					'cl_status'   => $this->input->post('cl_status'),
+					'wr_nickname' => $this->input->post('wr_nickname'),
+					'wr_id'       => $this->input->post('wr_id'),
+					'wr_email'    => $this->input->post('wr_email'),
+					'wr_status'   => $this->input->post('wr_status'),
 					'orderid'     => $this->input->post('orderid'),
 					'orderstatus' => $this->input->post('orderstatus'),
 			);
@@ -87,11 +87,11 @@ class Clientlist extends MY_Controller
 
 		} else {
 			// セッションからフラッシュデータ読み込み
-			$tmp_inputpost['cl_company'] = $this->session->flashdata('cl_company');
-			$tmp_inputpost['cl_id'] = $this->session->flashdata('cl_id');
-			$tmp_inputpost['cl_email'] = $this->session->flashdata('cl_email');
-			$tmp_inputpost['cl_status'] = $this->session->flashdata('cl_status');
-			$tmp_inputpost['orderid'] = $this->session->flashdata('orderid');
+			$tmp_inputpost['wr_nickname'] = $this->session->flashdata('wr_nickname');
+			$tmp_inputpost['wr_id']       = $this->session->flashdata('wr_id');
+			$tmp_inputpost['wr_email']    = $this->session->flashdata('wr_email');
+			$tmp_inputpost['wr_status']   = $this->session->flashdata('wr_status');
+			$tmp_inputpost['orderid']     = $this->session->flashdata('orderid');
 			$tmp_inputpost['orderstatus'] = $this->session->flashdata('orderstatus');
 
 			$this->session->set_flashdata($tmp_inputpost);
@@ -115,35 +115,28 @@ class Clientlist extends MY_Controller
 		$this->config->load('config_comm');
 		$tmp_per_page = $this->config->item('PAGINATION_PER_PAGE');
 
-		// クライアントメンバーの取得
-		$this->load->model('Client', 'cl', TRUE);
-		list($client_list, $client_countall) = $this->cl->get_clientlist($tmp_inputpost, $tmp_per_page, $tmp_offset);
-		$this->smarty->assign('client_list', $client_list);
+		// ライターメンバーの取得
+		$this->load->model('Writer', 'wr', TRUE);
+		list($writer_list, $writer_countall) = $this->wr->get_writerlist($tmp_inputpost, $tmp_per_page, $tmp_offset);
+		$this->smarty->assign('writer_list', $writer_list);
 
 		// 検索項目 初期値セット
 		$this->_search_set();
 
 		// Pagination 設定
-		$set_pagination = $this->_get_Pagination($client_countall, $tmp_per_page);
+		$set_pagination = $this->_get_Pagination($writer_countall, $tmp_per_page);
 
 		$this->smarty->assign('set_pagination', $set_pagination['page_link']);
-		$this->smarty->assign('countall', $client_countall);
+		$this->smarty->assign('countall', $writer_countall);
 
-		$this->view('admin/clientlist/index.tpl');
+		$this->view('admin/writerlist/index.tpl');
 
 	}
 
-
-
-
-
-
-
-	// クライアント情報編集
+	// ライター情報編集
 	public function detail()
 	{
 
-<<<<<<< HEAD
 		print("detail -><br>");
 		print_r($this->input->post());
 
@@ -155,128 +148,109 @@ class Clientlist extends MY_Controller
 		$this->smarty->assign('options_pref', $this->_options_pref);
 
 		// 都道府県チェック
-		if ($this->input->post('cl_pref')) {
-			$pref_id = $this->input->post('cl_pref');
+		if ($this->input->post('wr_pref'))
+		{
+			$pref_id = $this->input->post('wr_pref');
 			$this->_pref_name = $this->_options_pref[$pref_id];
 		}
 
-=======
-		$this->load->library('form_validation');							// バリデーションクラス読み込み
->>>>>>> develop
-
-		// クライアントステータス設定  <-- 検索項目 初期値セット
+		// ライターステータス設定  <-- 検索項目 初期値セット
 		$this->_search_set();
 
-<<<<<<< HEAD
-
-
-		// 更新対象クライアントメンバーのデータ取得
+		// 更新対象ライターのデータ取得
 		// 初期表示はバリデーションチェックを回避
-=======
-		// 更新対象クライアントメンバーのデータ取得
-		// 初期表示はバリデーションチェックを回避 <- チェックは要らない！
->>>>>>> develop
 		$input_post = $this->input->post();
-		$this->load->model('Client', 'cl', TRUE);
-		if (isset($input_post['clid_uniq']))
+		$this->load->model('writer', 'wr', TRUE);
+		if (isset($input_post['wrid_uniq']))
 		{
-<<<<<<< HEAD
-			$tmp_clientid = $input_post['clid_uniq'];
-			$get_data = $this->cl->select_client_id($tmp_clientid);
+			$tmp_writerid = $input_post['wrid_uniq'];
+			$get_data = $this->wr->select_writer_id($tmp_writerid);
 
 			$this->load->library('form_validation');							// バリデーションクラス読み込み
 
 			$this->smarty->assign('err_email', FALSE);
-			$this->smarty->assign('client_info', $get_data[0]);
+			$this->smarty->assign('writer_info', $get_data[0]);
+
+			// メルマガ配信チェックボックスのチェック
+			if ($get_data[0]['wr_mailmaga_flg'])
+			{
+				$this->smarty->assign('mailmaga_flg', TRUE);
+			} else {
+				$this->smarty->assign('mailmaga_flg', FALSE);
+			}
+
 		} else {
 
 			// バリデーション・チェック
 			$this->_set_validation01();											// バリデーション設定
-			if ($this->form_validation->run() == FALSE) {
+			if ($this->form_validation->run() == FALSE)
+			{
 				$this->smarty->assign('err_email', FALSE);
-				$this->smarty->assign('client_info', $input_post);
+				$this->smarty->assign('writer_info', $input_post);
 			} else {
 
-				// ログインID(メールアドレス)の重複チェック
-				$this->load->model('Client', 'cl', TRUE);
+				$set_data = $this->input->post();
 
-				if ($this->cl->check_LoginID($input_post['cl_email'], $update = TRUE)) {
+				// メルマガ有無フラグ
+				if (isset($set_data['wr_mailmaga_flg']))
+				{
+					print("メルマガ有");
+					$this->setData["wr_mailmaga_flg"] = TRUE;
+				} else {
+					print("メルマガ無");
+					$this->setData["wr_mailmaga_flg"] = NULL;
+				}
+
+
+				// ログインID(メールアドレス)の重複チェック
+				if ($this->wr->duplicate_LoginID($set_data['wr_email']))
+				{
 					$this->smarty->assign('err_email', TRUE);
-					$this->view('admin/clientlist/detail.tpl');
+					$this->smarty->assign('writer_info', $set_data);
+					$this->view('admin/writerlist/detail.tpl');
 					return;
 				}
 
 				// DB書き込み
-				$set_data = $this->input->post();
-				if (isset($input_post['cl_password']))
+				if (isset($set_data['wr_password']))
 				{
-					$set_data["cl_password"] = password_hash($input_post['cl_password'], PASSWORD_DEFAULT);
+					$set_data["wr_password"] = password_hash($set_data['wr_password'], PASSWORD_DEFAULT);
 				}
+
 
 				// 不要パラメータ削除
 				unset($set_data["submit"]) ;
 				unset($set_data["retype_password"]) ;
 
-				if ($this->cl->update_Client($set_data)) {
+				if ($this->wr->update_Writer($set_data))
+				{
 				} else {
 					echo "会員更新に失敗しました。";
 				}
 
 				// 検索一覧へ
 				$this->load->helper('url');
-				redirect('/clientlist/');
+				redirect('/writerlist/');
 
 			}
-=======
-
-			$tmp_clientid = $input_post['clid_uniq'];
-			$get_data = $this->cl->select_client_id($tmp_clientid);
-
-			// 都道府県情報設定
-			$this->config->load('config_pref');									// 都道府県情報読み込み
-			$this->_options_pref = $this->config->item('pref');
-			$this->_pref_name    = $this->_options_pref[$get_data[0]['cl_pref']];
-			$this->smarty->assign('pref_name', $this->_pref_name);
-
-			$this->smarty->assign('client_info', $get_data[0]);
-
-		} else {
-
-			// DB書き込み
-			$set_data['cl_status'] = $this->input->post('cl_status');
-			$set_data['cl_id']     = $this->input->post('cl_id');
-
-			if ($this->cl->update_Client($set_data)) {
-			} else {
-				echo "会員更新に失敗しました。";
-			}
-
-			// 検索一覧へ
-			$this->load->helper('url');
-			redirect('/clientlist/');
-
->>>>>>> develop
 		}
 
-		$this->view('admin/clientlist/detail.tpl');
+		$this->view('admin/writerlist/detail.tpl');
 
 	}
 
-<<<<<<< HEAD
 
 
 
 
 
-=======
->>>>>>> develop
 	// Pagination 設定
-	private function _get_Pagination($client_countall, $tmp_per_page)
+	private function _get_Pagination($writer_countall, $tmp_per_page)
 	{
 
-		$config['base_url']       = base_url() . '/clientlist/search/';		// ページの基本URIパス。「/コントローラクラス/アクションメソッド/」
+		$config['base_url']       = base_url() . '/writerlist/search/';		// ページの基本URIパス。「/コントローラクラス/アクションメソッド/」
 		$config['per_page']       = $tmp_per_page;							// 1ページ当たりの表示件数。
-		$config['total_rows']     = $client_countall;						// 総件数。where指定するか？
+		$config['total_rows']     = $writer_countall;						// 総件数。where指定するか？
 		$config['uri_segment']    = 4;										// オフセット値がURIパスの何セグメント目とするか設定
 		$config['num_links']      = 5;										//現在のページ番号の左右にいくつのページ番号リンクを生成するか設定
 		$config['full_tag_open']  = '<p class="pagination">';				// ページネーションリンク全体を階層化するHTMLタグの先頭タグ文字列を指定
@@ -299,33 +273,18 @@ class Clientlist extends MY_Controller
 
 		// ステータス状態 選択項目セット
 		$this->config->load('config_status');
-<<<<<<< HEAD
-		$arroptions_clstatus = array (
-=======
-		$arroptions_clstatus01 = array (
->>>>>>> develop
+		$arroptions_wrstatus = array (
 				''  => '選択してください',
-				'0' => $this->config->item('CLIENT_SHINSEITYU'),
-				'1' => $this->config->item('CLIENT_SHONIN'),
-				'2' => $this->config->item('CLIENT_HISYONIN'),
-				'7' => $this->config->item('CLIENT_ITIJITEISHI'),
-				'8' => $this->config->item('CLIENT_TEISHI'),
-				'9' => $this->config->item('CLIENT_TAIKAI'),
+				'1' => $this->config->item('WRITER_KARISHINSEI'),
+				'2' => $this->config->item('WRITER_SHINSEITYU'),
+				'3' => $this->config->item('WRITER_KARITOUROKU'),
+				'4' => $this->config->item('WRITER_TOUROKU'),
+				'7' => $this->config->item('WRITER_ITIJITEISHI'),
+				'8' => $this->config->item('WRITER_TEISHI'),
+				'9' => $this->config->item('WRITER_TAIKAI'),
 		);
 
-<<<<<<< HEAD
-=======
-		$arroptions_clstatus02 = array (
-				'0' => $this->config->item('CLIENT_SHINSEITYU'),
-				'1' => $this->config->item('CLIENT_SHONIN'),
-				'2' => $this->config->item('CLIENT_HISYONIN'),
-				'7' => $this->config->item('CLIENT_ITIJITEISHI'),
-				'8' => $this->config->item('CLIENT_TEISHI'),
-				'9' => $this->config->item('CLIENT_TAIKAI'),
-		);
-
->>>>>>> develop
-		// クライアントID 並び替え選択項目セット
+		// ライターID 並び替え選択項目セット
 		$arroptions_id = array (
 				''     => '選択してください',
 				'DESC' => '降順',
@@ -339,12 +298,7 @@ class Clientlist extends MY_Controller
 				'ASC'  => '昇順',
 		);
 
-<<<<<<< HEAD
-		$this->smarty->assign('options_cl_status',   $arroptions_clstatus);
-=======
-		$this->smarty->assign('options_cl_status01', $arroptions_clstatus01);
-		$this->smarty->assign('options_cl_status02', $arroptions_clstatus02);
->>>>>>> develop
+		$this->smarty->assign('options_wr_status',   $arroptions_wrstatus);
 		$this->smarty->assign('options_orderid',     $arroptions_id);
 		$this->smarty->assign('options_orderstatus', $arroptions_status);
 
@@ -356,22 +310,22 @@ class Clientlist extends MY_Controller
 
 		$rule_set = array(
 				array(
-						'field'   => 'cl_company',
-						'label'   => '会社名',
-						'rules'   => 'trim|max_length[100]'
+						'field'   => 'wr_nickname',
+						'label'   => 'ニックネーム',
+						'rules'   => 'trim|max_length[50]'
 				),
 				array(
-						'field'   => 'cl_id',
-						'label'   => 'クライアントID',
+						'field'   => 'wr_id',
+						'label'   => 'ライターID',
 						'rules'   => 'trim|numeric'
 				),
 				array(
-						'field'   => 'cl_email',
+						'field'   => 'wr_email',
 						'label'   => 'メールアドレス',
 						'rules'   => 'trim|max_length[50]'
 				),
 				array(
-						'field'   => 'cl_status',
+						'field'   => 'wr_status',
 						'label'   => 'ステータス',
 						'rules'   => 'trim|numeric'
 				),
@@ -381,140 +335,105 @@ class Clientlist extends MY_Controller
 
 	}
 
-	// フォーム・バリデーションチェック :: クライアント更新フォーム
+	// フォーム・バリデーションチェック :: ライター更新フォーム
 	private function _set_validation01()
 	{
 
 		$rule_set = array(
 				array(
-						'field'   => 'cl_company',
-						'label'   => '会社名',
-						'rules'   => 'trim|required|max_length[100]'
-				),
-				array(
-						'field'   => 'cl_company_kana',
-						'label'   => '会社名カナ（全角）',
-						'rules'   => 'trim|regex_match[/^[ァ-タダ-ヴ　ー・]+$/]|required|max_length[100]'
-				),
-				array(
-						'field'   => 'cl_president01',
-						'label'   => '代表者姓',
+						'field'   => 'wr_name01',
+						'label'   => '姓',
 						'rules'   => 'trim|required|max_length[50]'
 				),
 				array(
-						'field'   => 'cl_president02',
-						'label'   => '代表者名',
+						'field'   => 'wr_name02',
+						'label'   => '名',
 						'rules'   => 'trim|required|max_length[50]'
 				),
 				array(
-						'field'   => 'cl_president_kana01',
-						'label'   => '代表者セイ（全角）',
+						'field'   => 'wr_namekana01',
+						'label'   => 'セイ（全角カタカナ）',
 						'rules'   => 'trim|required|max_length[50]'
 				),
 				array(
-						'field'   => 'cl_president_kana02',
-						'label'   => '代表者メイ（全角）',
+						'field'   => 'wr_namekana02',
+						'label'   => 'メイ（全角カタカナ）',
 						'rules'   => 'trim|required|max_length[50]'
 				),
 				array(
-						'field'   => 'cl_department',
-						'label'   => '担当部署',
-						'rules'   => 'trim|max_length[50]'
-				),
-				array(
-						'field'   => 'cl_person01',
-						'label'   => '担当者姓',
+						'field'   => 'wr_nickname',
+						'label'   => 'ニックネーム',
 						'rules'   => 'trim|required|max_length[50]'
 				),
 				array(
-						'field'   => 'cl_person02',
-						'label'   => '担当者名',
-						'rules'   => 'trim|required|max_length[50]'
-				),
-				array(
-						'field'   => 'cl_person_kana01',
-						'label'   => '担当者セイ（全角）',
-						'rules'   => 'trim|required|max_length[50]'
-				),
-				array(
-						'field'   => 'cl_person_kana02',
-						'label'   => '担当者メイ（全角）',
-						'rules'   => 'trim|required|max_length[50]'
-				),
-				array(
-						'field'   => 'cl_zip01',
+						'field'   => 'wr_zip01',
 						'label'   => '郵便番号（3ケタ）',
 						'rules'   => 'trim|required|max_length[3]|is_numeric'
 				),
 				array(
-						'field'   => 'cl_zip02',
+						'field'   => 'wr_zip02',
 						'label'   => '郵便番号（4ケタ）',
 						'rules'   => 'trim|required|max_length[4]|is_numeric'
 				),
 				array(
-						'field'   => 'cl_pref',
+						'field'   => 'wr_pref',
 						'label'   => '都道府県',
 						'rules'   => 'trim|required|max_length[2]'
 				),
 				array(
-						'field'   => 'cl_addr01',
+						'field'   => 'wr_addr01',
 						'label'   => '市区町村',
 						'rules'   => 'trim|required|max_length[100]'
 				),
 				array(
-						'field'   => 'cl_addr02',
+						'field'   => 'wr_addr02',
 						'label'   => '町名・番地',
 						'rules'   => 'trim|required|max_length[100]'
 				),
 				array(
-						'field'   => 'cl_buil',
+						'field'   => 'wr_buil',
 						'label'   => 'ビル・マンション名など',
 						'rules'   => 'trim|max_length[100]'
 				),
 				array(
-						'field'   => 'cl_email',
-						'label'   => 'メールアドレス（代表）',
+						'field'   => 'wr_email',
+						'label'   => 'メールアドレス',
 						'rules'   => 'trim|required|valid_email'
 				),
 				array(
-						'field'   => 'cl_email2',
-						'label'   => 'メールアドレス（予備）',
+						'field'   => 'wr_email_mobile',
+						'label'   => '携帯メールアドレス',
 						'rules'   => 'trim|valid_email'
 				),
 				array(
-						'field'   => 'cl_tel01',
-						'label'   => '代表電話番号',
+						'field'   => 'wr_tel',
+						'label'   => '電話番号',
 						'rules'   => 'trim|required|regex_match[/^[0-9\-]+$/]|max_length[15]'
 				),
 				array(
-						'field'   => 'cl_tel02',
-						'label'   => '担当者電話番号',
+						'field'   => 'wr_mobile',
+						'label'   => '携帯番号',
 						'rules'   => 'trim|regex_match[/^[0-9\-]+$/]|max_length[15]'
 				),
 				array(
-						'field'   => 'cl_mobile',
-						'label'   => '担当者携帯番号',
+						'field'   => 'wr_mobile',
+						'label'   => '携帯番号',
 						'rules'   => 'trim|regex_match[/^[0-9\-]+$/]|max_length[15]'
 				),
 				array(
-						'field'   => 'cl_fax',
-						'label'   => 'ＦＡＸ番号',
-						'rules'   => 'trim|regex_match[/^[0-9\-]+$/]|max_length[15]'
+						'field'   => 'wr_mailmaga_flg[]',
+						'label'   => 'メルマガ配信希望',
+						'rules'   => ''
 				),
 				array(
-						'field'   => 'cl_hp',
-						'label'   => '会社ＨＰ(http://～)',
-						'rules'   => 'trim|regex_match[/^(https?)(:\/\/[-_.!~*\'()a-zA-Z0-9;\/?:\@&=+\$,%#]+)$/]|max_length[100]'
-				),
-				array(
-						'field'   => 'cl_password',
+						'field'   => 'wr_password',
 						'label'   => 'パスワード',
 						'rules'   => 'trim|regex_match[/^[\x21-\x7e]+$/]|min_length[8]|max_length[50]|matches[retype_password]'
 				),
 				array(
 						'field'   => 'retype_password',
 						'label'   => 'パスワード再入力',
-						'rules'   => 'trim|regex_match[/^[\x21-\x7e]+$/]|min_length[8]|max_length[50]|matches[cl_password]'
+						'rules'   => 'trim|regex_match[/^[\x21-\x7e]+$/]|min_length[8]|max_length[50]|matches[wr_password]'
 				)
 		);
 

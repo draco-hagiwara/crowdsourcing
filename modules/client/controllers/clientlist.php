@@ -143,11 +143,6 @@ class Clientlist extends MY_Controller
 	public function detail()
 	{
 
-<<<<<<< HEAD
-		print("detail -><br>");
-		print_r($this->input->post());
-
-
 		$this->config->load('config_pref');										// 都道府県情報読み込み
 
 		// 都道府県情報設定
@@ -160,27 +155,18 @@ class Clientlist extends MY_Controller
 			$this->_pref_name = $this->_options_pref[$pref_id];
 		}
 
-=======
-		$this->load->library('form_validation');							// バリデーションクラス読み込み
->>>>>>> develop
 
 		// クライアントステータス設定  <-- 検索項目 初期値セット
 		$this->_search_set();
 
-<<<<<<< HEAD
 
 
 		// 更新対象クライアントメンバーのデータ取得
 		// 初期表示はバリデーションチェックを回避
-=======
-		// 更新対象クライアントメンバーのデータ取得
-		// 初期表示はバリデーションチェックを回避 <- チェックは要らない！
->>>>>>> develop
 		$input_post = $this->input->post();
 		$this->load->model('Client', 'cl', TRUE);
 		if (isset($input_post['clid_uniq']))
 		{
-<<<<<<< HEAD
 			$tmp_clientid = $input_post['clid_uniq'];
 			$get_data = $this->cl->select_client_id($tmp_clientid);
 
@@ -198,7 +184,7 @@ class Clientlist extends MY_Controller
 			} else {
 
 				// ログインID(メールアドレス)の重複チェック
-				$this->load->model('Client', 'cl', TRUE);
+				//$this->load->model('Client', 'cl', TRUE);
 
 				if ($this->cl->check_LoginID($input_post['cl_email'], $update = TRUE)) {
 					$this->smarty->assign('err_email', TRUE);
@@ -227,49 +213,12 @@ class Clientlist extends MY_Controller
 				redirect('/clientlist/');
 
 			}
-=======
-
-			$tmp_clientid = $input_post['clid_uniq'];
-			$get_data = $this->cl->select_client_id($tmp_clientid);
-
-			// 都道府県情報設定
-			$this->config->load('config_pref');									// 都道府県情報読み込み
-			$this->_options_pref = $this->config->item('pref');
-			$this->_pref_name    = $this->_options_pref[$get_data[0]['cl_pref']];
-			$this->smarty->assign('pref_name', $this->_pref_name);
-
-			$this->smarty->assign('client_info', $get_data[0]);
-
-		} else {
-
-			// DB書き込み
-			$set_data['cl_status'] = $this->input->post('cl_status');
-			$set_data['cl_id']     = $this->input->post('cl_id');
-
-			if ($this->cl->update_Client($set_data)) {
-			} else {
-				echo "会員更新に失敗しました。";
-			}
-
-			// 検索一覧へ
-			$this->load->helper('url');
-			redirect('/clientlist/');
-
->>>>>>> develop
 		}
 
 		$this->view('admin/clientlist/detail.tpl');
 
 	}
 
-<<<<<<< HEAD
-
-
-
-
-
-=======
->>>>>>> develop
 	// Pagination 設定
 	private function _get_Pagination($client_countall, $tmp_per_page)
 	{
@@ -299,11 +248,7 @@ class Clientlist extends MY_Controller
 
 		// ステータス状態 選択項目セット
 		$this->config->load('config_status');
-<<<<<<< HEAD
 		$arroptions_clstatus = array (
-=======
-		$arroptions_clstatus01 = array (
->>>>>>> develop
 				''  => '選択してください',
 				'0' => $this->config->item('CLIENT_SHINSEITYU'),
 				'1' => $this->config->item('CLIENT_SHONIN'),
@@ -313,18 +258,6 @@ class Clientlist extends MY_Controller
 				'9' => $this->config->item('CLIENT_TAIKAI'),
 		);
 
-<<<<<<< HEAD
-=======
-		$arroptions_clstatus02 = array (
-				'0' => $this->config->item('CLIENT_SHINSEITYU'),
-				'1' => $this->config->item('CLIENT_SHONIN'),
-				'2' => $this->config->item('CLIENT_HISYONIN'),
-				'7' => $this->config->item('CLIENT_ITIJITEISHI'),
-				'8' => $this->config->item('CLIENT_TEISHI'),
-				'9' => $this->config->item('CLIENT_TAIKAI'),
-		);
-
->>>>>>> develop
 		// クライアントID 並び替え選択項目セット
 		$arroptions_id = array (
 				''     => '選択してください',
@@ -339,12 +272,7 @@ class Clientlist extends MY_Controller
 				'ASC'  => '昇順',
 		);
 
-<<<<<<< HEAD
 		$this->smarty->assign('options_cl_status',   $arroptions_clstatus);
-=======
-		$this->smarty->assign('options_cl_status01', $arroptions_clstatus01);
-		$this->smarty->assign('options_cl_status02', $arroptions_clstatus02);
->>>>>>> develop
 		$this->smarty->assign('options_orderid',     $arroptions_id);
 		$this->smarty->assign('options_orderstatus', $arroptions_status);
 

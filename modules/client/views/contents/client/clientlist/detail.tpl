@@ -17,7 +17,6 @@
     </div>
   </div>
   <div class="form-group">
-<<<<<<< HEAD
     <label for="cl_company" class="col-sm-4 control-label">ステータス (状態)</label>
     <div class="col-sm-8">
 		  {form_dropdown('cl_status', $options_cl_status, {$client_info.cl_status})}
@@ -57,47 +56,11 @@
     <div class="col-sm-4">
       {form_input('cl_president_kana02' , {$client_info.cl_president_kana02} , 'class="form-control" placeholder="代表者メイを入力してください"')}
       {if form_error('cl_president_kana02')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('cl_president_kana02')}</font></label>{/if}
-=======
-    <label for="cl_status" class="col-sm-4 control-label">ステータス (状態)</label>
-    <div class="col-sm-8">
-		  {form_dropdown('cl_status', $options_cl_status02, {$client_info.cl_status})}
-    </div>
-  </div>
-  <div class="form-group">
-    <label for="cl_company" class="col-sm-4 control-label">会　社　名</label>
-    <div class="col-sm-8">
-      {$client_info.cl_company}
-      {form_hidden('cl_company', $client_info.cl_company)}
-    </div>
-  </div>
-  <div class="form-group">
-    <label for="cl_company_kana" class="col-sm-4 control-label">会　社　名（全角）</label>
-    <div class="col-sm-8">
-      {$client_info.cl_company_kana}
-      {form_hidden('cl_company_kana', $client_info.cl_company_kana)}
-    </div>
-  </div>
-  <div class="form-group">
-    <label for="cl_president" class="col-sm-4 control-label">代表者</label>
-    <div class="col-sm-4">
-      {$client_info.cl_president01} {$client_info.cl_president02}
-      {form_hidden('cl_president01', $client_info.cl_president01)}
-      {form_hidden('cl_president02', $client_info.cl_president02)}
-    </div>
-  </div>
-  <div class="form-group">
-    <label for="cl_president_kana" class="col-sm-4 control-label">代表者カナ（全角）</label>
-    <div class="col-sm-4">
-      {$client_info.cl_president_kana01} {$client_info.cl_president_kana02}
-      {form_hidden('cl_president_kana01', $client_info.cl_president_kana01)}
-      {form_hidden('cl_president_kana02', $client_info.cl_president_kana02)}
->>>>>>> develop
     </div>
   </div>
     <div class="form-group">
     <label for="cl_department" class="col-sm-4 control-label">担当部署</label>
     <div class="col-sm-4">
-<<<<<<< HEAD
       {form_input('cl_department' , {$client_info.cl_department} , 'class="form-control" placeholder="担当部署を入力してください"')}
       {if form_error('cl_department')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('cl_department')}</font></label>{/if}
     </div>
@@ -154,60 +117,11 @@
     <div class="col-sm-8">
       {form_input('cl_addr02' , {$client_info.cl_addr02} , 'class="form-control" placeholder="町名・番地を入力してください"')}
       {if form_error('cl_addr02')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('cl_addr02')}</font></label>{/if}
-=======
-      {$client_info.cl_department}
-      {form_hidden('cl_department', $client_info.cl_department)}
-    </div>
-  </div>
-  <div class="form-group">
-    <label for="cl_person" class="col-sm-4 control-label">担当者</label>
-    <div class="col-sm-4">
-      {$client_info.cl_person01} {$client_info.cl_person02} {form_hidden('cl_person01', $client_info.cl_person01)}
-      {form_hidden('cl_person02', $client_info.cl_person02)}
-    </div>
-  </div>
-  <div class="form-group">
-    <label for="cl_person_kana" class="col-sm-4 control-label">担当者カナ（全角）</label>
-    <div class="col-sm-4">
-      {$client_info.cl_person_kana01} {$client_info.cl_person_kana02}
-      {form_hidden('cl_person_kana01', $client_info.cl_person_kana01)}
-      {form_hidden('cl_person_kana02', $client_info.cl_person_kana02)}
-    </div>
-  </div>
-  <div class="form-group">
-    <label for="cl_zip" class="col-sm-4 control-label">郵便番号</label>
-    <div class="col-sm-2">
-      {$client_info.cl_zip01} - {$client_info.cl_zip02}
-      {form_hidden('cl_zip01', $client_info.cl_zip01)}
-      {form_hidden('cl_zip02', $client_info.cl_zip02)}
-    </div>
-  </div>
-  <div class="form-group">
-    <label for="cl_pref" class="col-sm-4 control-label">都道府県</label>
-    <div class="col-sm-2 btn-lg">
-      {$pref_name}
-      {form_hidden('cl_pref', $client_info.cl_pref)}
-    </div>
-  </div>
-  <div class="form-group">
-    <label for="cl_addr01" class="col-sm-4 control-label">市区町村</label>
-    <div class="col-sm-8">
-      {$client_info.cl_addr01}
-      {form_hidden('cl_addr01', $client_info.cl_addr01)}
-    </div>
-  </div>
-  <div class="form-group">
-    <label for="cl_addr02" class="col-sm-4 control-label">町名・番地</label>
-    <div class="col-sm-8">
-      {$client_info.cl_addr02}
-      {form_hidden('cl_addr02', $client_info.cl_addr02)}
->>>>>>> develop
     </div>
   </div>
   <div class="form-group">
     <label for="cl_buil" class="col-sm-4 control-label">ビル・マンション名など</label>
     <div class="col-sm-8">
-<<<<<<< HEAD
       {form_input('cl_buil' , {$client_info.cl_buil} , 'class="form-control" placeholder="ビル・マンション名などを入力してください"')}
       {if form_error('cl_buil')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('cl_buil')}</font></label>{/if}
     </div>
@@ -234,23 +148,11 @@
       {form_password('retype_password' , '' , 'class="form-control" placeholder="パスワード変更時のみ入力　(半角英数字・記号：８文字以上)"')}
       <p><small>確認のため、もう一度入力してください。</small></p>
       {if form_error('retype_password')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('retype_password')}</font></label>{/if}
-=======
-      {$client_info.cl_buil}
-      {form_hidden('cl_buil', $client_info.cl_buil)}
-    </div>
-  </div>
-  <div class="form-group">
-    <label for="cl_email1" class="col-sm-4 control-label">メールアドレス（代表）<br>＆　ログインID</label>
-    <div class="col-sm-8">
-      {$client_info.cl_email}
-      {form_hidden('cl_email', $client_info.cl_email)}
->>>>>>> develop
     </div>
   </div>
   <div class="form-group">
     <label for="cl_email2" class="col-sm-4 control-label">メールアドレス（予備）</label>
     <div class="col-sm-8">
-<<<<<<< HEAD
       {form_input('cl_email2' , {$client_info.cl_email2} , 'class="col-sm-4 form-control" placeholder="メールアドレス（予備）を入力してください"')}
       {if form_error('cl_email2')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('cl_email2')}</font></label>{/if}
     </div>
@@ -260,65 +162,34 @@
     <div class="col-sm-8">
       {form_input('cl_tel01' , {$client_info.cl_tel01} , 'class="form-control" placeholder="代表電話番号を入力してください"')}
       {if form_error('cl_tel01')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('cl_tel01')}</font></label>{/if}
-=======
-      {$client_info.cl_email2}
-      {form_hidden('cl_email2', $client_info.cl_email2)}
-    </div>
-  </div>
-  <div class="form-group">
-    <label for="cl_tel01" class="col-sm-4 control-label">代表電話番号</label>
-    <div class="col-sm-8">
-      {$client_info.cl_tel01}
-      {form_hidden('cl_tel01', $client_info.cl_tel01)}
->>>>>>> develop
     </div>
   </div>
   <div class="form-group">
     <label for="cl_tel02" class="col-sm-4 control-label">担当者電話番号</label>
     <div class="col-sm-8">
-<<<<<<< HEAD
       {form_input('cl_tel02' , {$client_info.cl_tel02} , 'class="form-control" placeholder="担当者電話番号を入力してください"')}
       {if form_error('cl_tel02')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('cl_tel02')}</font></label>{/if}
-=======
-      {$client_info.cl_tel02}
-      {form_hidden('cl_tel02', $client_info.cl_tel02)}
->>>>>>> develop
     </div>
   </div>
   <div class="form-group">
     <label for="cl_mobile" class="col-sm-4 control-label">担当者携帯番号</label>
     <div class="col-sm-8">
-<<<<<<< HEAD
       {form_input('cl_mobile' , {$client_info.cl_mobile} , 'class="form-control" placeholder="担当者携帯番号を入力してください"')}
       {if form_error('cl_mobile')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('cl_mobile')}</font></label>{/if}
-=======
-      {$client_info.cl_mobile}
-      {form_hidden('cl_mobile', $client_info.cl_mobile)}
->>>>>>> develop
     </div>
   </div>
   <div class="form-group">
     <label for="cl_fax" class="col-sm-4 control-label">ＦＡＸ番号</label>
     <div class="col-sm-8">
-<<<<<<< HEAD
       {form_input('cl_fax' , {$client_info.cl_fax} , 'class="form-control" placeholder="ＦＡＸ番号を入力してください"')}
       {if form_error('cl_fax')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('cl_fax')}</font></label>{/if}
-=======
-      {$client_info.cl_fax}
-      {form_hidden('cl_fax', $client_info.cl_fax)}
->>>>>>> develop
     </div>
   </div>
   <div class="form-group">
     <label for="cl_hp" class="col-sm-4 control-label">会社ＨＰ(http://～)</label>
     <div class="col-sm-8">
-<<<<<<< HEAD
       {form_input('cl_hp' , {$client_info.cl_hp} , 'class="form-control" placeholder="会社ＨＰ(http://～)を入力してください"')}
       {if form_error('cl_hp')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('cl_hp')}</font></label>{/if}
-=======
-      {$client_info.cl_hp}
-      {form_hidden('cl_hp', $client_info.cl_hp)}
->>>>>>> develop
     </div>
   </div>
 

@@ -10,6 +10,7 @@ class Admin extends CI_Model
 
     // 重複データのチェック：ログインID（メールアドレス）
 <<<<<<< HEAD
+<<<<<<< HEAD
     /*
      * ADMIN管理者は クライアント登録(tb_client) の クライアントID(cl_id)=='1' 固定とする。
      */
@@ -24,15 +25,25 @@ class Admin extends CI_Model
     			$loginid,
     			'1',
 =======
+=======
+    /*
+     * ADMIN管理者は クライアント登録(tb_client) の クライアントID(cl_id)=='1' 固定とする。
+     */
+>>>>>>> develop
     public function check_LoginID($loginid)
     {
 
-    	$sql = 'SELECT * FROM `tb_admin` '
-    			. 'WHERE `ad_email1` = ? ';
+    	$sql = 'SELECT * FROM `tb_client` '
+    			. 'WHERE `cl_email` = ? '
+    			. 'AND `cl_id` = ? ';
 
     	$values = array(
     			$loginid,
+<<<<<<< HEAD
 >>>>>>> 778364b11983b8ecd0f1ae7ce60860e34a1a71c4
+=======
+    			'1',
+>>>>>>> develop
     	);
 
     	$query = $this->db->query($sql, $values);
@@ -51,12 +62,17 @@ class Admin extends CI_Model
 
     	// データ追加
 <<<<<<< HEAD
+<<<<<<< HEAD
     	//$result = $this->db->insert('tb_admin', $setData);
 		//return $result;
 =======
     	$result = $this->db->insert('tb_admin', $setData);
 		return $result;
 >>>>>>> 778364b11983b8ecd0f1ae7ce60860e34a1a71c4
+=======
+    	//$result = $this->db->insert('tb_admin', $setData);
+		//return $result;
+>>>>>>> develop
     }
 
     /**
@@ -71,6 +87,7 @@ class Admin extends CI_Model
     	$time = time();
     	$setData = array(
 <<<<<<< HEAD
+<<<<<<< HEAD
     			'cl_lastlogin' => date("Y-m-d H:i:s", $time)
     	);
     	$where = array(
@@ -79,12 +96,19 @@ class Admin extends CI_Model
     	$result = $this->db->update('tb_client', $setData, $where);
 =======
     			'ad_lastlogin' => date("Y-m-d H:i:s", $time)
+=======
+    			'cl_lastlogin' => date("Y-m-d H:i:s", $time)
+>>>>>>> develop
     	);
     	$where = array(
-    			'ad_id' => $cl_id
+    			'cl_id' => $cl_id
     	);
+<<<<<<< HEAD
     	$result = $this->db->update('tb_admin', $setData, $where);
 >>>>>>> 778364b11983b8ecd0f1ae7ce60860e34a1a71c4
+=======
+    	$result = $this->db->update('tb_client', $setData, $where);
+>>>>>>> develop
     	return $result;
     }
 

@@ -8,6 +8,9 @@
 
 // ライター会員ステータス
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> develop
 $config['WRITER_KARISHINSEI_ID'] = '1';					// 仮申請
 $config['WRITER_SHINSEITYU_ID']  = '2';					// 登録申請中
 $config['WRITER_KARITOUROKU_ID'] = '3';					// 仮登録 (デフォルト)
@@ -68,6 +71,7 @@ $config['CLIENT_TAIKAI']         = '退会';
 
 
 
+<<<<<<< HEAD
 =======
 $config['WRITER_KARISHINSEI']    = '1';					// 仮申請
 $config['WRITER_SHINSEITYU']     = '2';					// 登録申請中
@@ -77,6 +81,8 @@ $config['WRITER_ITIJITEISHI']    = '7';					// 一時停止
 $config['WRITER_TEISHI']         = '8';					// 強制停止
 $config['WRITER_TAIKAI']         = '9';					// 退会
 >>>>>>> 778364b11983b8ecd0f1ae7ce60860e34a1a71c4
+=======
+>>>>>>> develop
 
 
 /* End of file config_status.php */

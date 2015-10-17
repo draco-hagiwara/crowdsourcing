@@ -39,10 +39,14 @@
 
 $autoload['packages'] = array();
 <<<<<<< HEAD
+<<<<<<< HEAD
 $autoload['packages'] = array(APPPATH . 'third_party/smarty', '../modules/common');
 =======
 $autoload['packages'] = array(APPPATH . 'third_party/smarty', '../common');
 >>>>>>> 778364b11983b8ecd0f1ae7ce60860e34a1a71c4
+=======
+$autoload['packages'] = array(APPPATH . 'third_party/smarty', '../modules/common');
+>>>>>>> develop
 //$autoload['packages'] = array(APPPATH . 'third_party/smarty');
 
 /*
@@ -71,11 +75,16 @@ $autoload['libraries'] = array('database', 'session', 'smarty');
 */
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 //$autoload['helper'] = array();
 $autoload['helper'] = array('url');
 =======
 $autoload['helper'] = array();
 >>>>>>> 778364b11983b8ecd0f1ae7ce60860e34a1a71c4
+=======
+//$autoload['helper'] = array();
+$autoload['helper'] = array('url');
+>>>>>>> develop
 
 
 /*

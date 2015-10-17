@@ -7,9 +7,13 @@ class Comm_auth extends CI_Model
 	private $_memberID;
 	private $_memberRANK;
 <<<<<<< HEAD
+<<<<<<< HEAD
 	private $_memberNAME;
 =======
 >>>>>>> 778364b11983b8ecd0f1ae7ce60860e34a1a71c4
+=======
+	private $_memberNAME;
+>>>>>>> develop
 
     public function __construct()
     {
@@ -27,11 +31,16 @@ class Comm_auth extends CI_Model
     {
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     	switch ($login_member)
     	{
 =======
     	switch ($login_member){
 >>>>>>> 778364b11983b8ecd0f1ae7ce60860e34a1a71c4
+=======
+    	switch ($login_member)
+    	{
+>>>>>>> develop
     		case 'writer':
     			$sql = 'SELECT * FROM `tb_writer` '
     					. 'WHERE `wr_email` = ? ';
@@ -44,11 +53,16 @@ class Comm_auth extends CI_Model
 
     			// 重複チェック
 <<<<<<< HEAD
+<<<<<<< HEAD
    				if ($query->num_rows() >= 2)
    				{
 =======
    				if ($query->num_rows() >= 2) {
 >>>>>>> 778364b11983b8ecd0f1ae7ce60860e34a1a71c4
+=======
+   				if ($query->num_rows() >= 2)
+   				{
+>>>>>>> develop
    					$err_mess = '入力されたログインIDが重複しています。システム管理者に連絡してください。';
    					return $err_mess;
    				}
@@ -56,19 +70,28 @@ class Comm_auth extends CI_Model
    				// ログインID＆パスワード読み込み
    				$arrData = $query->result('array');
 <<<<<<< HEAD
+<<<<<<< HEAD
     			if (is_array($arrData))
     			{
 =======
     			if (is_array($arrData)) {
 >>>>>>> 778364b11983b8ecd0f1ae7ce60860e34a1a71c4
+=======
+    			if (is_array($arrData))
+    			{
+>>>>>>> develop
 
     				$this->_hash_passwd = $arrData[0]['wr_password'];
     				$this->_memberID    = $arrData[0]['wr_id'];
     				$this->_memberRANK  = $arrData[0]['wr_mm_memberrank_id'];
 <<<<<<< HEAD
+<<<<<<< HEAD
     				$this->_memberNAME  = $arrData[0]['wr_nickname'];
 =======
 >>>>>>> 778364b11983b8ecd0f1ae7ce60860e34a1a71c4
+=======
+    				$this->_memberNAME  = $arrData[0]['wr_nickname'];
+>>>>>>> develop
 
     				$this->_update_Session($login_member);
     			} else {
@@ -79,10 +102,14 @@ class Comm_auth extends CI_Model
     			break;
     		case 'client':
 <<<<<<< HEAD
+<<<<<<< HEAD
     	    	$sql = 'SELECT * FROM `tb_client` '
 =======
     	    			$sql = 'SELECT * FROM `tb_client` '
 >>>>>>> 778364b11983b8ecd0f1ae7ce60860e34a1a71c4
+=======
+    	    	$sql = 'SELECT * FROM `tb_client` '
+>>>>>>> develop
     					. 'WHERE `cl_email` = ? ';
 
     			$values = array(
@@ -93,11 +120,16 @@ class Comm_auth extends CI_Model
 
     			// 重複チェック
 <<<<<<< HEAD
+<<<<<<< HEAD
    				if ($query->num_rows() >= 2)
    				{
 =======
    				if ($query->num_rows() >= 2) {
 >>>>>>> 778364b11983b8ecd0f1ae7ce60860e34a1a71c4
+=======
+   				if ($query->num_rows() >= 2)
+   				{
+>>>>>>> develop
    					$err_mess = '入力されたログインIDが重複しています。システム管理者に連絡してください。';
    					return $err_mess;
    				}
@@ -105,19 +137,28 @@ class Comm_auth extends CI_Model
    				// ログインID＆パスワード読み込み
    				$arrData = $query->result('array');
 <<<<<<< HEAD
+<<<<<<< HEAD
     			if (is_array($arrData))
     			{
 =======
     			if (is_array($arrData)) {
 >>>>>>> 778364b11983b8ecd0f1ae7ce60860e34a1a71c4
+=======
+    			if (is_array($arrData))
+    			{
+>>>>>>> develop
 
     				$this->_hash_passwd = $arrData[0]['cl_password'];
     				$this->_memberID    = $arrData[0]['cl_id'];
     				$this->_memberRANK  = '';
 <<<<<<< HEAD
+<<<<<<< HEAD
     				$this->_memberNAME  = $arrData[0]['cl_company'];
 =======
 >>>>>>> 778364b11983b8ecd0f1ae7ce60860e34a1a71c4
+=======
+    				$this->_memberNAME  = $arrData[0]['cl_company'];
+>>>>>>> develop
 
     				$this->_update_Session($login_member);
     			} else {
@@ -128,6 +169,9 @@ class Comm_auth extends CI_Model
     			break;
     		case 'admin':
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> develop
     			/*
     			 * ADMIN管理者は クライアント登録(tb_client) の クライアントID(cl_id)=='1' 固定とする。
     			*/
@@ -170,8 +214,11 @@ class Comm_auth extends CI_Model
     				return $err_mess;
     			}
 
+<<<<<<< HEAD
 =======
 >>>>>>> 778364b11983b8ecd0f1ae7ce60860e34a1a71c4
+=======
+>>>>>>> develop
     			break;
     		default:
     	}
@@ -210,9 +257,13 @@ class Comm_auth extends CI_Model
     	$this->session->set_userdata('memberID'  , $this->_memberID);			// メンバーID
     	$this->session->set_userdata('memberRANK', $this->_memberRANK);			// メンバーランキング(writerのみ)
 <<<<<<< HEAD
+<<<<<<< HEAD
     	$this->session->set_userdata('memberNAME', $this->_memberNAME);			// メンバー名前(writerはニックネーム)
 =======
 >>>>>>> 778364b11983b8ecd0f1ae7ce60860e34a1a71c4
+=======
+    	$this->session->set_userdata('memberNAME', $this->_memberNAME);			// メンバー名前(writerはニックネーム)
+>>>>>>> develop
     }
 
 	/**

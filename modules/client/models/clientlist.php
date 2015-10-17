@@ -145,11 +145,7 @@ class Client extends CI_Model
 
     	// 更新日時をセット
     	$time = time();
-<<<<<<< HEAD
     	$set_data['cl_lastlogin'] = date("Y-m-d H:i:s", $time);
-=======
-    	$set_data['cl_update_date'] = date("Y-m-d H:i:s", $time);
->>>>>>> develop
 
     	$where = array(
     			'cl_id' => $set_data['cl_id']
