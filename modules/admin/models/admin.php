@@ -9,14 +9,19 @@ class Admin extends CI_Model
     }
 
     // 重複データのチェック：ログインID（メールアドレス）
+    /*
+     * ADMIN管理者は クライアント登録(tb_client) の クライアントID(cl_id)=='1' 固定とする。
+     */
     public function check_LoginID($loginid)
     {
 
-    	$sql = 'SELECT * FROM `tb_admin` '
-    			. 'WHERE `ad_email1` = ? ';
+    	$sql = 'SELECT * FROM `tb_client` '
+    			. 'WHERE `cl_email` = ? '
+    			. 'AND `cl_id` = ? ';
 
     	$values = array(
     			$loginid,
+    			'1',
     	);
 
     	$query = $this->db->query($sql, $values);
@@ -34,8 +39,8 @@ class Admin extends CI_Model
     {
 
     	// データ追加
-    	$result = $this->db->insert('tb_admin', $setData);
-		return $result;
+    	//$result = $this->db->insert('tb_admin', $setData);
+		//return $result;
     }
 
     /**
@@ -49,12 +54,12 @@ class Admin extends CI_Model
 
     	$time = time();
     	$setData = array(
-    			'ad_lastlogin' => date("Y-m-d H:i:s", $time)
+    			'cl_lastlogin' => date("Y-m-d H:i:s", $time)
     	);
     	$where = array(
-    			'ad_id' => $cl_id
+    			'cl_id' => $cl_id
     	);
-    	$result = $this->db->update('tb_admin', $setData, $where);
+    	$result = $this->db->update('tb_client', $setData, $where);
     	return $result;
     }
 

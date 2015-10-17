@@ -3,6 +3,9 @@
 class Login extends MY_Controller
 {
 
+	/*
+	 * ADMIN管理者は クライアント登録(tb_client) の クライアントID(cl_id)=='1' 固定とする。
+	*/
 	public function __construct()
 	{
 		parent::__construct();
@@ -53,8 +56,8 @@ class Login extends MY_Controller
 			} else {
 				// 認証OK
 				// ログイン日時 更新
-				$this->load->model('Client', 'cl', TRUE);
-				$this->cl->update_Logindate($this->session->userdata('memberID'));
+				$this->load->model('Admin', 'ad', TRUE);
+				$this->ad->update_Logindate($this->session->userdata('memberID'));
 
 				// クライアント・マイページ画面TOPへ
 				//$this->view('client/top/index.tpl');

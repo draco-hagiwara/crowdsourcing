@@ -10,10 +10,13 @@ class Top extends MY_Controller
 		if (($this->session->userdata('login_mem') == 'admin') && ($this->session->userdata('login_chk') == TRUE))
 		{
 			$this->smarty->assign('login_chk', TRUE);
+        	$this->smarty->assign('login_mem', 'admin');
+			$this->smarty->assign('login_name', $this->session->userdata('memberNAME'));
 		} else {
         	$this->smarty->assign('login_chk', FALSE);
         	$this->smarty->assign('login_mem', 'admin');
-			$this->load->helper('url');
+
+        	$this->load->helper('url');
 			redirect('/login/');
 		}
 
