@@ -8,13 +8,13 @@ class My_Controller extends CI_Controller {
         parent::__construct();
 
         // ログイン有無チェック
-		if (($this->session->userdata('login_mem') == 'client') && ($this->session->userdata('login_chk') == TRUE))
+		if ($this->session->userdata('c_login') == TRUE)
 		{
-        	//$this->smarty->assign('login_chk', $this->session->userdata('login_chk'));
+        	//$this->smarty->assign('login_chk', TRUE);
         	//$this->smarty->assign('login_mem', $this->session->userdata('login_mem'));
         } else {
         	$this->smarty->assign('login_chk', FALSE);
-        	$this->smarty->assign('login_mem', 'client');
+        	//$this->smarty->assign('login_mem', 'client');
         }
 
         // Smarty 設定

@@ -10,14 +10,14 @@
 
 <script type="text/javascript" src="https://www.google.com/jsapi"></script>
 
-<link rel="stylesheet" href="../../css/bootstrap.min.css">
-<link rel="stylesheet" href="../../css/normalize.css">
-<link rel="stylesheet" href="../../css/main.css">
+<link rel="stylesheet" href="{base_url()}../css/bootstrap.min.css">
+<link rel="stylesheet" href="{base_url()}../css/normalize.css">
+<link rel="stylesheet" href="{base_url()}../css/main.css">
 
-<script src="../../js/jquery-2.1.4.min.js"></script>
-<script src="../../js/jquery-ui-3.0.2.custom.min.js"></script>
-<script src="../../js/bootstrap.min.js"></script>
-<script src="../../js/main.js"></script>
+<script src="{base_url()}../js/jquery-2.1.4.min.js"></script>
+<script src="{base_url()}../js/jquery-ui-3.0.2.custom.min.js"></script>
+<script src="{base_url()}../js/bootstrap.min.js"></script>
+<script src="{base_url()}../js/main.js"></script>
 </head>
 
 
@@ -38,19 +38,24 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-  		  <a href="/" class="navbar-brand">クライアントTOP</a>
+  		  <a href="#" class="navbar-brand">クライアントTOP</a>
         </div>
 
         <div id="patern05" class="collapse navbar-collapse">
           <ul class="nav navbar-nav">
-		    <li><a href="">TOP</a></li>
-		    <li><a href="">案件申請</a></li>
+		    <li><a href="/client/top/">TOP</a></li>
+		    <li><a href="#" class="dropdown-toggle" data-toggle="dropdown">案件申請<b class="caret"></b></a>
+			  <ul class="dropdown-menu right">
+				<li><a href="/client/entrylist/">案件申請一覧</a></li>
+				<li><a href="/client/entryorder/">新規作成</a></li>
+			  </ul>
+		    </li>
 		    <li><a href="">納品案件</a></li>
 		    <li><a href="">支払管理</a></li>
           </ul>
 
 		  <ul class="nav navbar-nav navbar-right">
-		    <li><a href="#" class="dropdown-toggle" data-toggle="dropdown">会社名<b class="caret"></b></a>
+		    <li><a href="#" class="dropdown-toggle" data-toggle="dropdown">{$login_name}<b class="caret"></b></a>
 			  <ul class="dropdown-menu right">
 				<li><a href="#">会社情報</a></li>
 				<li><a href="#">問合せ</a></li>
