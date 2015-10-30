@@ -17,7 +17,7 @@
     </div>
   </div>
   <div class="form-group">
-    <label for="cl_company_kana" class="col-sm-4 control-label">会　社　名（全角）<font color=red>【必須】</font></label>
+    <label for="cl_company_kana" class="col-sm-4 control-label">会社名カナ（全角）<font color=red>【必須】</font></label>
     <div class="col-sm-8">
       {form_input('cl_company_kana' , set_value('cl_company_kana', '') , 'class="form-control" placeholder="会社名カナを入力してください"')}
       {if form_error('cl_company_kana')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('cl_company_kana')}</font></label>{/if}

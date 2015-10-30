@@ -10,8 +10,6 @@
 
 <script type="text/javascript" src="https://www.google.com/jsapi"></script>
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 <link rel="stylesheet" href="{base_url()}../css/bootstrap.min.css">
 <link rel="stylesheet" href="{base_url()}../css/normalize.css">
 <link rel="stylesheet" href="{base_url()}../css/main.css">
@@ -20,26 +18,6 @@
 <script src="{base_url()}../js/jquery-ui-3.0.2.custom.min.js"></script>
 <script src="{base_url()}../js/bootstrap.min.js"></script>
 <script src="{base_url()}../js/main.js"></script>
-=======
-<link rel="stylesheet" href="../../css/bootstrap.min.css">
-<link rel="stylesheet" href="../../css/normalize.css">
-<link rel="stylesheet" href="../../css/main.css">
-
-<script src="../../js/jquery-2.1.4.min.js"></script>
-<script src="../../js/jquery-ui-3.0.2.custom.min.js"></script>
-<script src="../../js/bootstrap.min.js"></script>
-<script src="../../js/main.js"></script>
->>>>>>> 778364b11983b8ecd0f1ae7ce60860e34a1a71c4
-=======
-<link rel="stylesheet" href="{base_url()}../css/bootstrap.min.css">
-<link rel="stylesheet" href="{base_url()}../css/normalize.css">
-<link rel="stylesheet" href="{base_url()}../css/main.css">
-
-<script src="{base_url()}../js/jquery-2.1.4.min.js"></script>
-<script src="{base_url()}../js/jquery-ui-3.0.2.custom.min.js"></script>
-<script src="{base_url()}../js/bootstrap.min.js"></script>
-<script src="{base_url()}../js/main.js"></script>
->>>>>>> develop
 </head>
 
 
@@ -60,28 +38,22 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-<<<<<<< HEAD
-<<<<<<< HEAD
   		  <a href="#" class="navbar-brand">アドミンTOP</a>
-=======
-  		  <a href="/" class="navbar-brand">アドミンTOP</a>
->>>>>>> 778364b11983b8ecd0f1ae7ce60860e34a1a71c4
-=======
-  		  <a href="#" class="navbar-brand">アドミンTOP</a>
->>>>>>> develop
         </div>
 
         <div id="patern05" class="collapse navbar-collapse">
           <ul class="nav navbar-nav">
 		    <li><a href="/admin/top/">TOP</a></li>
-		    <li><a href="">案件申請</a></li>
-<<<<<<< HEAD
-<<<<<<< HEAD
-		    <li><a href="">発注管理</a></li>
-		    <li><a href="">投稿記事管理</a></li>
-		    <li><a href="">ライター管理</a></li>
-=======
-		    <li><a href="">発注管理</a></li>
+		    <li><a href="#" class="dropdown-toggle" data-toggle="dropdown">CL申請管理<b class="caret"></b></a>
+			  <ul class="dropdown-menu right">
+				<li><a href="/admin/entrylist/">CL案件申請一覧</a></li>
+			  </ul>
+		    </li>
+		    <li><a href="#" class="dropdown-toggle" data-toggle="dropdown">案件管理<b class="caret"></b></a>
+			  <ul class="dropdown-menu right">
+				<li><a href="/admin/orderlist/">案件一覧</a></li>
+			  </ul>
+		    </li>
 		    <li><a href="">投稿記事管理</a></li>
 		    <li><a href="#" class="dropdown-toggle" data-toggle="dropdown">ライター管理<b class="caret"></b></a>
 			  <ul class="dropdown-menu right">
@@ -89,7 +61,6 @@
 				<li><a href="#">新規登録</a></li>
 			  </ul>
 		    </li>
->>>>>>> develop
 		    <li><a href="#" class="dropdown-toggle" data-toggle="dropdown">クライアント管理<b class="caret"></b></a>
 			  <ul class="dropdown-menu right">
 				<li><a href="/admin/clientlist/">クライアント一覧</a></li>
@@ -97,7 +68,6 @@
 			  </ul>
 		    </li>
 		    <li><a href="">決済管理</a></li>
-<<<<<<< HEAD
           </ul>
 
 		  <ul class="nav navbar-nav navbar-right">
@@ -106,24 +76,6 @@
 				<li><a href="#">会社情報</a></li>
 				<li><a href="#">問合せ</a></li>
 				<li><a href="/admin/login/logout/">ログアウト</a></li>
-=======
-		    <li><a href="">納品案件</a></li>
-		    <li><a href="">支払管理</a></li>
-=======
->>>>>>> develop
-          </ul>
-
-		  <ul class="nav navbar-nav navbar-right">
-		    <li><a href="#" class="dropdown-toggle" data-toggle="dropdown">{$login_name}<b class="caret"></b></a>
-			  <ul class="dropdown-menu right">
-				<li><a href="#">会社情報</a></li>
-				<li><a href="#">問合せ</a></li>
-<<<<<<< HEAD
-				<li><a href="/client/login/logout/">ログアウト</a></li>
->>>>>>> 778364b11983b8ecd0f1ae7ce60860e34a1a71c4
-=======
-				<li><a href="/admin/login/logout/">ログアウト</a></li>
->>>>>>> develop
 			  </ul>
 		    </li>
           </ul>
@@ -145,7 +97,7 @@
 		  <span class="icon-bar"></span>
 		  <span class="icon-bar"></span>
 		  <span class="icon-bar"></span>
-		  <a href="/client/login/" class="navbar-brand">アドミン管理</a>
+		  <a href="/admin/login/" class="navbar-brand">アドミン管理</a>
 		</div>
 	  </nav>
 

@@ -15,21 +15,21 @@ class Login extends MY_Controller
 
 			$setData = array(
 					'ticket' => md5(uniqid(mt_rand(), true)),
-					'login_chk' => '',
-					'login_mem' => '',
+					'w_login' => FALSE,
+					//'login_mem' => '',
 			);
 			$this->session->set_userdata($setData);
 		} else {
 
 			// ログイン有無のチェック
-			if ($this->session->userdata('login_chk') == TRUE) {
+			if ($this->session->userdata('w_login') == TRUE) {
 				// TOPへリダイレクト
 				$this->load->helper('url');
 				redirect(base_url());
 				return;
 			}
 			$this->smarty->assign('login_chk', FALSE);
-			$this->smarty->assign('login_mem', $this->session->userdata('login_mem'));
+			//$this->smarty->assign('login_mem', $this->session->userdata('login_mem'));
 		}
 
 		//$this->_set_validation();											// バリデーション設定
@@ -101,7 +101,7 @@ class Login extends MY_Controller
 				// 認証OK
 				// ログイン日時 更新
 				$this->load->model('Writer', 'wr', TRUE);
-				$this->wr->update_Logindate($this->session->userdata('memberID'));
+				$this->wr->update_Logindate($this->session->userdata('w_memID'));
 
 				// 前URLへリダイレクト
 				$this->load->helper('url');
@@ -426,7 +426,7 @@ class Login extends MY_Controller
 				array(
 						'field'   => 'wr_password',
 						'label'   => 'パスワード',
-						'rules'   => 'trim|required|regex_match[/^[\x21-\x7e]+$/]|min_length[8]|max_length[50]'
+						'rules'   => 'trim|required|regex_match[/^[\x21-\x7e]+$/]|min_length[8]|max_length[50]|matches[|matches[wr_password]]'
 				),
 				array(
 						'field'   => 'retype_password',

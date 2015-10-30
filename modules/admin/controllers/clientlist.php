@@ -7,26 +7,29 @@ class Clientlist extends MY_Controller
 	{
 		parent::__construct();
 
-		if (($this->session->userdata('login_mem') == 'admin') && ($this->session->userdata('login_chk') == TRUE))
+		if ($this->session->userdata('a_login') == TRUE)
 		{
 			$this->smarty->assign('login_chk', TRUE);
-			$this->smarty->assign('login_mem', 'admin');
-			$this->smarty->assign('login_name', $this->session->userdata('memberNAME'));
+			//$this->smarty->assign('login_mem', 'admin');
+			$this->smarty->assign('login_name', $this->session->userdata('a_memNAME'));
 		} else {
 			$this->smarty->assign('login_chk', FALSE);
-			$this->smarty->assign('login_mem', 'admin');
+			//$this->smarty->assign('login_mem', 'admin');
+			$this->smarty->assign('login_name', '');
 
-			$this->load->helper('url');
+			//$this->load->helper('url');
 			redirect('/login/');
 		}
-
-		//$this->load->library('form_validation');							// バリデーションクラス読み込み
 
 	}
 
 	// クライアントTOP
 	public function index()
 	{
+
+		// セッションデータをクリア
+		$this->load->model('comm_auth', 'comm_auth', TRUE);
+		$this->comm_auth->delete_session('admin');
 
 		// バリデーション・チェック
 		$this->_set_validation();											// バリデーション設定
@@ -40,7 +43,7 @@ class Clientlist extends MY_Controller
 		$this->_search_set();
 
 		// Pagination 現在ページ数の取得：：URIセグメントの取得
-		$this->load->helper('url');
+		//$this->load->helper('url');
 		$segments = $this->uri->segment_array();
 		if (isset($segments[3]))
 		{
@@ -73,28 +76,28 @@ class Clientlist extends MY_Controller
 		{
 			// セッションをフラッシュデータとして保存
 			$data = array(
-					'cl_company'  => $this->input->post('cl_company'),
-					'cl_id'       => $this->input->post('cl_id'),
-					'cl_email'    => $this->input->post('cl_email'),
-					'cl_status'   => $this->input->post('cl_status'),
-					'orderid'     => $this->input->post('orderid'),
-					'orderstatus' => $this->input->post('orderstatus'),
+					'a_cl_company'  => $this->input->post('cl_company'),
+					'a_cl_id'       => $this->input->post('cl_id'),
+					'a_cl_email'    => $this->input->post('cl_email'),
+					'a_cl_status'   => $this->input->post('cl_status'),
+					'a_orderid'     => $this->input->post('orderid'),
+					'a_orderstatus' => $this->input->post('orderstatus'),
 			);
-			$this->session->set_flashdata($data);
+			$this->session->set_userdata($data);
 
 			$tmp_inputpost = $this->input->post();
 			unset($tmp_inputpost["submit"]);
 
 		} else {
 			// セッションからフラッシュデータ読み込み
-			$tmp_inputpost['cl_company'] = $this->session->flashdata('cl_company');
-			$tmp_inputpost['cl_id'] = $this->session->flashdata('cl_id');
-			$tmp_inputpost['cl_email'] = $this->session->flashdata('cl_email');
-			$tmp_inputpost['cl_status'] = $this->session->flashdata('cl_status');
-			$tmp_inputpost['orderid'] = $this->session->flashdata('orderid');
-			$tmp_inputpost['orderstatus'] = $this->session->flashdata('orderstatus');
+			$tmp_inputpost['cl_company']  = $this->session->userdata('a_cl_company');
+			$tmp_inputpost['cl_id']       = $this->session->userdata('a_cl_id');
+			$tmp_inputpost['cl_email']    = $this->session->userdata('a_cl_email');
+			$tmp_inputpost['cl_status']   = $this->session->userdata('a_cl_status');
+			$tmp_inputpost['orderid']     = $this->session->userdata('a_orderid');
+			$tmp_inputpost['orderstatus'] = $this->session->userdata('a_orderstatus');
 
-			$this->session->set_flashdata($tmp_inputpost);
+			//$this->session->set_userdata($tmp_inputpost);
 		}
 
 		// バリデーション・チェック
@@ -102,7 +105,7 @@ class Clientlist extends MY_Controller
 		$this->form_validation->run();
 
 		// Pagination 現在ページ数の取得：：URIセグメントの取得
-		$this->load->helper('url');
+		//$this->load->helper('url');
 		$segments = $this->uri->segment_array();
 		if (isset($segments[3]))
 		{
@@ -133,143 +136,100 @@ class Clientlist extends MY_Controller
 
 	}
 
-
-
-
-
-
-
 	// クライアント情報編集
 	public function detail()
 	{
 
-<<<<<<< HEAD
-		print("detail -><br>");
-		print_r($this->input->post());
+		// クライアントステータス設定  <-- 検索項目 初期値セット
+		$this->_search_set();
 
+		// 更新対象クライアントメンバーのデータ取得
+		$input_post = $this->input->post();
+		$this->load->model('Client', 'cl', TRUE);
 
-		$this->config->load('config_pref');										// 都道府県情報読み込み
+		$tmp_clientid = $input_post['clid_uniq'];
+		$get_data = $this->cl->select_client_id($tmp_clientid);
 
-		// 都道府県情報設定
-		$this->_options_pref = $this->config->item('pref');
-		$this->smarty->assign('options_pref', $this->_options_pref);
+		// 都道府県情報＆手数料選択設定
+		$this->set_optionitem($get_data[0]);
 
-		// 都道府県チェック
-		if ($this->input->post('cl_pref')) {
-			$pref_id = $this->input->post('cl_pref');
-			$this->_pref_name = $this->_options_pref[$pref_id];
-		}
+		$this->smarty->assign('client_info', $get_data[0]);
 
-=======
-		$this->load->library('form_validation');							// バリデーションクラス読み込み
->>>>>>> develop
+		// バリデーション設定
+		$this->_set_validation01();
+
+		$this->view('admin/clientlist/detail.tpl');
+
+	}
+
+	// クライアント情報チェック
+	public function detailchk()
+	{
 
 		// クライアントステータス設定  <-- 検索項目 初期値セット
 		$this->_search_set();
 
-<<<<<<< HEAD
-
-
 		// 更新対象クライアントメンバーのデータ取得
-		// 初期表示はバリデーションチェックを回避
-=======
-		// 更新対象クライアントメンバーのデータ取得
-		// 初期表示はバリデーションチェックを回避 <- チェックは要らない！
->>>>>>> develop
 		$input_post = $this->input->post();
 		$this->load->model('Client', 'cl', TRUE);
-		if (isset($input_post['clid_uniq']))
+
+		// 都道府県情報＆手数料選択設定
+		$this->set_optionitem($input_post);
+
+		$this->_set_validation01();											// バリデーション設定
+		if ($this->form_validation->run() == FALSE)
 		{
-<<<<<<< HEAD
-			$tmp_clientid = $input_post['clid_uniq'];
-			$get_data = $this->cl->select_client_id($tmp_clientid);
-
-			$this->load->library('form_validation');							// バリデーションクラス読み込み
-
-			$this->smarty->assign('err_email', FALSE);
-			$this->smarty->assign('client_info', $get_data[0]);
+			$this->smarty->assign('client_info', $this->input->post());
 		} else {
-
-			// バリデーション・チェック
-			$this->_set_validation01();											// バリデーション設定
-			if ($this->form_validation->run() == FALSE) {
-				$this->smarty->assign('err_email', FALSE);
-				$this->smarty->assign('client_info', $input_post);
-			} else {
-
-				// ログインID(メールアドレス)の重複チェック
-				$this->load->model('Client', 'cl', TRUE);
-
-				if ($this->cl->check_LoginID($input_post['cl_email'], $update = TRUE)) {
-					$this->smarty->assign('err_email', TRUE);
-					$this->view('admin/clientlist/detail.tpl');
-					return;
-				}
-
-				// DB書き込み
-				$set_data = $this->input->post();
-				if (isset($input_post['cl_password']))
-				{
-					$set_data["cl_password"] = password_hash($input_post['cl_password'], PASSWORD_DEFAULT);
-				}
-
-				// 不要パラメータ削除
-				unset($set_data["submit"]) ;
-				unset($set_data["retype_password"]) ;
-
-				if ($this->cl->update_Client($set_data)) {
-				} else {
-					echo "会員更新に失敗しました。";
-				}
-
-				// 検索一覧へ
-				$this->load->helper('url');
-				redirect('/clientlist/');
-
-			}
-=======
-
-			$tmp_clientid = $input_post['clid_uniq'];
-			$get_data = $this->cl->select_client_id($tmp_clientid);
-
-			// 都道府県情報設定
-			$this->config->load('config_pref');									// 都道府県情報読み込み
-			$this->_options_pref = $this->config->item('pref');
-			$this->_pref_name    = $this->_options_pref[$get_data[0]['cl_pref']];
-			$this->smarty->assign('pref_name', $this->_pref_name);
-
-			$this->smarty->assign('client_info', $get_data[0]);
-
-		} else {
-
 			// DB書き込み
-			$set_data['cl_status'] = $this->input->post('cl_status');
-			$set_data['cl_id']     = $this->input->post('cl_id');
+			$set_data01['cl_status'] = $this->input->post('cl_status');
+			$set_data01['cl_id']     = $this->input->post('cl_id');
 
-			if ($this->cl->update_Client($set_data)) {
+			if ($this->cl->update_Client($set_data01))
+			{
+
+				// クライアント個別情報更新
+				$set_data02['cl_id']            = $this->input->post('cl_id');
+				$set_data02['ci_fee_id']        = $this->input->post('ci_fee_id');
+				$set_data02['ci_fee']           = $this->input->post('ci_fee');
+				$set_data02['ci_agreement_st']  = $this->input->post('ci_agreement_st');
+				$set_data02['ci_agreement_end'] = $this->input->post('ci_agreement_end');
+				$set_data02['ci_comment']       = $this->input->post('ci_comment');
+
+				if ($this->cl->update_Client_info($set_data02)) {
+				} else {
+					echo "クライアント個別更新に失敗しました。";
+				}
+
 			} else {
-				echo "会員更新に失敗しました。";
+				echo "クライアント更新に失敗しました。";
 			}
 
 			// 検索一覧へ
-			$this->load->helper('url');
+			//$this->load->helper('url');
 			redirect('/clientlist/');
-
->>>>>>> develop
 		}
 
 		$this->view('admin/clientlist/detail.tpl');
 
 	}
 
-<<<<<<< HEAD
+	// 都道府県情報＆手数料選択設定
+	private function set_optionitem($input_data)
+	{
 
+		// 都道府県情報設定
+		$this->config->load('config_pref');									// 都道府県情報読み込み
+		$this->_options_pref = $this->config->item('pref');
+		$this->_pref_name    = $this->_options_pref[$input_data['cl_pref']];
+		$this->smarty->assign('pref_name', $this->_pref_name);
 
+		// 手数料状態選択
+		$this->smarty->assign('ci_fee_id', $input_data['ci_fee_id']);
+		$this->smarty->assign('ci_fee',    $input_data['ci_fee']);
 
+	}
 
-
-=======
->>>>>>> develop
 	// Pagination 設定
 	private function _get_Pagination($client_countall, $tmp_per_page)
 	{
@@ -299,11 +259,7 @@ class Clientlist extends MY_Controller
 
 		// ステータス状態 選択項目セット
 		$this->config->load('config_status');
-<<<<<<< HEAD
-		$arroptions_clstatus = array (
-=======
 		$arroptions_clstatus01 = array (
->>>>>>> develop
 				''  => '選択してください',
 				'0' => $this->config->item('CLIENT_SHINSEITYU'),
 				'1' => $this->config->item('CLIENT_SHONIN'),
@@ -313,8 +269,6 @@ class Clientlist extends MY_Controller
 				'9' => $this->config->item('CLIENT_TAIKAI'),
 		);
 
-<<<<<<< HEAD
-=======
 		$arroptions_clstatus02 = array (
 				'0' => $this->config->item('CLIENT_SHINSEITYU'),
 				'1' => $this->config->item('CLIENT_SHONIN'),
@@ -324,7 +278,6 @@ class Clientlist extends MY_Controller
 				'9' => $this->config->item('CLIENT_TAIKAI'),
 		);
 
->>>>>>> develop
 		// クライアントID 並び替え選択項目セット
 		$arroptions_id = array (
 				''     => '選択してください',
@@ -339,15 +292,17 @@ class Clientlist extends MY_Controller
 				'ASC'  => '昇順',
 		);
 
-<<<<<<< HEAD
-		$this->smarty->assign('options_cl_status',   $arroptions_clstatus);
-=======
-		$this->smarty->assign('options_cl_status01', $arroptions_clstatus01);
-		$this->smarty->assign('options_cl_status02', $arroptions_clstatus02);
->>>>>>> develop
-		$this->smarty->assign('options_orderid',     $arroptions_id);
-		$this->smarty->assign('options_orderstatus', $arroptions_status);
+		// 手数料状態選択
+		$arroptions_ci_fee_id = array (
+				'0'    => '手数料:率',
+				'1'    => '手数料:月額固定',
+		);
 
+		$this->smarty->assign('options_cl_status01',   $arroptions_clstatus01);
+		$this->smarty->assign('options_cl_status02',   $arroptions_clstatus02);
+		$this->smarty->assign('options_orderid',       $arroptions_id);
+		$this->smarty->assign('options_orderstatus',   $arroptions_status);
+		$this->smarty->assign('options_ci_fee_id',     $arroptions_ci_fee_id);
 	}
 
 	// フォーム・バリデーションチェック
@@ -387,136 +342,165 @@ class Clientlist extends MY_Controller
 
 		$rule_set = array(
 				array(
-						'field'   => 'cl_company',
-						'label'   => '会社名',
-						'rules'   => 'trim|required|max_length[100]'
+						'field'   => 'cl_status',
+						'label'   => 'ステータス',
+						'rules'   => 'trim|required'
 				),
 				array(
-						'field'   => 'cl_company_kana',
-						'label'   => '会社名カナ（全角）',
-						'rules'   => 'trim|regex_match[/^[ァ-タダ-ヴ　ー・]+$/]|required|max_length[100]'
+						'field'   => 'ci_fee_id',
+						'label'   => '手数料設定',
+						'rules'   => 'trim|required'
 				),
 				array(
-						'field'   => 'cl_president01',
-						'label'   => '代表者姓',
-						'rules'   => 'trim|required|max_length[50]'
+						'field'   => 'ci_agreement_st',
+						'label'   => '契約開始日',
+						'rules'   => 'trim|regex_match[/^\d{4}-\d{1,2}-\d{1,2}+$/]|max_length[10]'
 				),
 				array(
-						'field'   => 'cl_president02',
-						'label'   => '代表者名',
-						'rules'   => 'trim|required|max_length[50]'
+						'field'   => 'ci_agreement_end',
+						'label'   => '契約終了(予定)日',
+						'rules'   => 'trim|regex_match[/^\d{4}-\d{1,2}-\d{1,2}+$/]|max_length[10]'
 				),
 				array(
-						'field'   => 'cl_president_kana01',
-						'label'   => '代表者セイ（全角）',
-						'rules'   => 'trim|required|max_length[50]'
+						'field'   => 'ci_comment',
+						'label'   => '備考',
+						'rules'   => 'trim|max_length[2000]'
 				),
-				array(
-						'field'   => 'cl_president_kana02',
-						'label'   => '代表者メイ（全角）',
-						'rules'   => 'trim|required|max_length[50]'
-				),
-				array(
-						'field'   => 'cl_department',
-						'label'   => '担当部署',
-						'rules'   => 'trim|max_length[50]'
-				),
-				array(
-						'field'   => 'cl_person01',
-						'label'   => '担当者姓',
-						'rules'   => 'trim|required|max_length[50]'
-				),
-				array(
-						'field'   => 'cl_person02',
-						'label'   => '担当者名',
-						'rules'   => 'trim|required|max_length[50]'
-				),
-				array(
-						'field'   => 'cl_person_kana01',
-						'label'   => '担当者セイ（全角）',
-						'rules'   => 'trim|required|max_length[50]'
-				),
-				array(
-						'field'   => 'cl_person_kana02',
-						'label'   => '担当者メイ（全角）',
-						'rules'   => 'trim|required|max_length[50]'
-				),
-				array(
-						'field'   => 'cl_zip01',
-						'label'   => '郵便番号（3ケタ）',
-						'rules'   => 'trim|required|max_length[3]|is_numeric'
-				),
-				array(
-						'field'   => 'cl_zip02',
-						'label'   => '郵便番号（4ケタ）',
-						'rules'   => 'trim|required|max_length[4]|is_numeric'
-				),
-				array(
-						'field'   => 'cl_pref',
-						'label'   => '都道府県',
-						'rules'   => 'trim|required|max_length[2]'
-				),
-				array(
-						'field'   => 'cl_addr01',
-						'label'   => '市区町村',
-						'rules'   => 'trim|required|max_length[100]'
-				),
-				array(
-						'field'   => 'cl_addr02',
-						'label'   => '町名・番地',
-						'rules'   => 'trim|required|max_length[100]'
-				),
-				array(
-						'field'   => 'cl_buil',
-						'label'   => 'ビル・マンション名など',
-						'rules'   => 'trim|max_length[100]'
-				),
-				array(
-						'field'   => 'cl_email',
-						'label'   => 'メールアドレス（代表）',
-						'rules'   => 'trim|required|valid_email'
-				),
-				array(
-						'field'   => 'cl_email2',
-						'label'   => 'メールアドレス（予備）',
-						'rules'   => 'trim|valid_email'
-				),
-				array(
-						'field'   => 'cl_tel01',
-						'label'   => '代表電話番号',
-						'rules'   => 'trim|required|regex_match[/^[0-9\-]+$/]|max_length[15]'
-				),
-				array(
-						'field'   => 'cl_tel02',
-						'label'   => '担当者電話番号',
-						'rules'   => 'trim|regex_match[/^[0-9\-]+$/]|max_length[15]'
-				),
-				array(
-						'field'   => 'cl_mobile',
-						'label'   => '担当者携帯番号',
-						'rules'   => 'trim|regex_match[/^[0-9\-]+$/]|max_length[15]'
-				),
-				array(
-						'field'   => 'cl_fax',
-						'label'   => 'ＦＡＸ番号',
-						'rules'   => 'trim|regex_match[/^[0-9\-]+$/]|max_length[15]'
-				),
-				array(
-						'field'   => 'cl_hp',
-						'label'   => '会社ＨＰ(http://～)',
-						'rules'   => 'trim|regex_match[/^(https?)(:\/\/[-_.!~*\'()a-zA-Z0-9;\/?:\@&=+\$,%#]+)$/]|max_length[100]'
-				),
-				array(
-						'field'   => 'cl_password',
-						'label'   => 'パスワード',
-						'rules'   => 'trim|regex_match[/^[\x21-\x7e]+$/]|min_length[8]|max_length[50]|matches[retype_password]'
-				),
-				array(
-						'field'   => 'retype_password',
-						'label'   => 'パスワード再入力',
-						'rules'   => 'trim|regex_match[/^[\x21-\x7e]+$/]|min_length[8]|max_length[50]|matches[cl_password]'
-				)
 		);
+
+
+
+//				array(
+//						'field'   => 'cl_company',
+//						'label'   => '会社名',
+//						'rules'   => 'trim|required|max_length[100]'
+//				),
+//				array(
+//						'field'   => 'cl_company_kana',
+//						'label'   => '会社名カナ（全角）',
+//						'rules'   => 'trim|regex_match[/^[ァ-タダ-ヴ　ー・]+$/]|required|max_length[100]'
+//				),
+//				array(
+//						'field'   => 'cl_president01',
+//						'label'   => '代表者姓',
+//						'rules'   => 'trim|required|max_length[50]'
+//				),
+//				array(
+//						'field'   => 'cl_president02',
+//						'label'   => '代表者名',
+//						'rules'   => 'trim|required|max_length[50]'
+//				),
+//				array(
+//						'field'   => 'cl_president_kana01',
+//						'label'   => '代表者セイ（全角）',
+//						'rules'   => 'trim|required|max_length[50]'
+//				),
+//				array(
+//						'field'   => 'cl_president_kana02',
+//						'label'   => '代表者メイ（全角）',
+//						'rules'   => 'trim|required|max_length[50]'
+//				),
+//				array(
+//						'field'   => 'cl_department',
+//						'label'   => '担当部署',
+//						'rules'   => 'trim|max_length[50]'
+//				),
+//				array(
+//						'field'   => 'cl_person01',
+//						'label'   => '担当者姓',
+//						'rules'   => 'trim|required|max_length[50]'
+//				),
+//				array(
+//						'field'   => 'cl_person02',
+//						'label'   => '担当者名',
+//						'rules'   => 'trim|required|max_length[50]'
+//				),
+//				array(
+//						'field'   => 'cl_person_kana01',
+//						'label'   => '担当者セイ（全角）',
+//						'rules'   => 'trim|required|max_length[50]'
+//				),
+//				array(
+//						'field'   => 'cl_person_kana02',
+//						'label'   => '担当者メイ（全角）',
+//						'rules'   => 'trim|required|max_length[50]'
+//				),
+//				array(
+//						'field'   => 'cl_zip01',
+//						'label'   => '郵便番号（3ケタ）',
+//						'rules'   => 'trim|required|max_length[3]|is_numeric'
+//				),
+//				array(
+//						'field'   => 'cl_zip02',
+//						'label'   => '郵便番号（4ケタ）',
+//						'rules'   => 'trim|required|max_length[4]|is_numeric'
+//				),
+//				array(
+//						'field'   => 'cl_pref',
+//						'label'   => '都道府県',
+//						'rules'   => 'trim|required|max_length[2]'
+//				),
+//				array(
+//						'field'   => 'cl_addr01',
+//						'label'   => '市区町村',
+//						'rules'   => 'trim|required|max_length[100]'
+//				),
+//				array(
+//						'field'   => 'cl_addr02',
+//						'label'   => '町名・番地',
+//						'rules'   => 'trim|required|max_length[100]'
+//				),
+//				array(
+//						'field'   => 'cl_buil',
+//						'label'   => 'ビル・マンション名など',
+//						'rules'   => 'trim|max_length[100]'
+//				),
+//				array(
+//						'field'   => 'cl_email',
+//						'label'   => 'メールアドレス（代表）',
+//						'rules'   => 'trim|required|valid_email'
+//				),
+//				array(
+//						'field'   => 'cl_email2',
+//						'label'   => 'メールアドレス（予備）',
+//						'rules'   => 'trim|valid_email'
+//				),
+//				array(
+//						'field'   => 'cl_tel01',
+//						'label'   => '代表電話番号',
+//						'rules'   => 'trim|required|regex_match[/^[0-9\-]+$/]|max_length[15]'
+//				),
+//				array(
+//						'field'   => 'cl_tel02',
+//						'label'   => '担当者電話番号',
+//						'rules'   => 'trim|regex_match[/^[0-9\-]+$/]|max_length[15]'
+//				),
+//				array(
+//						'field'   => 'cl_mobile',
+//						'label'   => '担当者携帯番号',
+//						'rules'   => 'trim|regex_match[/^[0-9\-]+$/]|max_length[15]'
+//				),
+//				array(
+//						'field'   => 'cl_fax',
+//						'label'   => 'ＦＡＸ番号',
+//						'rules'   => 'trim|regex_match[/^[0-9\-]+$/]|max_length[15]'
+//				),
+//				array(
+//						'field'   => 'cl_hp',
+//						'label'   => '会社ＨＰ(http://～)',
+//						'rules'   => 'trim|regex_match[/^(https?)(:\/\/[-_.!~*\'()a-zA-Z0-9;\/?:\@&=+\$,%#]+)$/]|max_length[100]'
+//				),
+//				array(
+//						'field'   => 'cl_password',
+//						'label'   => 'パスワード',
+//						'rules'   => 'trim|regex_match[/^[\x21-\x7e]+$/]|min_length[8]|max_length[50]|matches[retype_password]'
+//				),
+//				array(
+//						'field'   => 'retype_password',
+//						'label'   => 'パスワード再入力',
+//						'rules'   => 'trim|regex_match[/^[\x21-\x7e]+$/]|min_length[8]|max_length[50]|matches[cl_password]'
+//				)
+//		);
 
 		$this->load->library('form_validation', $rule_set);							// バリデーションクラス読み込み
 

@@ -6,6 +6,7 @@ class Comm_auth extends CI_Model
 	private $_hash_passwd;
 	private $_memberID;
 	private $_memberRANK;
+	private $_memberNAME;
 
     public function __construct()
     {
@@ -46,7 +47,8 @@ class Comm_auth extends CI_Model
 
     				$this->_hash_passwd = $arrData[0]['wr_password'];
     				$this->_memberID    = $arrData[0]['wr_id'];
-    				$this->_memberRANK  = $arrData[0]['wr_mm_memberrank_id'];
+    				$this->_memberRANK  = $arrData[0]['wr_mm_rank_id'];
+    				$this->_memberNAME  = $arrData[0]['wr_nickname'];
 
     				$this->_update_Session($login_member);
     			} else {
@@ -70,17 +72,29 @@ class Comm_auth extends CI_Model
     /**
      * LOGOUT ＆ SESSIONクリア
      *
-	 * @return	bool
+     * @return	bool
      */
-    public function logout()
+    public function logout($login_member)
     {
 
-    	$setData = array(
-    			'login_chk' => FALSE,
-    	);
-    	$this->session->set_userdata($setData);									// ログイン解除
 
-		$this->session->sess_destroy();											// セッションデータ削除
+    	switch ($login_member)
+    	{
+    		case 'writer':
+    			$setData = array('w_login' => FALSE);
+    			break;
+    		case 'client':
+    			$setData = array('c_login' => FALSE);
+    			break;
+    		case 'admin':
+    			$setData = array('a_login' => FALSE);
+    			break;
+    		default:
+    	}
+
+    	$this->session->set_userdata($setData);										// ログイン解除
+
+    	//$this->session->sess_destroy();											// セッションデータ削除
 
     }
 
@@ -91,26 +105,88 @@ class Comm_auth extends CI_Model
      */
     private function _update_Session($login_member)
     {
-    	$this->session->set_userdata('login_chk' , TRUE);						// ログイン有無
-    	$this->session->set_userdata('login_mem' , $login_member);				// ログインメンバー
-    	$this->session->set_userdata('memberID'  , $this->_memberID);			// ログインメンバーID
-    	$this->session->set_userdata('memberRANK', $this->_memberRANK);			// ログインメンバーランキング
+
+    	switch ($login_member)
+    	{
+    		case 'writer':
+    			$this->session->set_userdata('w_login',   TRUE);					// ログイン有無
+    			$this->session->set_userdata('w_memID',   $this->_memberID);		// メンバーID
+    			$this->session->set_userdata('w_memRANK', $this->_memberRANK);		// メンバーランキング(writerのみ)
+    			$this->session->set_userdata('w_memNAME', $this->_memberNAME);		// メンバー名前(writerはニックネーム)
+
+    			break;
+    		case 'client':
+    			$this->session->set_userdata('c_login',   TRUE);					// ログイン有無
+    			$this->session->set_userdata('c_memID',   $this->_memberID);		// メンバーID
+    			//$this->session->set_userdata('c_memRANK', $this->_memberRANK);		// メンバーランキング(writerのみ)
+    			$this->session->set_userdata('c_memNAME', $this->_memberNAME);		// メンバー名前(writerはニックネーム)
+
+    			break;
+    		case 'admin':
+    			$this->session->set_userdata('a_login',   TRUE);					// ログイン有無
+    			$this->session->set_userdata('a_memID',   $this->_memberID);		// メンバーID
+    			//$this->session->set_userdata('a_memRANK', $this->_memberRANK);		// メンバーランキング(writerのみ)
+    			$this->session->set_userdata('a_memNAME', $this->_memberNAME);		// メンバー名前(writerはニックネーム)
+
+    			break;
+    		default:
+    	}
+
+    	//$this->session->set_userdata('login_mem' , $login_member);			// ログインメンバー(writer/client/admin)
     }
 
-	/**
-	 * パスワードチェック
-	 *
-	 * @param	varchar
-	 * @param	varchar
-	 * @return	string
-	 */
-	 private function _check_password($password)
+    /**
+     * パスワードチェック
+     *
+     * @param	varchar
+     * @param	varchar
+     * @return	string
+     */
+    private function _check_password($password)
     {
-		// パスワードハッシュ認証チェック
+    	// パスワードハッシュ認証チェック
     	if (!password_verify($password, $this->_hash_passwd)) {
     		$err_mess = '入力されたパスワードが一致しません。';
     		return $err_mess;
     	}
     }
+
+
+
+
+
+
+
+
+    /**
+     * LOGOUT ＆ SESSIONクリア
+     *
+	 * @return	bool
+     */
+    //public function logout()
+    //{
+	//
+    //	$setData = array(
+    //			'login_chk' => FALSE,
+    //	);
+    //	$this->session->set_userdata($setData);									// ログイン解除
+	//
+	//	$this->session->sess_destroy();											// セッションデータ削除
+	//
+    //}
+
+    /**
+     * SESSION 書き込み
+     *
+     * @param	varchar
+     */
+    //private function _update_Session($login_member)
+    //{
+    //	$this->session->set_userdata('login_chk' , TRUE);						// ログイン有無
+    //	$this->session->set_userdata('login_mem' , $login_member);				// ログインメンバー
+    //	$this->session->set_userdata('memberID'  , $this->_memberID);			// ログインメンバーID
+    //	$this->session->set_userdata('memberRANK', $this->_memberRANK);			// ログインメンバーランキング
+    //}
+
 
 }

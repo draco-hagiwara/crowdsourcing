@@ -1,0 +1,17 @@
+<?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+
+/*
+| -------------------------------------------------------------------
+| Pagination SETTINGS
+| -------------------------------------------------------------------
+*/
+
+//$config['base_url']     = '/admin/clientlist/';			// ページの基本URIパス。「/コントローラクラス/アクションメソッド/」
+//$config['per_page']     = 5;							// 1ページ当たりの表示変数。
+//$config['total_rows'] = '9999';						// 総件数。各コントローラで設定。
+//$config['first_link']   = '&lsaquo;最初';				// 最初のページを表すテキスト。
+//$config['last_link']    = '&rsaquo;最後';				// 最後のページを表すテキスト。
+
+
+/* End of file pagination.php */
+/* Location: ./application/config/pagination.php */

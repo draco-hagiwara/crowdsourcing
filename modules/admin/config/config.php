@@ -47,7 +47,8 @@ $config['index_page'] = '';
 |
 */
 //$config['uri_protocol']	= 'AUTO';
-$config['uri_protocol']	= 'PATH_INFO';
+//$config['uri_protocol']	= 'PATH_INFO';
+$config['uri_protocol']	= 'REQUEST_URI';
 
 /*
 |--------------------------------------------------------------------------
@@ -289,6 +290,7 @@ $config['cookie_secure']	= FALSE;
 |
 */
 $config['global_xss_filtering'] = FALSE;
+//$config['global_xss_filtering'] = TRUE;
 
 /*
 |--------------------------------------------------------------------------

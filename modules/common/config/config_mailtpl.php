@@ -18,6 +18,21 @@ $config['MAILTPL_REPASSWORD_ID'] = '20';				// 仮パスワード登録メール
 
 
 
+// 【クライアント 発送】
+$config['MAILTPL_CL_xxxxxxxx_ID'] = '40';				// 仮パスワード登録メール
+
+
+
+
+
+
+// 【ADMIN 発送】
+$config['MAILTPL_AD_EL_ACCEPT_ID'] = '61';				// 案件申請「(非)承認」通知メール
+
+
+
+
+
 
 /* End of file config_mailtpl.php */
 /* Location: ./application/config/config_mailtpl.php */

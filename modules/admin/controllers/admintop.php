@@ -25,12 +25,12 @@ class Admintop extends MY_Controller
 		parent::__construct();
 
 		// セッション書き込み
-		if (($this->session->userdata('login_mem') == 'admin') && ($this->session->userdata('login_chk') == TRUE))
+		if ($this->session->userdata('a_login') == TRUE)
 		{
 		} else {
 			$setData = array(
-					'login_chk' => '',
-					'login_mem' => 'admin',
+					'a_login' => FALSE,
+					//'login_mem' => 'admin',
 			);
 			$this->session->set_userdata($setData);
 		}

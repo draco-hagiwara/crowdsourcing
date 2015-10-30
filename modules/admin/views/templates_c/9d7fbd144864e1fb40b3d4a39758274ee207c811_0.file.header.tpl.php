@@ -1,7 +1,7 @@
-<?php /* Smarty version 3.1.27, created on 2015-10-15 00:08:26
+<?php /* Smarty version 3.1.27, created on 2015-10-30 08:22:46
          compiled from "/home/cs/www/cs.com.dev/modules/admin/views/contents/admin/header.tpl" */ ?>
 <?php
-/*%%SmartyHeaderCode:1452097967561e6fea4e7d58_65703974%%*/
+/*%%SmartyHeaderCode:2973071485632aa4603b036_70366576%%*/
 if(!defined('SMARTY_DIR')) exit('no direct access allowed');
 $_valid = $_smarty_tpl->decodeProperties(array (
   'file_dependency' => 
@@ -9,24 +9,25 @@ $_valid = $_smarty_tpl->decodeProperties(array (
     '9d7fbd144864e1fb40b3d4a39758274ee207c811' => 
     array (
       0 => '/home/cs/www/cs.com.dev/modules/admin/views/contents/admin/header.tpl',
-      1 => 1444835092,
+      1 => 1446005484,
       2 => 'file',
     ),
   ),
-  'nocache_hash' => '1452097967561e6fea4e7d58_65703974',
+  'nocache_hash' => '2973071485632aa4603b036_70366576',
   'variables' => 
   array (
     'login_chk' => 0,
+    'login_name' => 0,
   ),
   'has_nocache_code' => false,
   'version' => '3.1.27',
-  'unifunc' => 'content_561e6fea4f0524_76091891',
+  'unifunc' => 'content_5632aa4604dcb0_32165558',
 ),false);
 /*/%%SmartyHeaderCode%%*/
-if ($_valid && !is_callable('content_561e6fea4f0524_76091891')) {
-function content_561e6fea4f0524_76091891 ($_smarty_tpl) {
+if ($_valid && !is_callable('content_5632aa4604dcb0_32165558')) {
+function content_5632aa4604dcb0_32165558 ($_smarty_tpl) {
 
-$_smarty_tpl->properties['nocache_hash'] = '1452097967561e6fea4e7d58_65703974';
+$_smarty_tpl->properties['nocache_hash'] = '2973071485632aa4603b036_70366576';
 ?>
 <!DOCTYPE html>
 <html class="no-js" lang="jp">
@@ -42,21 +43,28 @@ $_smarty_tpl->properties['nocache_hash'] = '1452097967561e6fea4e7d58_65703974';
  type="text/javascript" src="https://www.google.com/jsapi"><?php echo '</script'; ?>
 >
 
-<link rel="stylesheet" href="../../css/bootstrap.min.css">
-<link rel="stylesheet" href="../../css/normalize.css">
-<link rel="stylesheet" href="../../css/main.css">
+<link rel="stylesheet" href="<?php echo base_url();?>
+../css/bootstrap.min.css">
+<link rel="stylesheet" href="<?php echo base_url();?>
+../css/normalize.css">
+<link rel="stylesheet" href="<?php echo base_url();?>
+../css/main.css">
 
 <?php echo '<script'; ?>
- src="../../js/jquery-2.1.4.min.js"><?php echo '</script'; ?>
+ src="<?php echo base_url();?>
+../js/jquery-2.1.4.min.js"><?php echo '</script'; ?>
 >
 <?php echo '<script'; ?>
- src="../../js/jquery-ui-3.0.2.custom.min.js"><?php echo '</script'; ?>
+ src="<?php echo base_url();?>
+../js/jquery-ui-3.0.2.custom.min.js"><?php echo '</script'; ?>
 >
 <?php echo '<script'; ?>
- src="../../js/bootstrap.min.js"><?php echo '</script'; ?>
+ src="<?php echo base_url();?>
+../js/bootstrap.min.js"><?php echo '</script'; ?>
 >
 <?php echo '<script'; ?>
- src="../../js/main.js"><?php echo '</script'; ?>
+ src="<?php echo base_url();?>
+../js/main.js"><?php echo '</script'; ?>
 >
 </head>
 
@@ -78,23 +86,45 @@ $_smarty_tpl->properties['nocache_hash'] = '1452097967561e6fea4e7d58_65703974';
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-  		  <a href="/" class="navbar-brand">アドミンTOP</a>
+  		  <a href="#" class="navbar-brand">アドミンTOP</a>
         </div>
 
         <div id="patern05" class="collapse navbar-collapse">
           <ul class="nav navbar-nav">
-		    <li><a href="">TOP</a></li>
-		    <li><a href="">案件申請</a></li>
-		    <li><a href="">納品案件</a></li>
-		    <li><a href="">支払管理</a></li>
+		    <li><a href="/admin/top/">TOP</a></li>
+		    <li><a href="#" class="dropdown-toggle" data-toggle="dropdown">CL申請管理<b class="caret"></b></a>
+			  <ul class="dropdown-menu right">
+				<li><a href="/admin/entrylist/">CL案件申請一覧</a></li>
+			  </ul>
+		    </li>
+		    <li><a href="#" class="dropdown-toggle" data-toggle="dropdown">案件管理<b class="caret"></b></a>
+			  <ul class="dropdown-menu right">
+				<li><a href="/admin/orderlist/">案件一覧</a></li>
+			  </ul>
+		    </li>
+		    <li><a href="">投稿記事管理</a></li>
+		    <li><a href="#" class="dropdown-toggle" data-toggle="dropdown">ライター管理<b class="caret"></b></a>
+			  <ul class="dropdown-menu right">
+				<li><a href="/admin/writerlist/">ライター一覧</a></li>
+				<li><a href="#">新規登録</a></li>
+			  </ul>
+		    </li>
+		    <li><a href="#" class="dropdown-toggle" data-toggle="dropdown">クライアント管理<b class="caret"></b></a>
+			  <ul class="dropdown-menu right">
+				<li><a href="/admin/clientlist/">クライアント一覧</a></li>
+				<li><a href="#">新規登録</a></li>
+			  </ul>
+		    </li>
+		    <li><a href="">決済管理</a></li>
           </ul>
 
 		  <ul class="nav navbar-nav navbar-right">
-		    <li><a href="#" class="dropdown-toggle" data-toggle="dropdown">会社名<b class="caret"></b></a>
+		    <li><a href="#" class="dropdown-toggle" data-toggle="dropdown"><?php echo $_smarty_tpl->tpl_vars['login_name']->value;?>
+<b class="caret"></b></a>
 			  <ul class="dropdown-menu right">
 				<li><a href="#">会社情報</a></li>
 				<li><a href="#">問合せ</a></li>
-				<li><a href="/client/login/logout/">ログアウト</a></li>
+				<li><a href="/admin/login/logout/">ログアウト</a></li>
 			  </ul>
 		    </li>
           </ul>
@@ -116,7 +146,7 @@ $_smarty_tpl->properties['nocache_hash'] = '1452097967561e6fea4e7d58_65703974';
 		  <span class="icon-bar"></span>
 		  <span class="icon-bar"></span>
 		  <span class="icon-bar"></span>
-		  <a href="/client/login/" class="navbar-brand">アドミン管理</a>
+		  <a href="/admin/login/" class="navbar-brand">アドミン管理</a>
 		</div>
 	  </nav>
 

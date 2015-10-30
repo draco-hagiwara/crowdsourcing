@@ -17,20 +17,20 @@ class Entryclient extends MY_Controller
 		if (!$this->session->userdata('ticket')) {
 			$setData = array(
 					'ticket' => md5(uniqid(mt_rand(), true)),
-					'login_chk' => '',
-					'login_mem' => '',
+					'w_login' => FALSE,
+					//'login_mem' => '',
 			);
 			$this->session->set_userdata($setData);
 		} else {
 			// ログイン有無のチェック
-			if ($this->session->userdata('login_chk') == TRUE) {
+			if ($this->session->userdata('w_login') == TRUE) {
 				// TOPへリダイレクト
 				$this->load->helper('url');
 				redirect(base_url());
 				return;
 			}
 			$this->smarty->assign('login_chk', FALSE);
-			$this->smarty->assign('login_mem', $this->session->userdata('login_mem'));
+			//$this->smarty->assign('login_mem', $this->session->userdata('login_mem'));
 		}
 
 		// 都道府県情報設定

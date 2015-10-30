@@ -27,7 +27,8 @@ class Comm_auth extends CI_Model
     	{
     		case 'writer':
     			$sql = 'SELECT * FROM `tb_writer` '
-    					. 'WHERE `wr_email` = ? ';
+    					. 'WHERE `wr_email` = ? '
+    					. 'AND `wr_status`  = 4 ';
 
     			$values = array(
     					$loginid
@@ -69,7 +70,8 @@ class Comm_auth extends CI_Model
     			break;
     		case 'client':
     	    	$sql = 'SELECT * FROM `tb_client` '
-    					. 'WHERE `cl_email` = ? ';
+    					. 'WHERE `cl_email`  = ? '
+    					. 'AND   `cl_status` = 1 ';
 
     			$values = array(
     					$loginid
@@ -114,7 +116,8 @@ class Comm_auth extends CI_Model
     			 * ADMIN管理者は クライアント登録(tb_client) の クライアントID(cl_id)=='1' 固定とする。
     			*/
     	    	$sql = 'SELECT * FROM `tb_client` '
-    					. 'WHERE `cl_email` = ? ';
+    					. 'WHERE `cl_email` = ? '
+    					. 'AND   `cl_status` = 1 ';
 
     			$values = array(
     					$loginid
@@ -177,7 +180,34 @@ class Comm_auth extends CI_Model
     public function logout($login_member)
     {
 
+    	// 特定のセッションユーザデータを削除
+    	switch ($login_member)
+    	{
+    		case 'writer':
+    			$seach_key = 'w';
+    			break;
+    		case 'client':
+    			$seach_key = 'c';
+    			break;
+    		case 'admin':
+    			$seach_key = 'a';
+    			break;
+    		default:
+    	}
 
+    	$get_data = $this->session->all_userdata();
+    	$unset_data = array();
+    	foreach ($get_data as $key => $val)
+    	{
+    		if (substr($key, 0, 1) == $seach_key)
+    		{
+    			$unset_data[$key] = '';
+    		}
+    	}
+
+    	$this->session->unset_userdata($unset_data);							// セッションデータ削除
+
+    	// ログイン解除
     	switch ($login_member)
     	{
     		case 'writer':
@@ -193,8 +223,7 @@ class Comm_auth extends CI_Model
     	}
 
     	$this->session->set_userdata($setData);									// ログイン解除
-
-		//$this->session->sess_destroy();											// セッションデータ削除
+		//$this->session->sess_destroy();										// 全セッションデータ削除
 
     }
 
@@ -234,6 +263,95 @@ class Comm_auth extends CI_Model
 
     	//$this->session->set_userdata('login_mem' , $login_member);			// ログインメンバー(writer/client/admin)
     }
+
+
+
+
+
+    /**
+     * 不要なセッションデータの削除
+     *
+     * @param	string
+     * @return	bool
+     */
+    public function delete_session($login_member)
+    {
+
+        switch ($login_member)
+    	{
+    		case 'writer':
+    			$backup_w_login   = $this->session->userdata('w_login');
+    			$backup_w_memID   = $this->session->userdata('w_memID');
+    			$backup_w_memNAME = $this->session->userdata('w_memNAME');
+    			$backup_w_memRANK = $this->session->userdata('w_memRANK');
+
+    			$get_data = $this->session->all_userdata();
+    			$unset_data = array();
+    			foreach ($get_data as $key => $val)
+    			{
+    				if (substr($key, 0, 2) == 'w_')
+    				{
+    					$unset_data[$key] = '';
+    				}
+    			}
+    			$this->session->unset_userdata($unset_data);
+
+    			$this->session->set_userdata('w_login',   $backup_w_login);			// ログイン有無
+    			$this->session->set_userdata('w_memID',   $backup_w_memID);			// メンバーID
+    			$this->session->set_userdata('w_memNAME', $backup_w_memNAME);		// メンバーランキング(writerのみ)
+    			$this->session->set_userdata('w_memRANK', $backup_w_memRANK);		// メンバー名前(writerはニックネーム)
+
+    			break;
+    		case 'client':
+    			$backup_c_login   = $this->session->userdata('c_login');
+    			$backup_c_memID   = $this->session->userdata('c_memID');
+    			$backup_c_memNAME = $this->session->userdata('c_memNAME');
+
+    			$get_data = $this->session->all_userdata();
+    			$unset_data = array();
+    			foreach ($get_data as $key => $val)
+    			{
+    				if (substr($key, 0, 2) == 'c_')
+    				{
+    					$unset_data[$key] = '';
+    				}
+    			}
+    			$this->session->unset_userdata($unset_data);
+
+    			$this->session->set_userdata('c_login',   $backup_c_login);			// ログイン有無
+    			$this->session->set_userdata('c_memID',   $backup_c_memID);			// メンバーID
+    			$this->session->set_userdata('c_memNAME', $backup_c_memNAME);		// メンバー名前
+
+    			break;
+    		case 'admin':
+    			$backup_a_login   = $this->session->userdata('a_login');
+    			$backup_a_memID   = $this->session->userdata('a_memID');
+    			$backup_a_memNAME = $this->session->userdata('a_memNAME');
+
+    			$get_data = $this->session->all_userdata();
+    			$unset_data = array();
+    			foreach ($get_data as $key => $val)
+    			{
+    				if (substr($key, 0, 2) == 'a_')
+    				{
+    					$unset_data[$key] = '';
+    				}
+    			}
+    			$this->session->unset_userdata($unset_data);
+
+    			$this->session->set_userdata('a_login',   $backup_a_login);			// ログイン有無
+    			$this->session->set_userdata('a_memID',   $backup_a_memID);			// メンバーID
+    			$this->session->set_userdata('a_memNAME', $backup_a_memNAME);		// メンバー名前
+
+    			break;
+    		default:
+    	}
+
+    }
+
+
+
+
 
 	/**
 	 * パスワードチェック
