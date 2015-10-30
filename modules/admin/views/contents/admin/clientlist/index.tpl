@@ -72,11 +72,7 @@ function fmSubmit(formName, url, method, num) {
 		</td>
 		<td class="col-sm-2">ステータス</td>
 		<td class="col-sm-2">
-<<<<<<< HEAD
-		  {form_dropdown('cl_status', $options_cl_status, set_value('cl_status', ''))}
-=======
 		  {form_dropdown('cl_status', $options_cl_status01, set_value('cl_status', ''))}
->>>>>>> develop
 		</td>
 	  </tr>
 	</tbody>

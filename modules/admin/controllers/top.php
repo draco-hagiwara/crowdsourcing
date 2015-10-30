@@ -7,33 +7,16 @@ class Top extends MY_Controller
 	{
 		parent::__construct();
 
-		if (($this->session->userdata('login_mem') == 'admin') && ($this->session->userdata('login_chk') == TRUE))
+		if ($this->session->userdata('c_login') == TRUE)
 		{
 			$this->smarty->assign('login_chk', TRUE);
-<<<<<<< HEAD
-<<<<<<< HEAD
-        	$this->smarty->assign('login_mem', 'admin');
-			$this->smarty->assign('login_name', $this->session->userdata('memberNAME'));
+        	//$this->smarty->assign('login_mem', 'client');
+			$this->smarty->assign('login_name', $this->session->userdata('c_memNAME'));
 		} else {
         	$this->smarty->assign('login_chk', FALSE);
-        	$this->smarty->assign('login_mem', 'admin');
+        	//$this->smarty->assign('login_mem', 'client');
 
-        	$this->load->helper('url');
-=======
-		} else {
-        	$this->smarty->assign('login_chk', FALSE);
-        	$this->smarty->assign('login_mem', 'admin');
-			$this->load->helper('url');
->>>>>>> 778364b11983b8ecd0f1ae7ce60860e34a1a71c4
-=======
-        	$this->smarty->assign('login_mem', 'admin');
-			$this->smarty->assign('login_name', $this->session->userdata('memberNAME'));
-		} else {
-        	$this->smarty->assign('login_chk', FALSE);
-        	$this->smarty->assign('login_mem', 'admin');
-
-        	$this->load->helper('url');
->>>>>>> develop
+			//$this->load->helper('url');
 			redirect('/login/');
 		}
 
@@ -43,7 +26,11 @@ class Top extends MY_Controller
 	public function index()
 	{
 
-		$this->view('admin/top/index.tpl');
+		// セッションデータをクリア
+		$this->load->model('comm_auth', 'comm_auth', TRUE);
+		$this->comm_auth->delete_session('client');
+
+		$this->view('client/top/index.tpl');
 
 	}
 

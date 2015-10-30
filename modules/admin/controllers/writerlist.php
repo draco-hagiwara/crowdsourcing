@@ -7,16 +7,17 @@ class Writerlist extends MY_Controller
 	{
 		parent::__construct();
 
-		if (($this->session->userdata('login_mem') == 'admin') && ($this->session->userdata('login_chk') == TRUE))
+		if ($this->session->userdata('a_login') == TRUE)
 		{
 			$this->smarty->assign('login_chk', TRUE);
-			$this->smarty->assign('login_mem', 'admin');
-			$this->smarty->assign('login_name', $this->session->userdata('memberNAME'));
+			//$this->smarty->assign('login_mem', 'admin');
+			$this->smarty->assign('login_name', $this->session->userdata('a_memNAME'));
 		} else {
 			$this->smarty->assign('login_chk', FALSE);
-			$this->smarty->assign('login_mem', 'admin');
+			//$this->smarty->assign('login_mem', 'admin');
+			$this->smarty->assign('login_name', '');
 
-			$this->load->helper('url');
+			//$this->load->helper('url');
 			redirect('/login/');
 		}
 
@@ -25,6 +26,10 @@ class Writerlist extends MY_Controller
 	// ライターTOP
 	public function index()
 	{
+
+		// セッションデータをクリア
+		$this->load->model('comm_auth', 'comm_auth', TRUE);
+		$this->comm_auth->delete_session('admin');
 
 		// バリデーション・チェック
 		$this->_set_validation();											// バリデーション設定
@@ -71,28 +76,28 @@ class Writerlist extends MY_Controller
 		{
 			// セッションをフラッシュデータとして保存
 			$data = array(
-					'wr_nickname' => $this->input->post('wr_nickname'),
-					'wr_id'       => $this->input->post('wr_id'),
-					'wr_email'    => $this->input->post('wr_email'),
-					'wr_status'   => $this->input->post('wr_status'),
-					'orderid'     => $this->input->post('orderid'),
-					'orderstatus' => $this->input->post('orderstatus'),
+					'a_wr_nickname' => $this->input->post('wr_nickname'),
+					'a_wr_id'       => $this->input->post('wr_id'),
+					'a_wr_email'    => $this->input->post('wr_email'),
+					'a_wr_status'   => $this->input->post('wr_status'),
+					'a_orderid'     => $this->input->post('orderid'),
+					'a_orderstatus' => $this->input->post('orderstatus'),
 			);
-			$this->session->set_flashdata($data);
+			$this->session->set_userdata($data);
 
 			$tmp_inputpost = $this->input->post();
 			unset($tmp_inputpost["submit"]);
 
 		} else {
 			// セッションからフラッシュデータ読み込み
-			$tmp_inputpost['wr_nickname'] = $this->session->flashdata('wr_nickname');
-			$tmp_inputpost['wr_id']       = $this->session->flashdata('wr_id');
-			$tmp_inputpost['wr_email']    = $this->session->flashdata('wr_email');
-			$tmp_inputpost['wr_status']   = $this->session->flashdata('wr_status');
-			$tmp_inputpost['orderid']     = $this->session->flashdata('orderid');
-			$tmp_inputpost['orderstatus'] = $this->session->flashdata('orderstatus');
+			$tmp_inputpost['wr_nickname'] = $this->session->userdata('a_wr_nickname');
+			$tmp_inputpost['wr_id']       = $this->session->userdata('a_wr_id');
+			$tmp_inputpost['wr_email']    = $this->session->userdata('a_wr_email');
+			$tmp_inputpost['wr_status']   = $this->session->userdata('a_wr_status');
+			$tmp_inputpost['orderid']     = $this->session->userdata('a_orderid');
+			$tmp_inputpost['orderstatus'] = $this->session->userdata('a_orderstatus');
 
-			$this->session->set_flashdata($tmp_inputpost);
+			//$this->session->set_userdata($tmp_inputpost);
 		}
 
 		// バリデーション・チェック

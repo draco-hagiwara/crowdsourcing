@@ -22,9 +22,9 @@ class Writer extends CI_Model
     	// 各SQL項目へセット
     	// WHERE
     	$set_select["wr_nickname"] = $arr_post['wr_nickname'];
-    	$set_select["wr_id"]      = $arr_post['wr_id'];
-    	$set_select["wr_email"]   = $arr_post['wr_email'];
-    	$set_select["wr_status"]  = $arr_post['wr_status'];
+    	$set_select["wr_id"]       = $arr_post['wr_id'];
+    	$set_select["wr_email"]    = $arr_post['wr_email'];
+    	$set_select["wr_status"]   = $arr_post['wr_status'];
 
     	// ORDER BY
     	if ($arr_post['orderid'] == 'ASC')

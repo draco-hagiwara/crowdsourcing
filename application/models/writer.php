@@ -44,11 +44,11 @@ class Writer extends CI_Model
 
     		// パスワード更新
     		$setData = array(
-    				'wr_password' => $wr_tmp_password,
+    				'wr_password'     => $wr_tmp_password,
     				'wr_tmp_password' => NULL,
-    				'wr_tmp_pwkey' => NULL,
-    				'wr_tmp_pwtime' => NULL,
-    				'wr_update_date' => date("Y-m-d H:i:s", $time),
+    				'wr_tmp_pwkey'    => NULL,
+    				'wr_tmp_pwtime'   => NULL,
+    				'wr_update_date'  => date("Y-m-d H:i:s", $time),
     		);
     		$where = array(
     				'wr_id' => $wr_id

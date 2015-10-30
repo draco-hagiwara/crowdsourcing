@@ -36,8 +36,6 @@ class Client extends CI_Model
     	$set_orderby["cl_status"] = $arr_post['orderstatus'];
 
     	// 対象クライアントメンバーの取得
-    	//$this->load->model('Client', 'cl', TRUE);
-    	//$client_list = $this->cl->select_clientlist($set_select, $set_orderby, $tmp_per_page, $tmp_offset);
     	$client_list = $this->select_clientlist($set_select, $set_orderby, $tmp_per_page, $tmp_offset);
 
     	return $client_list;
@@ -53,9 +51,9 @@ class Client extends CI_Model
     public function select_client_id($tmp_clientid)
     {
 
-    	// 各SQL項目へセット
-    	$sql = 'SELECT * FROM `tb_client` ';
-    	$sql .= ' WHERE cl_id = ' . $tmp_clientid;
+    	// 各SQL項目へセット :: JOIN 個別情報
+    	$sql = 'SELECT * FROM tb_client AS cl JOIN tb_client_info AS ci ON cl.cl_id = ci.ci_cl_id';
+    	$sql .= ' WHERE cl.cl_id = ' . $tmp_clientid;
 
     	// クエリー実行
     	$query = $this->db->query($sql);
@@ -135,7 +133,7 @@ class Client extends CI_Model
     }
 
     /**
-     * 1レコード更新
+     * 1レコード更新 (tb_client)
      *
      * @param	array()
      * @return	bool
@@ -145,17 +143,51 @@ class Client extends CI_Model
 
     	// 更新日時をセット
     	$time = time();
-<<<<<<< HEAD
-    	$set_data['cl_lastlogin'] = date("Y-m-d H:i:s", $time);
-=======
     	$set_data['cl_update_date'] = date("Y-m-d H:i:s", $time);
->>>>>>> develop
 
     	$where = array(
     			'cl_id' => $set_data['cl_id']
     	);
 
     	$result = $this->db->update('tb_client', $set_data, $where);
+    	return $result;
+    }
+
+    /**
+     * 1レコード更新 (tb_client_info)
+     *
+     * @param	array()
+     * @return	bool
+     */
+    public function update_Client_info($set_data)
+    {
+
+    	// 「手数料率」「月額固定」「契約日」のセット
+    	if (!empty($set_data['ci_agreement_st']))
+    	{
+    		$set_data['ci_agreement_st']  = $set_data['ci_agreement_st'];
+    	} else {
+    		$set_data['ci_agreement_st']  = NULL;
+    	}
+        if (!empty($set_data['ci_agreement_end']))
+    	{
+    		$set_data['ci_agreement_end']  = $set_data['ci_agreement_end'];
+    	} else {
+    		$set_data['ci_agreement_end']  = NULL;
+    	}
+    	$set_data['ci_comment']       = $set_data['ci_comment'];
+
+    	// 更新日時をセット
+    	$time = time();
+    	$set_data['ci_update_date'] = date("Y-m-d H:i:s", $time);
+
+    	$where = array(
+    			'ci_cl_id' => $set_data['cl_id']
+    	);
+
+    	unset($set_data['cl_id']);
+
+    	$result = $this->db->update('tb_client_info', $set_data, $where);
     	return $result;
     }
 

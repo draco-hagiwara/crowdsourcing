@@ -22,14 +22,14 @@ class Entrywriter extends MY_Controller
 			$this->session->set_userdata($setData);
 		} else {
 			// ログイン有無のチェック
-			if ($this->session->userdata('login_chk') == TRUE) {
+			if ($this->session->userdata('w_login') == TRUE) {
 				// TOPへリダイレクト
 				$this->load->helper('url');
 				redirect(base_url());
 				return;
 			}
 			$this->smarty->assign('login_chk', FALSE);
-			$this->smarty->assign('login_mem', $this->session->userdata('login_mem'));
+			//$this->smarty->assign('login_mem', $this->session->userdata('login_mem'));
 		}
 
 		// 都道府県情報設定
@@ -344,12 +344,12 @@ class Entrywriter extends MY_Controller
 				array(
 						'field'   => 'wr_password',
 						'label'   => 'パスワード',
-						'rules'   => 'trim|required|regex_match[/^[\x21-\x7e]+$/]|min_length[8]|max_length[50]'
+						'rules'   => 'trim|required|regex_match[/^[\x21-\x7e]+$/]|min_length[8]|max_length[50]|matches[retype_password]'
 				),
 				array(
 						'field'   => 'retype_password',
 						'label'   => 'パスワード再入力',
-						'rules'   => 'trim|required|regex_match[/^[\x21-\x7e]+$/]|min_length[8]|max_length[50]'
+						'rules'   => 'trim|required|regex_match[/^[\x21-\x7e]+$/]|min_length[8]|max_length[50]|matches[wr_password]'
 				)
 			);
 

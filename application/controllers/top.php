@@ -28,22 +28,22 @@ class Top extends MY_Controller
 		if (!$this->session->userdata('ticket')) {
 			$setData = array(
 					'ticket' => md5(uniqid(mt_rand(), true)),
-					'login_chk' => '',
-					'login_mem' => '',
+					'w_login' => FALSE,
+					//'login_mem' => '',
 			);
 			$this->session->set_userdata($setData);
 		} else {
 			// ログイン有無のチェック
-			$this->smarty->assign('login_chk', $this->session->userdata('login_chk'));
-			$this->smarty->assign('login_mem', $this->session->userdata('login_mem'));
+			$this->smarty->assign('login_chk', $this->session->userdata('w_login'));
+			//$this->smarty->assign('login_mem', $this->session->userdata('login_mem'));
 		}
 	}
 
 	public function index()
 	{
 
-		$this->smarty->assign('login_chk', $this->session->userdata('login_chk'));
-		$this->smarty->assign('login_mem', $this->session->userdata('login_mem'));
+		$this->smarty->assign('login_chk', $this->session->userdata('w_login'));
+		//$this->smarty->assign('login_mem', $this->session->userdata('login_mem'));
 		$this->view('writer/top/index.tpl');
 
 		//phpinfo();
@@ -64,7 +64,7 @@ class Top extends MY_Controller
 
 		// SESSION クリア
 		$this->load->model('comm_auth', 'auth', TRUE);
-		$this->auth->logout();
+		$this->auth->logout('writer');
 
 		// TOPへリダイレクト
 		$this->load->helper('url');
