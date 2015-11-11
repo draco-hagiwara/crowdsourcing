@@ -42,6 +42,30 @@ $config['CLIENT_TAIKAI']         = '退会';
 
 
 
+// エントリーステータス
+$config['PJ_ESTATUS_NOENTRY_ID']  = '0';				// エントリーなし (デフォルト)
+$config['PJ_ESTATUS_NOENTRY']     = 'エントリーなし';
+$config['PJ_ESTATUS_ENTRY_ID']    = '1';				// エントリー中
+$config['PJ_ESTATUS_ENTRY']       = 'エントリー中';
+
+
+// ライター作業ステータス
+$config['PJ_WSTATUS_ENTRY_ID']    = '0';						// 投稿なし
+$config['PJ_WSTATUS_ENTRY']       = '投稿なし';
+$config['PJ_WSTATUS_CREATE_ID']   = '1';						// 原稿作成中
+$config['PJ_WSTATUS_CREATE']      = '原稿作成中';
+$config['PJ_WSTATUS_RECREATE_ID'] = '2';						// 原稿再作成中
+$config['PJ_WSTATUS_RECREATE']    = '原稿再作成中';
+$config['PJ_WSTATUS_CHECK_ID']    = '3';						// 投稿審査待ち
+$config['PJ_WSTATUS_CHECK']       = '投稿審査待ち';
+$config['PJ_WSTATUS_RECHECK_ID']  = '4';						// 投稿再審査待ち
+$config['PJ_WSTATUS_RECHECK']     = '投稿再審査待ち';
+$config['PJ_WSTATUS_CHECKOK_ID']  = '5';						// 審査OK
+$config['PJ_WSTATUS_CHECKOK']     = '審査OK';
+$config['PJ_WSTATUS_CHECKNG_ID']  = '6';						// 審査NG
+$config['PJ_WSTATUS_CHECKNG']     = '審査NG';
+$config['PJ_WSTATUS_TIMEOVER_ID'] = '7';						// 投稿なし(時間オーバー)
+$config['PJ_WSTATUS_TIMEOVER']    = '投稿なし(時間オーバー)';
 
 
 

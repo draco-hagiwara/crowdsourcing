@@ -28,50 +28,63 @@
     <div class="row">
 
     {if $login_chk==TRUE}
+
       <div class="page-header">
         <h1>C<small>rowd</small> S<small>ourcing</small></h1>
 
         <ul class="list-inline text-right">
-           <li class=""><a href="/entrywriter/">マイページ</a></li>
-           <li class=""><a href="/top/logout/">ログアウト</a></li>
+          <li>こんにちは　{$login_name} さん。
+          　　現在のあなたのランクは {if $mem_rank==1}ブロンズ{elseif $mem_rank==2}シルバー{elseif $mem_rank==3}ゴールド{/if} です。
+          {if $mem_entry}<br>エントリー中{/if}
+          </li>
         </ul>
 
+        <nav class="navbar navbar-inverse">
+        <div class="navbar-header">
+  		  <a href="#" class="navbar-brand">CS</a>
+        </div>
 
-		<nav class="navbar navbar-inverse">
-		<div class="navbar-header">toggle="collapse" data-target="#patern05">
-		  <span class="icon-bar"></span>
-		  <span class="icon-bar"></span>
-		  <span class="icon-bar"></span>
-		  <a href="/" class="navbar-brand">TOP</a>
-		</div>
-
-		<div id="patern05" class="collapse navbar-collapse">
-		  <ul class="nav navbar-nav">
-		    <li><a href="">Link1</a></li>
-		    <li><a href="">Link2</a></li>
-
-		  <form class="navbar-form navbar-left" role="search">
-		     <div class="form-group">
-		       <input type="text" class="form-control" placeholder="Search">
-		     </div>
-		     <button type="submit" class="btn btn-default">Submit</button>
-		  </form>
-		  </ul>
-
-		  <ul class="nav navbar-nav navbar-right">
-		    <li><a href="#" class="dropdown-toggle" data-toggle="dropdown">Link3<b class="caret"></b></a>
+        <div id="patern05" class="collapse navbar-collapse">
+          <ul class="nav navbar-nav">
+		    <li><a href="/">TOP</a></li>
+		    <li><a href="#" class="dropdown-toggle" data-toggle="dropdown">仕事を探す<b class="caret"></b></a>
 			  <ul class="dropdown-menu right">
-				<li><a href="#">Link3-1</a></li>
-				<li><a href="#">Link3-2</a></li>
-				<li><a href="#">Link3-3</a></li>
-			</ul>
+				<li><a href="/search_list/">案件一覧</a></li>
+				<li><a href="/search_genre/">ジャンル一覧</a></li>
+			  </ul>
 		    </li>
-		  </ul>
-		</div>
-		</nav>
+
+			{form_open('/search_list/search/' , 'name="seachForm" class="navbar-form navbar-left" role="search"')}
+		      <div class="form-group">
+		         {form_input('pj_order_title' , set_value('pj_order_title', '') , 'class="form-control" placeholder="仕事を探す"')}
+		      </div>
+
+		      {$attr['name']  = 'submit'}
+              {$attr['type']  = 'submit'}
+              {$attr['value'] = '_navsearch'}
+              {form_button($attr , '検　　索' , 'class="btn btn-default"')}
+		    {form_close()}
+
+		    <li><a href="#" class="dropdown-toggle" data-toggle="dropdown">マイページ<b class="caret"></b></a>
+			  <ul class="dropdown-menu right">
+				<li><a href="/search_list/">エントリー一覧</a></li>
+				<li><a href="/search_genre/">月別明細</a></li>
+				<li><a href="/search_genre/">会員情報 編集</a></li>
+				<li><a href="/search_genre/">退会</a></li>
+			  </ul>
+		    </li>
+		    <li><a href="/admin/top/">ご利用ガイド</a></li>
+          </ul>
+          <ul class="nav navbar-nav navbar-right">
+		    <li><a href="/top/logout/">ログアウト</a></li>
+          </ul>
+        </div>
+        </nav>
 
 	  </div>
+
     {else}
+
       <div class="page-header">
         <h1>C<small>rowd</small> S<small>ourcing</small></h1>
 
@@ -80,43 +93,23 @@
           <li><a href="/login/">ログイン</a></li>
         </ul>
 
-		<nav class="navbar navbar-inverse">
-		<div class="navbar-header">toggle="collapse" data-target="#patern05">
-		  <span class="icon-bar"></span>
-		  <span class="icon-bar"></span>
-		  <span class="icon-bar"></span>
-		  <a href="/" class="navbar-brand">ｸﾗｳﾄﾞｿｰｼﾝｸﾞ</a>
-		</div>
+        <nav class="navbar navbar-inverse">
+        <div class="navbar-header">
+  		  <a href="#" class="navbar-brand">CS</a>
+        </div>
 
-		<div id="patern05" class="collapse navbar-collapse">
-		  <ul class="nav navbar-nav">
-		    <li><a href="">Link1</a></li>
-		    <li><a href="">Link2</a></li>
-
-		  <form class="navbar-form navbar-left" role="search">
-		     <div class="form-group">
-		       <input type="text" class="form-control" placeholder="Search">
-		     </div>
-		     <button type="submit" class="btn btn-default">Submit</button>
-		  </form>
-		  </ul>
-
-		  <ul class="nav navbar-nav navbar-right">
-		    <li><a href="#" class="dropdown-toggle" data-toggle="dropdown">Link3<b class="caret"></b></a>
-			  <ul class="dropdown-menu right">
-				<li><a href="#">Link3-1</a></li>
-				<li><a href="#">Link3-2</a></li>
-				<li><a href="#">Link3-3</a></li>
-			</ul>
-		    </li>
-		  </ul>
-		</div>
-		</nav>
+        <div id="patern05" class="collapse navbar-collapse">
+          <ul class="nav navbar-nav">
+		    <li><a href="/">TOP</a></li>
+		    <li><a href="/admin/top/">ご利用ガイド</a></li>
+          </ul>
+        </div>
+        </nav>
 
         <ul class="list-inline text-right">
           <li><a href="/client/login/">Clientログイン</a></li>
           <li><a href="/admin/login/">ADMIINログイン</a></li>
         </ul>
-
 	  </div>
+
     {/if}
