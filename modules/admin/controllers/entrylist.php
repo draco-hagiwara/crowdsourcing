@@ -174,8 +174,8 @@ class Entrylist extends MY_Controller
 		$get_data = $this->pro->get_entry($tmp_peid);
 
 		// ジャンル 選択項目セット
-		$this->load->model('comm_genre', 'gr', TRUE);
-		$genre_list = $this->gr->get_genre();
+		$this->load->model('comm_select', 'select', TRUE);
+		$genre_list = $this->select->get_genre();
 		$get_data[0]['genre01_name']     = $genre_list[$get_data[0]['pe_genre01']];
 
 		$get_data[0]['pe_open_date']     = date('Y-m-d', strtotime($get_data[0]['pe_open_date']));
@@ -343,26 +343,26 @@ class Entrylist extends MY_Controller
 				$this->db->trans_strict(FALSE);									// StrictモードをOFF
 				$this->db->trans_start();										// trans_begin
 
-				// 「承認」の場合
-				$set_update_data = array();
-				$set_update_data['pe_id']          = $flash_data['a_pe_id'];							// 案件申請ID
-				$set_update_data['pe_status']      = $this->config->item('C_ENTRY_SYOUNIN_ID');			// 承認
-				$set_update_data['pe_reason']      = $this->input->post('pe_reason');					// 非承認　理由
-				$time = time();
-				$set_update_data['pe_accept_date'] = date("Y-m-d H:i:s", $time);						// (非)承認日
+					// 「承認」の場合
+					$set_update_data = array();
+					$set_update_data['pe_id']          = $flash_data['a_pe_id'];							// 案件申請ID
+					$set_update_data['pe_status']      = $this->config->item('C_ENTRY_SYOUNIN_ID');			// 承認
+					$set_update_data['pe_reason']      = $this->input->post('pe_reason');					// 非承認　理由
+					$time = time();
+					$set_update_data['pe_accept_date'] = date("Y-m-d H:i:s", $time);						// (非)承認日
 
-				// UPDATE <- 'tb_project_entry'
-				$this->pro->update_pro_entry($set_update_data);
-
-
+					// UPDATE <- 'tb_project_entry'
+					$this->pro->update_pro_entry($set_update_data);
 
 
-				// 案件情報テーブルを新規作成 -> 案件IDを取得「pj_id」
-				$get_pj_id = $this->pro->create_project($set_update_data['pe_id']);
-				$tmp_pj_id = $get_pj_id[0]['LAST_INSERT_ID()'];
 
-				// 案件個別情報 ＆ 投稿記事個別情報テーブルを新規作成 -> 案件個別ID ＆ 投稿記事個別IDを取得
-				list($get_pji_id, $get_rep_id) = $this->pro->create_project_info($set_update_data['pe_id'], $tmp_pj_id);
+
+					// 案件情報テーブルを新規作成 -> 案件IDを取得「pj_id」
+					$get_pj_id = $this->pro->create_project($set_update_data['pe_id']);
+					$tmp_pj_id = $get_pj_id[0]['LAST_INSERT_ID()'];
+
+					// 案件個別情報 ＆ 投稿記事個別情報テーブルを新規作成 -> 案件個別ID ＆ 投稿記事個別IDを取得
+					list($get_pji_id, $get_rep_id) = $this->pro->create_project_info($set_update_data['pe_id'], $tmp_pj_id);
 
 
 				// トランザクション・COMMIT
@@ -477,8 +477,8 @@ class Entrylist extends MY_Controller
 		);
 
 		// ジャンル 選択項目セット
-		$this->load->model('comm_genre', 'gr', TRUE);
-		$genre_list = $this->gr->get_genre();
+		$this->load->model('comm_select', 'select', TRUE);
+		$genre_list = $this->select->get_genre();
 
 		// 案件申請ID 並び替え選択項目セット
 		$arroptions_id = array (
@@ -517,8 +517,8 @@ class Entrylist extends MY_Controller
 		);
 
 		// ジャンル 選択項目セット
-		$this->load->model('comm_genre', 'gr', TRUE);
-		$genre_list = $this->gr->get_genre();
+		$this->load->model('comm_select', 'select', TRUE);
+		$genre_list = $this->select->get_genre();
 
 		$this->smarty->assign('options_entry_status', $arroptions_entrystatus);
 		$this->smarty->assign('options_genre_list',   $genre_list);

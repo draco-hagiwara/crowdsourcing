@@ -153,6 +153,9 @@ class Clientlist extends MY_Controller
 		// 都道府県情報＆手数料選択設定
 		$this->set_optionitem($get_data[0]);
 
+		// 現在の会員ランク単価を取得
+		$this->_get_member_tanka($tmp_clientid);
+
 		$this->smarty->assign('client_info', $get_data[0]);
 
 		// バリデーション設定
@@ -182,8 +185,10 @@ class Clientlist extends MY_Controller
 			$this->smarty->assign('client_info', $this->input->post());
 		} else {
 			// DB書き込み
-			$set_data01['cl_status'] = $this->input->post('cl_status');
-			$set_data01['cl_id']     = $this->input->post('cl_id');
+			$set_data01['cl_status']       = $this->input->post('cl_status');
+			$set_data01['cl_id']           = $this->input->post('cl_id');
+			$set_data01['cl_company']      = $this->input->post('cl_company');
+			$set_data01['cl_company_kana'] = $this->input->post('cl_company_kana');
 
 			if ($this->cl->update_Client($set_data01))
 			{
@@ -227,6 +232,22 @@ class Clientlist extends MY_Controller
 		// 手数料状態選択
 		$this->smarty->assign('ci_fee_id', $input_data['ci_fee_id']);
 		$this->smarty->assign('ci_fee',    $input_data['ci_fee']);
+
+	}
+
+	// 現在の会員ランク単価＆難易度単価を取得
+	private function _get_member_tanka($cl_id)
+	{
+
+		$this->load->model('tanka', 'ta', TRUE);
+		$tanka_list = $this->ta->get_tanka($cl_id);
+		$tmp_tankainfo = "ブロンズ=" . $tanka_list[1]['ta_price'] . " 円、シルバー=" . $tanka_list[2]['ta_price'] . " 円、ゴールド=" . $tanka_list[3]['ta_price'] . " 円";
+		$this->smarty->assign('tanka_info', $tmp_tankainfo);
+
+		$tankaadd_list = $this->ta->get_tankaaad($cl_id);
+		$tmp_tankaaddinfo = "カンタン=" . $tankaadd_list[0]['taa_price'] . " 円、ふつう=" . $tankaadd_list[1]['taa_price'] . " 円、難しい=" . $tankaadd_list[2]['taa_price'] . " 円";
+		$this->smarty->assign('tankaadd_info', $tmp_tankaaddinfo);
+
 
 	}
 
@@ -366,20 +387,20 @@ class Clientlist extends MY_Controller
 						'label'   => '備考',
 						'rules'   => 'trim|max_length[2000]'
 				),
+				array(
+						'field'   => 'cl_company',
+						'label'   => '会社名',
+						'rules'   => 'trim|required|max_length[100]'
+				),
+				array(
+						'field'   => 'cl_company_kana',
+						'label'   => '会社名カナ（全角）',
+						'rules'   => 'trim|regex_match[/^[ァ-タダ-ヴ　ー・]+$/]|required|max_length[100]'
+				),
 		);
 
 
 
-//				array(
-//						'field'   => 'cl_company',
-//						'label'   => '会社名',
-//						'rules'   => 'trim|required|max_length[100]'
-//				),
-//				array(
-//						'field'   => 'cl_company_kana',
-//						'label'   => '会社名カナ（全角）',
-//						'rules'   => 'trim|regex_match[/^[ァ-タダ-ヴ　ー・]+$/]|required|max_length[100]'
-//				),
 //				array(
 //						'field'   => 'cl_president01',
 //						'label'   => '代表者姓',

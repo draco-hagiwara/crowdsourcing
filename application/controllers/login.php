@@ -11,10 +11,11 @@ class Login extends MY_Controller
 		parent::__construct();
 
 		// セッション書き込み
-		if (!$this->session->userdata('ticket')) {
+		if (!$this->session->userdata('w_ticket'))
+		{
 
 			$setData = array(
-					'ticket' => md5(uniqid(mt_rand(), true)),
+					'w_ticket' => md5(uniqid(mt_rand(), true)),
 					'w_login' => FALSE,
 					//'login_mem' => '',
 			);
@@ -41,9 +42,10 @@ class Login extends MY_Controller
 	{
 
 		// セッションのチェック
-		$this->ticket = $this->session->userdata('ticket');
+		$this->ticket = $this->session->userdata('w_ticket');
 		//if (!$this->input->post('ticket') || $this->input->post('ticket') !== $this->ticket) {
-		if (!$this->ticket) {
+		if (!$this->ticket)
+		{
 			$message = 'セッション・エラーが発生しました。';
 			show_error($message, 400);
 		} else {
@@ -66,7 +68,7 @@ class Login extends MY_Controller
 	{
 
 		// セッションのチェック
-		$this->ticket = $this->session->userdata('ticket');
+		$this->ticket = $this->session->userdata('w_ticket');
 		if (!$this->input->post('ticket') || $this->input->post('ticket') !== $this->ticket) {
 		//if (!$this->ticket) {
 			$message = 'セッション・エラーが発生しました。';
@@ -78,7 +80,8 @@ class Login extends MY_Controller
 
 		// バリデーション・チェック
 		$this->_set_validation();											// バリデーション設定
-		if ($this->form_validation->run() == FALSE) {
+		if ($this->form_validation->run() == FALSE)
+		{
 			$this->smarty->assign('err_mess', '');
 			$this->view('writer/login/index.tpl');
 		} else {
@@ -89,11 +92,12 @@ class Login extends MY_Controller
 			// ログインID＆パスワードチェック
 			$this->load->model('comm_auth', 'auth', TRUE);
 
-			$loginid = $this->input->post('wr_email');
+			$loginid  = $this->input->post('wr_email');
 			$password = $this->input->post('wr_password');
 
 			$err_mess = $this->auth->check_Login($loginid, $password, $login_member);
-			if (isset($err_mess)) {
+			if (isset($err_mess))
+			{
 				// 入力エラー
 				$this->smarty->assign('err_mess', $err_mess);
 				$this->view('writer/login/index.tpl');
@@ -115,9 +119,10 @@ class Login extends MY_Controller
 	{
 
 		// セッションのチェック
-		$this->ticket = $this->session->userdata('ticket');
+		$this->ticket = $this->session->userdata('w_ticket');
 		//if (!$this->input->post('ticket') || $this->input->post('ticket') !== $this->ticket) {
-		if (!$this->ticket) {
+		if (!$this->ticket)
+		{
 			$message = 'セッション・エラーが発生しました。';
 			show_error($message, 400);
 		} else {
@@ -149,8 +154,9 @@ class Login extends MY_Controller
 	{
 
 		// セッションのチェック
-		$this->ticket = $this->session->userdata('ticket');
-		if (!$this->input->post('ticket') || $this->input->post('ticket') !== $this->ticket) {
+		$this->ticket = $this->session->userdata('w_ticket');
+		if (!$this->input->post('ticket') || $this->input->post('ticket') !== $this->ticket)
+		{
 		//if (!$this->ticket) {
 			$message = 'セッション・エラーが発生しました。';
 			show_error($message, 400);
@@ -162,7 +168,8 @@ class Login extends MY_Controller
 
 		// バリデーション・チェック
 		$this->_set_validation01();												// バリデーション設定
-		if ($this->form_validation->run() == FALSE) {
+		if ($this->form_validation->run() == FALSE)
+		{
 			// 画像認証コード作成
 			$img_captcha = $this->_captsha_create();
 			$this->smarty->assign('captcha', $img_captcha);
@@ -174,7 +181,8 @@ class Login extends MY_Controller
 			$this->load->model('Writer', 'wr', TRUE);
 
 			$input_email = $this->input->post('wr_email');
-			if ($this->wr->exist_LoginID($input_email) == FALSE) {
+			if ($this->wr->exist_LoginID($input_email) == FALSE)
+			{
 				$this->smarty->assign('err_mess', '入力されたログインID（メールアドレス）は登録されていません。');
 				$this->view('writer/login/reissue.tpl');
 				return;
@@ -186,7 +194,8 @@ class Login extends MY_Controller
 			$captcha_word = strtolower($this->input->post('captcha_word'));		// 画像認証コード文字
 			$captcha_chr = strtolower($this->input->post('captcha_chr'));		// 入力文字
 
-			if ( $captcha_chr != $captcha_word ) {
+			if ( $captcha_chr != $captcha_word )
+			{
 				// 画像認証コード作成
 				$img_captcha = $this->_captsha_create();
 				$this->smarty->assign('captcha', $img_captcha);
@@ -233,7 +242,8 @@ class Login extends MY_Controller
 
 			// メール送信
 			$this->load->model('Mailtpl', 'mailtpl', TRUE);
-			if ($this->mailtpl->getMailTpl($mail, $arrRepList, $mail_tpl)) {
+			if ($this->mailtpl->getMailTpl($mail, $arrRepList, $mail_tpl))
+			{
 				//$this->view('writer/entrywriter/end.tpl');
 			} else {
 				echo "メール送信エラー";
@@ -251,9 +261,10 @@ class Login extends MY_Controller
 	{
 
 		// セッションのチェック
-		$this->ticket = $this->session->userdata('ticket');
+		$this->ticket = $this->session->userdata('w_ticket');
 		//if (!$this->input->post('ticket') || $this->input->post('ticket') !== $this->ticket) {
-		if (!$this->ticket) {
+		if (!$this->ticket)
+		{
 			$message = 'セッション・エラーが発生しました。';
 			show_error($message, 400);
 		} else {
@@ -270,7 +281,8 @@ class Login extends MY_Controller
 
 		// ライター情報の読み込み
 		$arrData = $this->wr->exist_WriterID($this->_writerID);
-		if (count($arrData) != 0) {
+		if (count($arrData) != 0)
+		{
 			foreach ($arrData as $r) {
 				$wr_tmp_password  = $r['wr_tmp_password'];
 				$wr_tmp_pwkey     = $r['wr_tmp_pwkey'];
@@ -281,13 +293,15 @@ class Login extends MY_Controller
 		}
 
 		// KEYチェック
-		if ($this->_writerKEY != $wr_tmp_pwkey) {
+		if ($this->_writerKEY != $wr_tmp_pwkey)
+		{
 			redirect('login/reissue_ngend');
 		}
 
 		// 制限時間チェック
 		$result_timechk = $this->_repasswd_timechk($wr_tmp_pwtime);
-		if ($result_timechk) {
+		if ($result_timechk)
+		{
 			redirect('login/reissue_ngend');
 		}
 
@@ -302,9 +316,10 @@ class Login extends MY_Controller
 	{
 
 		// セッションのチェック
-		$this->ticket = $this->session->userdata('ticket');
+		$this->ticket = $this->session->userdata('w_ticket');
 		//if (!$this->input->post('ticket') || $this->input->post('ticket') !== $this->ticket) {
-		if (!$this->ticket) {
+		if (!$this->ticket)
+		{
 			$message = 'セッション・エラーが発生しました。';
 			show_error($message, 400);
 		} else {
@@ -322,9 +337,10 @@ class Login extends MY_Controller
 	{
 
 		// セッションのチェック
-		$this->ticket = $this->session->userdata('ticket');
+		$this->ticket = $this->session->userdata('w_ticket');
 		//if (!$this->input->post('ticket') || $this->input->post('ticket') !== $this->ticket) {
-		if (!$this->ticket) {
+		if (!$this->ticket)
+		{
 			$message = 'セッション・エラーが発生しました。';
 			show_error($message, 400);
 		} else {
@@ -370,7 +386,8 @@ class Login extends MY_Controller
 
 		$time = time();
 		$tmp_nowtime = date("Y-m-d H:i:s", $time);
-		if (strtotime($count_time) <= strtotime($tmp_nowtime)) {
+		if (strtotime($count_time) <= strtotime($tmp_nowtime))
+		{
 			return TRUE;
 		}
 
@@ -426,7 +443,7 @@ class Login extends MY_Controller
 				array(
 						'field'   => 'wr_password',
 						'label'   => 'パスワード',
-						'rules'   => 'trim|required|regex_match[/^[\x21-\x7e]+$/]|min_length[8]|max_length[50]|matches[|matches[wr_password]]'
+						'rules'   => 'trim|required|regex_match[/^[\x21-\x7e]+$/]|min_length[8]|max_length[50]'
 				),
 				array(
 						'field'   => 'retype_password',

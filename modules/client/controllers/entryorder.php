@@ -22,10 +22,10 @@ class Entryorder extends MY_Controller
 		}
 
 		// セッション::フラッシュデータ(案件申請ID)書き込み
-		if (!$this->session->flashdata('pe_id')) {
-			$flash_data['pe_id'] = '';
-			$this->session->set_flashdata($flash_data);
-			$this->smarty->assign('flashdata_peid', $flash_data['pe_id']);
+		if (!$this->session->userdata('c_pe_id')) {
+			$flash_data['c_pe_id'] = '';
+			$this->session->set_userdata($flash_data);
+			$this->smarty->assign('flashdata_peid', $flash_data['c_pe_id']);
 		}
 
 	}
@@ -34,19 +34,34 @@ class Entryorder extends MY_Controller
 	public function index()
 	{
 
+		// セッション::案件申請IDをクリア：：URIセグメントの取得
+		//   href="/client/entryorder/index/0/" で取得
+		$segments = $this->uri->segment_array();
+		if ((isset($segments[3])) && $segments[3] == 0)
+		{
+
+//			// セッションデータをクリア
+//			$this->load->model('comm_auth', 'comm_auth', TRUE);
+//			$this->comm_auth->delete_session('client');
+
+
+			$flash_data['c_pe_id'] = '';
+			$this->session->set_userdata($flash_data);
+		}
+
 		// SELECT項目 初期値セット
 		$this->_search_set();
 
 		// セッションからフラッシュデータ読み込み
-		$flash_data['pe_id'] = $this->session->flashdata('pe_id');
+		$flash_data['c_pe_id'] = $this->session->userdata('c_pe_id');
 
 
 		print("flash_data00 == ");
-		print_r($flash_data['pe_id']);
+		print_r($flash_data['c_pe_id']);
 		print("<br><br>");
 
 
-		if (empty($flash_data['pe_id']))
+		if (empty($flash_data['c_pe_id']))
 		{
 			// 各項目 初期値セット
 			$this->_form_item_set00();
@@ -54,7 +69,7 @@ class Entryorder extends MY_Controller
 
 			// 案内申請情報の取得
 			$this->load->model('Project_entry', 'pro', TRUE);				// models 読み込み
-			$get_data = $this->pro->get_entry($flash_data['pe_id']);
+			$get_data = $this->pro->get_entry($flash_data['c_pe_id']);
 
 			$get_data[0]['pe_open_date']     = date('Y-m-d', strtotime($get_data[0]['pe_open_date']));
 			$get_data[0]['pe_delivery_date'] = date('Y-m-d', strtotime($get_data[0]['pe_delivery_date']));
@@ -64,8 +79,8 @@ class Entryorder extends MY_Controller
 		}
 
 		// session:フラッシュデータに案件申請ID書き込み
-		$this->session->set_flashdata($flash_data);
-		$this->smarty->assign('flashdata_peid', $flash_data['pe_id']);
+		$this->session->set_userdata($flash_data);
+		$this->smarty->assign('flashdata_peid', $flash_data['c_pe_id']);
 
 		// バリデーション・チェック
 		$this->_set_validation01();											// バリデーション設定
@@ -85,7 +100,7 @@ class Entryorder extends MY_Controller
 		$this->_search_set();
 
 		// セッションからフラッシュデータ読み込み
-		$flash_data['pe_id'] = $this->session->flashdata('pe_id');
+		$flash_data['c_pe_id'] = $this->session->userdata('c_pe_id');
 
 
 		//print("flash_data01 == ");
@@ -94,7 +109,7 @@ class Entryorder extends MY_Controller
 
 
 
-		if (empty($flash_data['pe_id']))
+		if (empty($flash_data['c_pe_id']))
 		{
 			// 各項目 初期値セット
 			$this->_form_item_set01();
@@ -102,15 +117,15 @@ class Entryorder extends MY_Controller
 
 			// 案内申請情報の取得
 			$this->load->model('Project_entry', 'pro', TRUE);				// models 読み込み
-			$get_data = $this->pro->get_entry_info($flash_data['pe_id'], $pei_seq = 0);
+			$get_data = $this->pro->get_entry_info($flash_data['c_pe_id'], $pei_seq = 0);
 
 			$this->smarty->assign('set_val', $get_data[0]);
 
 		}
 
 		// session:フラッシュデータに案件申請ID書き込み
-		$this->session->set_flashdata($flash_data);
-		$this->smarty->assign('flashdata_peid', $flash_data['pe_id']);
+		$this->session->set_userdata($flash_data);
+		$this->smarty->assign('flashdata_peid', $flash_data['c_pe_id']);
 
 		// バリデーション・チェック
 		$this->_set_validation01();											// バリデーション設定
@@ -130,7 +145,7 @@ class Entryorder extends MY_Controller
 		$this->_search_set();
 
 		// セッションからフラッシュデータ読み込み
-		$flash_data['pe_id'] = $this->session->flashdata('pe_id');
+		$flash_data['c_pe_id'] = $this->session->userdata('c_pe_id');
 
 
 		//print("flash_data02 == ");
@@ -139,7 +154,7 @@ class Entryorder extends MY_Controller
 
 
 
-		if (empty($flash_data['pe_id']))
+		if (empty($flash_data['c_pe_id']))
 		{
 			// 各項目 初期値セット
 			$this->_form_item_set01();
@@ -147,7 +162,7 @@ class Entryorder extends MY_Controller
 
 			// 案内申請情報の取得
 			$this->load->model('Project_entry', 'pro', TRUE);				// models 読み込み
-			$get_data = $this->pro->get_entry_info($flash_data['pe_id'], $pei_seq = 1);
+			$get_data = $this->pro->get_entry_info($flash_data['c_pe_id'], $pei_seq = 1);
 
 			if (empty($get_data[0]))
 			{
@@ -159,8 +174,8 @@ class Entryorder extends MY_Controller
 		}
 
 		// session:フラッシュデータに案件申請ID書き込み
-		$this->session->set_flashdata($flash_data);
-		$this->smarty->assign('flashdata_peid', $flash_data['pe_id']);
+		$this->session->set_userdata($flash_data);
+		$this->smarty->assign('flashdata_peid', $flash_data['c_pe_id']);
 
 		// バリデーション・チェック
 		$this->_set_validation01();											// バリデーション設定
@@ -180,7 +195,7 @@ class Entryorder extends MY_Controller
 		$this->_search_set();
 
 		// セッションからフラッシュデータ読み込み
-		$flash_data['pe_id'] = $this->session->flashdata('pe_id');
+		$flash_data['c_pe_id'] = $this->session->userdata('c_pe_id');
 
 
 		//print("flash_data03 == ");
@@ -189,7 +204,7 @@ class Entryorder extends MY_Controller
 
 
 
-		if (empty($flash_data['pe_id']))
+		if (empty($flash_data['c_pe_id']))
 		{
 			// 各項目 初期値セット
 			$this->_form_item_set01();
@@ -197,7 +212,7 @@ class Entryorder extends MY_Controller
 
 			// 案内申請情報の取得
 			$this->load->model('Project_entry', 'pro', TRUE);				// models 読み込み
-			$get_data = $this->pro->get_entry_info($flash_data['pe_id'], $pei_seq = 2);
+			$get_data = $this->pro->get_entry_info($flash_data['c_pe_id'], $pei_seq = 2);
 
 			if (empty($get_data[0]))
 			{
@@ -208,8 +223,8 @@ class Entryorder extends MY_Controller
 		}
 
 		// session:フラッシュデータに案件申請ID書き込み
-		$this->session->set_flashdata($flash_data);
-		$this->smarty->assign('flashdata_peid', $flash_data['pe_id']);
+		$this->session->set_userdata($flash_data);
+		$this->smarty->assign('flashdata_peid', $flash_data['c_pe_id']);
 
 		// バリデーション・チェック
 		$this->_set_validation01();											// バリデーション設定
@@ -228,11 +243,20 @@ class Entryorder extends MY_Controller
 		// 「新規作成」ボタン押下時
 		if ($this->input->post('submit') == '_new')
 		{
+
+			redirect('/entryorder/index/0/');
+
+			// 初期値セット
+			$this->_search_set();
+			$this->smarty->assign('entry_no', '00');
+
+			$this->view('client/entryorder/index.tpl');
+
 			return;
 		}
 
 		// セッションからフラッシュデータ読み込み
-		$flash_data['pe_id'] = $this->session->flashdata('pe_id');
+		$flash_data['c_pe_id'] = $this->session->userdata('c_pe_id');
 
 
 		//print("flash_data_entry == ");
@@ -265,7 +289,7 @@ class Entryorder extends MY_Controller
 			$this->load->model('Project_entry', 'pro', TRUE);					// models 読み込み
 
 			// フラッシュデータの「案件申請ID」チェック
-			if (empty($flash_data['pe_id']))
+			if (empty($flash_data['c_pe_id']))
 			{
 
 				// 新規にレコード作成::「tb_project_entry」
@@ -296,7 +320,7 @@ class Entryorder extends MY_Controller
 				$result = $this->pro->insert_pro_entryinfo($set_insert_data);
 
 				// session:フラッシュデータに案件申請ID書き込み
-				$flash_data['pe_id'] = $tmp_pe_id;
+				$flash_data['c_pe_id'] = $tmp_pe_id;
 				//$this->session->set_flashdata($flash_data);
 
 				// 各項目 初期値セット
@@ -311,7 +335,7 @@ class Entryorder extends MY_Controller
 
 				if ($set_entryno == '00')
 				{
-					$set_update_data['pe_id']        = $flash_data['pe_id'];								// 案件申請ID
+					$set_update_data['pe_id']        = $flash_data['c_pe_id'];								// 案件申請ID
 					$set_update_data['pe_cl_id']     = $this->session->userdata('c_memID');					// クライアントID
 
 					unset($set_update_data["entry_no"]) ;
@@ -324,7 +348,7 @@ class Entryorder extends MY_Controller
 					$this->_form_item_set00();
 
 				} else {
-					$set_update_data['pei_pe_id']    = $flash_data['pe_id'];								// 案件申請ID
+					$set_update_data['pei_pe_id']    = $flash_data['c_pe_id'];								// 案件申請ID
 					$set_update_data['pei_pe_cl_id'] = $this->session->userdata('c_memID');					// クライアントID
 
 					foreach ($set_update_data as $key => $val)
@@ -352,8 +376,8 @@ class Entryorder extends MY_Controller
 		}
 
 		// session:フラッシュデータに案件申請ID書き込み
-		$this->session->set_flashdata($flash_data);
-		$this->smarty->assign('flashdata_peid', $flash_data['pe_id']);
+		$this->session->set_userdata($flash_data);
+		$this->smarty->assign('flashdata_peid', $flash_data['c_pe_id']);
 
 		$this->smarty->assign('entry_no', $this->input->post('entry_no'));
 		$this->view('client/entryorder/index.tpl');
@@ -365,95 +389,6 @@ class Entryorder extends MY_Controller
 
 
 
-
-
-
-
-
-
-
-
-
-
-	// 完了画面表示
-	public function complete()
-	{
-
-		// バリデーション・チェック
-		$this->form_validation->run();
-
-		// 「戻る」ボタン押下の場合
-		if ( $this->input->post('_back') ) {
-			$this->view('writer/entryclient/index.tpl');
-			return;
-		}
-
-		// ログインID(メールアドレス)の重複チェック
-		$this->load->model('Client', 'client', TRUE);
-
-		if ($this->client->check_LoginID($this->input->post('cl_email'))) {
-			$this->smarty->assign('err_email1', TRUE);
-			$this->smarty->assign('err_passwd', FALSE);
-			$this->view('writer/entryclient/index.tpl');
-			return;
-		}
-
-		// DB書き込み
-		$this->setData = $this->input->post();
-		$this->setData["cl_password"] = password_hash($this->input->post('cl_password'), PASSWORD_DEFAULT);
-
-		// 不要パラメータ削除
-		unset($this->setData["ticket"]) ;
-		unset($this->setData["submit"]) ;
-		unset($this->setData["retype_password"]) ;
-
-		if ($this->client->insert_Client($this->setData)) {
-			$this->view('writer/entryclient/end.tpl');
-		} else {
-			echo "会員登録に失敗しました。";
-			$this->view('writer/entryclient/end.tpl');
-		}
-
-		// メール送信先設定
-		$mail['from']      = "";
-		$mail['from_name'] = "";
-		$mail['subject']   = "";
-		$mail['to']        = "";
-		$mail['cc']        = "";
-		$mail['bcc']       = "";
-
-		// メール本文置き換え文字設定
-		$arrRepList = array(
-				'cl_company'      => $this->input->post('cl_company'),
-				'cl_company_kana' => $this->input->post('cl_company_kana'),
-				'cl_zip01'        => $this->input->post('cl_zip01'),
-				'cl_zip02'        => $this->input->post('cl_zip02'),
-				'cl_pref'         => $this->_pref_name,
-				'cl_addr01'       => $this->input->post('cl_addr01'),
-				'cl_addr02'       => $this->input->post('cl_addr02'),
-				'cl_buil'         => $this->input->post('cl_buil'),
-				'cl_person01'     => $this->input->post('cl_person01'),
-				'cl_person02'     => $this->input->post('cl_person02'),
-				'cl_email'        => $this->input->post('cl_email'),
-				'cl_email2'       => $this->input->post('cl_email2'),
-				'cl_tel01'        => $this->input->post('cl_tel01'),
-				'cl_tel02'        => $this->input->post('cl_tel02'),
-				'cl_hp'           => $this->input->post('cl_hp')
-		);
-
-		// メールテンプレートの読み込み
-		$this->config->load('config_mailtpl');								// メールテンプレート情報読み込み
-		$mail_tpl = $this->config->item('MAILTPL_ENT_CLIENT_ID');
-
-		// メール送信
-		$this->load->model('Mailtpl', 'mailtpl', TRUE);
-		if ($this->mailtpl->getMailTpl($mail, $arrRepList, $mail_tpl)) {
-			$this->view('writer/entryclient/end.tpl');
-		} else {
-			echo "メール送信エラー";
-			$this->view('writer/entryclient/end.tpl');
-		}
-	}
 
 
 
@@ -481,8 +416,8 @@ class Entryorder extends MY_Controller
 		);
 
 		// ジャンル 選択項目セット
-		$this->load->model('comm_genre', 'gr', TRUE);
-		$genre_list = $this->gr->get_genre();
+		$this->load->model('comm_select', 'select', TRUE);
+		$genre_list = $this->select->get_genre();
 
 		// ライターID 並び替え選択項目セット
 		$arroptions_pei_status = array (
@@ -509,8 +444,8 @@ class Entryorder extends MY_Controller
 		$set_val['pe_other']         = '';
 		$set_val['pe_addwork']       = '';
 		$set_val['pe_word_tanka']    = '0.0';
-		$set_val['pe_open_date']     = '';
-		$set_val['pe_delivery_date'] = '';
+		$set_val['pe_open_date']     = date('Y-m-d');
+		$set_val['pe_delivery_date'] = date('Y-m-d', strtotime('+1 month'));
 		$set_val['pe_comment']       = '';
 
 		$this->smarty->assign('set_val',   $set_val);

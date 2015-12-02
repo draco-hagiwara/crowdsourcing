@@ -84,7 +84,7 @@ class Search_list extends MY_Controller
 		}
 
 		// Pagination 設定
-		$set_pagination = $this->_get_Pagination($order_countall, $tmp_per_page, NULL);
+		$set_pagination = $this->_get_Pagination($order_countall, $tmp_per_page);
 
 		$this->smarty->assign('order_list',     $order_list);
 
@@ -99,6 +99,10 @@ class Search_list extends MY_Controller
 	// 一覧表示
 	public function search()
 	{
+
+		// セッションデータをクリア
+		$this->load->model('comm_auth', 'comm_auth', TRUE);
+		$this->comm_auth->delete_session('writer');
 
 		// 検索項目の保存が上手くいかない。応急的に対応！
 		// 検索項目=「pj_order_title」「pj_title」「pj_work」「pj_genre01」
@@ -225,7 +229,7 @@ class Search_list extends MY_Controller
 		//$genre_list = $this->select->get_genre();
 		//$get_data[0]['genre01_name']     = $genre_list[$get_data[0]['pj_genre01']];
 
-		$get_data[0]['pj_delivery_time'] = date('Y-m-d H:i', strtotime($get_data[0]['pj_delivery_time']));
+		//$get_data[0]['pj_delivery_time'] = date('Y-m-d H:i', strtotime($get_data[0]['pj_delivery_time']));
 		$get_data[0]['pj_start_time']    = date('Y-m-d H:i', strtotime($get_data[0]['pj_start_time']));
 		$get_data[0]['pj_end_time']      = date('Y-m-d H:i', strtotime($get_data[0]['pj_end_time']));
 
@@ -399,12 +403,20 @@ class Search_list extends MY_Controller
 
 		$post_data = array();
 		$post_data = $this->input->post();
-		//$set_orderno     = $set_update_data['order_no'];
-
 
 		// バリデーション・チェック
 		$this->_set_validation00();
 		$this->form_validation->run();
+
+		// ２度目のエントリー却下
+		$this->load->model('Writer_info', 'wrinfo', TRUE);
+		$res_chk = $this->wrinfo->exist_pjid($flash_data['w_pj_id'], $flash_data['w_memID']);
+		if ($res_chk)
+		{
+			// エラーメッセージを出す！　または選択不可にする。
+
+			redirect('/search_list/');
+		}
 
 		// エントリー情報の書き込み
 		$this->config->load('config_status');
@@ -419,8 +431,15 @@ class Search_list extends MY_Controller
 		$set_wdata['wi_difficulty_id'] = $post_data['pj_taa_difficulty_id'];			// 難易度
 		$set_wdata['wi_word_tanka'] = $post_data['wi_word_tanka'];						// 一文字単価
 		$set_wdata['wi_entry_date'] = date("Y-m-d H:i", $time);							// エントリー日
+
 		$tmp_limit_time = $time + ($post_data['pj_limit_time'] * 60);					// 分に変換のため * 60
-		$set_wdata['wi_posting_limit_date'] = date("Y-m-d H:i", $tmp_limit_time);		// 投稿〆日
+		$tmp_end_time = strtotime($post_data['pj_end_time']);
+		if ($tmp_limit_time <= $tmp_end_time)											// 投稿〆日 = 制限時間 < 公開〆切時間
+		{
+			$set_wdata['wi_posting_limit_date'] = date("Y-m-d H:i", $tmp_limit_time);
+		} else {
+			$set_wdata['wi_posting_limit_date'] = date("Y-m-d H:i", $tmp_end_time);
+		}
 
 		// 案件情報
 		$set_pdata['pj_id'] = $flash_data['w_pj_id'];									// 案件ID
@@ -433,13 +452,7 @@ class Search_list extends MY_Controller
 		$this->db->trans_start();											// trans_begin
 
 			// INSERT
-			$this->load->model('Writer_info', 'wrinfo', TRUE);
 			$_wi_id = $this->wrinfo->insert_writer_info($set_wdata);					// 「ライター個別情報ID」取得
-
-
-
-			print_r($_wi_id);
-
 
 			// UPDATE
 			$this->load->model('Project', 'pj', TRUE);
@@ -455,7 +468,7 @@ class Search_list extends MY_Controller
 			$this->session->set_userdata('w_memENTRY', TRUE);				// ENTRY有をセッションデータに書き込み
 
 			// エントリー確認メールを送信
-			$this->_mail_send($post_data, $set_wdata, $flash_data['w_memNAME']);
+			$this->_mail_send($post_data, $set_wdata, $flash_data);
 		}
 
 		redirect('/search_list/');
@@ -468,26 +481,40 @@ class Search_list extends MY_Controller
 
 		$this->load->model('tanka', 'ta', TRUE);
 		$tanka_list = $this->ta->get_tanka($cl_id);
+
+		/* デバッグ用 */
 		$tmp_tankainfo = "ブロンズ=" . $tanka_list[1]['ta_price'] . " 円、シルバー=" . $tanka_list[2]['ta_price'] . " 円、ゴールド=" . $tanka_list[3]['ta_price'] . " 円";
 		$this->smarty->assign('tanka_info', $tmp_tankainfo);
+
+		$tmp_diff_tanka0 = $this->ta->get_difftanka($cl_id, 0);
+		$tmp_diff_tanka1 = $this->ta->get_difftanka($cl_id, 1);
+		$tmp_diff_tanka2 = $this->ta->get_difftanka($cl_id, 2);
+		$this->smarty->assign('diff_tanka0', $tmp_diff_tanka0['taa_price']);
+		$this->smarty->assign('diff_tanka1', $tmp_diff_tanka1['taa_price']);
+		$this->smarty->assign('diff_tanka2', $tmp_diff_tanka2['taa_price']);
+		/* -------- */
 
 	}
 
 	// エントリー確認メールを送信
-	private function _mail_send($post_data, $set_wdata, $wr_nickname)
+	private function _mail_send($post_data, $set_wdata, $wr_data)
 	{
+
+		// ライターのメールアドレスを取得する
+		$this->load->model('Writer', 'wr', TRUE);
+		$get_data = $this->wr->select_writer_id($wr_data['w_memID']);
 
 		// メール送信先設定
 		$mail['from']      = "";
 		$mail['from_name'] = "";
 		$mail['subject']   = "";
-		$mail['to']        = $get_writer_info[0]['wr_email'];
+		$mail['to']        = $get_data[0]['wr_email'];
 		$mail['cc']        = "";
 		$mail['bcc']       = "";
 
 		// メール本文置き換え文字設定
 		$arrRepList = array(
-				'wr_nickname'           => $wr_nickname,
+				'wr_nickname'           => $wr_data['w_memNAME'],
 				'wi_pj_id'              => $set_wdata['wi_pj_id'],
 				'pj_title'              => $post_data['pj_title'],
 				'wi_word_tanka'         => $set_wdata['wi_word_tanka'],
@@ -509,11 +536,11 @@ class Search_list extends MY_Controller
 	private function _get_Pagination($entry_countall, $tmp_per_page)
 	{
 
-		$config['base_url']       = base_url() . '/orderlist/search/';		// ページの基本URIパス。「/コントローラクラス/アクションメソッド/」
+		$config['base_url']       = base_url() . '/search_list/search/';	// ページの基本URIパス。「/コントローラクラス/アクションメソッド/」
 		$config['per_page']       = $tmp_per_page;							// 1ページ当たりの表示件数。
 		$config['total_rows']     = $entry_countall;						// 総件数。where指定するか？
 		$config['uri_segment']    = 4;										// オフセット値がURIパスの何セグメント目とするか設定
-		$config['num_links']      = 5;										//現在のページ番号の左右にいくつのページ番号リンクを生成するか設定
+		$config['num_links']      = 5;										// 現在のページ番号の左右にいくつのページ番号リンクを生成するか設定
 		$config['full_tag_open']  = '<p class="pagination">';				// ページネーションリンク全体を階層化するHTMLタグの先頭タグ文字列を指定
 		$config['full_tag_close'] = '</p>';									// ページネーションリンク全体を階層化するHTMLタグの閉じタグ文字列を指定
 		$config['first_link']     = '最初へ';								// 最初のページを表すテキスト。

@@ -156,16 +156,9 @@
     </div>
   </div>
 
+
   <div class="form-group">
-    <label for="pj_delivery_time" class="col-sm-3 control-label">ライター投稿納期<font color=red>【必須】</font></label>
-    <div class="col-sm-4">
-      {form_input('pj_delivery_time' , set_value('pj_delivery_time', $order_info.pj_delivery_time) , 'class="form-control" placeholder="「20xx-xx-xx HH:MM」の形式で入力してください"')}
-      「20xx-xx-xx HH:MM」の形式。<br>
-      {if form_error('pj_delivery_time')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('pj_delivery_time')}</font></label>{/if}
-    </div>
-  </div>
-  <div class="form-group">
-    <label for="pj_limit_time" class="col-sm-3 control-label">ライター投稿制限時間<font color=red>【必須】</font></label>
+    <label for="pj_limit_time" class="col-sm-3 control-label">ライター原稿作成max時間<font color=red>【必須】</font></label>
     <div class="col-sm-4">
       {form_input('pj_limit_time' , set_value('pj_limit_time', $order_info.pj_limit_time) , 'class="form-control" placeholder="「MM」(分)の形式で入力してください"')}
       「分」指定。<br>

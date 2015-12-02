@@ -10,6 +10,160 @@ class Project extends CI_Model
 
 
     /**
+     * 投稿情報の取得
+     *
+     * @param	int
+     * @return	array()
+     */
+    public function get_posting($get_pj_id)
+    {
+
+    	$set_where["pj_id"] = $get_pj_id;
+
+    	$query = $this->db->get_where('vw_posting_pj', $set_where);
+
+    	$get_data = $query->result('array');
+
+    	return $get_data;
+
+    }
+
+
+
+    /**
+     * 投稿記事情報のリスト＆件数を取得
+     *
+     * @param	array() : 検索項目値
+     * @param	int     : 1ページ当たりの表示件数(LIMIT値)
+     * @param	int     : オフセット値(ページ番号)
+     * @return	array()
+     */
+    public function get_postinglist($arr_post, $tmp_per_page, $tmp_offset=0)
+    {
+
+    	// 各SQL項目へセット
+    	// WHERE
+    	$set_select_like["pj_id"]       = $arr_post['pj_id'];
+    	$set_select_like["pj_pe_id"]    = $arr_post['pj_pe_id'];
+    	$set_select_like["pj_pe_cl_id"] = $arr_post['pj_pe_cl_id'];
+    	$set_select_like["pj_title"]    = $arr_post['pj_title'];
+    	$set_select["pj_status"]        = $arr_post['pj_status'];
+    	$set_select["pj_work_status"]   = $arr_post['pj_work_status'];
+    	$set_select["pj_entry_status"]  = $arr_post['pj_entry_status'];
+    	$set_select["pj_genre01"]       = $arr_post['pj_genre01'];
+
+
+    	// ORDER BY
+    	if ($arr_post['orderid'] == '')
+    	{
+    		$set_orderby["pj_pe_cl_id"] = '';
+    	}else {
+    		$set_orderby["pj_pe_cl_id"] = $arr_post['orderid'];
+    	}
+
+    	if ($arr_post['orderstatus'] == '')
+    	{
+    		$set_orderby["pj_status"] = '';
+    	}else {
+    		$set_orderby["pj_status"] = $arr_post['orderstatus'];
+    	}
+
+    	// 対象クライアントメンバーの取得
+    	$entry_list = $this->select_postinglist($set_select, $set_select_like, $set_orderby, $tmp_per_page, $tmp_offset);
+
+    	return $entry_list;
+
+    }
+
+    /**
+     * 対象投稿記事情報のリスト＆件数を取得
+     *
+     * @param	array() : WHERE句項目
+     * @param	array() : WHERE LIKE句項目
+     * @param	array() : ORDER BY句項目
+     * @param	int     : 1ページ当たりの表示件数
+     * @param	int     : オフセット値(ページ番号)
+     * @return	array()
+     */
+    public function select_postinglist($set_select, $set_select_like, $set_orderby, $tmp_per_page, $tmp_offset=0)
+    {
+
+    	$sql  = 'SELECT * FROM `vw_posting_pj` ';
+    	$sql .= ' WHERE `pj_del_flg` = 0';											// 削除フラグ
+
+    	// WHERE文 作成
+    	foreach ($set_select as $key => $val)
+    	{
+    		if (isset($val) && $val != '')
+    		{
+    			if ($key == 'pj_genre01')
+    			{
+	    		    if (intval($set_select["pj_genre01"]) > 1) 						// ジャンル："1"は選択文字
+	    			{
+    					$sql .= ' AND `pj_genre01` = ' . $set_select["pj_genre01"];
+	    			}
+    			} else {
+    				$sql .= ' AND ' . $key . ' = ' . $this->db->escape($val);
+    			}
+    		}
+    	}
+
+    	// WHERE-LIKE文 作成
+    	foreach ($set_select_like as $key => $val)
+    	{
+    		if (isset($val) && $val != '')
+    		{
+   				$sql .= ' AND ' . $key . ' LIKE \'%' . $this->db->escape_like_str($val) . '%\'';
+    		}
+    	}
+
+    	// ORDER BY文 作成 : ORDERBY の優先順位があるので注意 (ステータス > 案件申請ID)
+    	$tmp_firstitem = FALSE;
+    	foreach ($set_orderby as $key => $val)
+    	{
+    		if (isset($val) && $val != '')
+    		{
+    			if ($tmp_firstitem == FALSE)
+    			{
+    				$sql .= ' ORDER BY ' . $key . ' ' . $val;
+    				$tmp_firstitem = TRUE;
+    			} else {
+    				$sql .= ' , ' . $key . ' ' . $val;
+    			}
+    		}
+    	}
+    	if ($tmp_firstitem == FALSE)
+    	{
+    		$sql .= ' ORDER BY pj_id DESC';										// デフォルト：「案件ID」降順
+    	}
+
+    	// 対象全件数を取得
+    	$query = $this->db->query($sql);
+    	$countall = $query->num_rows();
+
+    	// LIMIT ＆ OFFSET 値をセット
+    	$sql .= ' LIMIT ' . $tmp_per_page . ' OFFSET ' . $tmp_offset;
+
+    	// クエリー実行
+    	$query = $this->db->query($sql);
+    	$listall = $query->result('array');
+
+    	return array($listall, $countall);
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+    /**
      * 案件情報の取得
      *
      * @param	int
@@ -36,7 +190,7 @@ class Project extends CI_Model
      * @param	tinyint
      * @return	array()
      */
-    public function get_order_info($get_pj_id, $pji_seq = NULL, $pji_status = NULL)
+    public function get_order_info($get_pj_id, $pji_seq = NULL)
     {
 
     	$set_where["pji_pj_id"]      = $get_pj_id;
@@ -44,13 +198,9 @@ class Project extends CI_Model
     	{
     		$set_where["pji_seq"]    = $pji_seq;
     	}
-    	if ($pji_status != NULL)
-    	{
-    		$set_where["pji_status"] = 1;
-    	}
 
     	// view から取得
-    	$query = $this->db->get_where('vw_orderlist', $set_where);
+    	$query = $this->db->get_where('vw_order_pji', $set_where);
 
     	$get_data = $query->result('array');
 
@@ -81,18 +231,18 @@ class Project extends CI_Model
 
 
     	// ORDER BY
-        if ($arr_post['orderpjid'] == 'ASC')
+        if ($arr_post['orderpjid'] == '')
     	{
-    		$set_orderby["pj_id"] = $arr_post['orderpjid'];
+    		$set_orderby["pj_id"] = '';
     	}else {
-    		$set_orderby["pj_id"] = 'DESC';
+    		$set_orderby["pj_id"] = $arr_post['orderpjid'];
     	}
 
-    	if ($arr_post['orderpeid'] == 'ASC')
+    	if ($arr_post['orderpeid'] == '')
     	{
-    		$set_orderby["pj_pe_id"] = $arr_post['orderpeid'];
+    		$set_orderby["pj_pe_id"] = '';
     	}else {
-    		$set_orderby["pj_pe_id"] = 'DESC';
+    		$set_orderby["pj_pe_id"] = $arr_post['orderpeid'];
     	}
 
     	// 対象クライアントメンバーの取得
@@ -126,7 +276,7 @@ class Project extends CI_Model
     	// WHERE文 作成
     	foreach ($set_select_like as $key => $val)
     	{
-    		if (isset($val))
+    		if (isset($val) && $val != '')
     		{
     			$sql .= ' AND ' . $key . ' LIKE \'%' . $this->db->escape_like_str($val) . '%\'';
     		}
@@ -136,7 +286,7 @@ class Project extends CI_Model
     	$tmp_firstitem = FALSE;
     	foreach ($set_orderby as $key => $val)
     	{
-    		if (isset($val))
+    		if (isset($val) && $val != '')
     		{
     			if ($tmp_firstitem == FALSE)
     			{
@@ -147,7 +297,10 @@ class Project extends CI_Model
     			}
     		}
     	}
-    	$sql .= ' , pj_pe_entry_date DESC';									// デフォルト：「申請日」降順
+    	if ($tmp_firstitem == FALSE)
+    	{
+    		$sql .= ' ORDER BY pj_pe_entry_date DESC';							// デフォルト：「案件ID」降順
+    	}
 
     	// 対象全件数を取得
     	$query = $this->db->query($sql);
@@ -244,10 +397,18 @@ class Project extends CI_Model
 
     	$time = time();
 
-    	// 公開設置日時をチェック
-    	if ($set_data['pj_status'] == '1')
+    	// 公開日時をチェック
+    	$current_time = date("Y-m-d H:i:s", $time);
+    	if (strtotime($set_data['pj_start_time']) <= strtotime($current_time))
     	{
+    		// エントリーステータス(エントリーなし)
+    		$set_data['pj_entry_status'] = 0;
+
+    		// 公開設置日時をセット
     		$set_data['pj_open_date'] = date("Y-m-d H:i:s", $time);
+    	} else {
+    		// エントリーステータス(予約)
+    		$set_data['pj_entry_status'] = 2;
     	}
 
     	// 更新日時をセット
@@ -262,6 +423,22 @@ class Project extends CI_Model
     }
 
 
+    /**
+     * 1レコード更新 :: 投稿記事
+     *
+     * @param	array()
+     * @return	bool
+     */
+    public function update_pj_posting($set_data)
+    {
+
+    	$where = array(
+    			'pj_id' => $set_data['pj_id']
+    	);
+
+    	$result = $this->db->update('tb_project', $set_data, $where);
+    	return $result;
+    }
 
 
 }

@@ -55,6 +55,14 @@
       {if form_error('ci_comment')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('ci_comment')}</font></label>{/if}
     </div>
   </div>
+  <div class="form-group">
+    <label for="info_tanka" class="col-sm-2 control-label">単価設定情報</label>
+    <div class="col-sm-10">
+      {$tanka_info}
+      <br>
+      {$tankaadd_info}
+    </div>
+  </div>
 
 <HR>
 
@@ -68,15 +76,15 @@
   <div class="form-group">
     <label for="cl_company" class="col-sm-4 control-label">会　社　名</label>
     <div class="col-sm-8">
-      {$client_info.cl_company}
-      {form_hidden('cl_company', $client_info.cl_company)}
+      {form_input('cl_company' , $client_info.cl_company , 'class="form-control" placeholder=""')}
+      {if form_error('cl_company')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('cl_company')}</font></label>{/if}
     </div>
   </div>
   <div class="form-group">
-    <label for="cl_company_kana" class="col-sm-4 control-label">会　社　名（全角）</label>
+    <label for="cl_company_kana" class="col-sm-4 control-label">会社名カナ（全角）</label>
     <div class="col-sm-8">
-      {$client_info.cl_company_kana}
-      {form_hidden('cl_company_kana', $client_info.cl_company_kana)}
+      {form_input('cl_company_kana' , $client_info.cl_company_kana , 'class="form-control" placeholder=""')}
+      {if form_error('cl_company_kana')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('cl_company_kana')}</font></label>{/if}
     </div>
   </div>
   <div class="form-group">

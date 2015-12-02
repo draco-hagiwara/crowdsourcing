@@ -1,6 +1,6 @@
 <?php
 
-class Entrylist extends MY_Controller
+class Posting extends MY_Controller
 {
 
 	public function __construct()
@@ -19,7 +19,7 @@ class Entrylist extends MY_Controller
 
 	}
 
-	// 申請一覧TOP
+	// 投稿一覧TOP
 	public function index()
 	{
 
@@ -47,19 +47,19 @@ class Entrylist extends MY_Controller
 			$tmp_offset = 0;
 		}
 
-		// 案件申請情報のリスト＆件数を取得
-		$this->load->model('Project_entry', 'pro', TRUE);
-		list($entry_list, $entry_countall) = $this->pro->get_entrylist($this->input->post(), $tmp_per_page, $tmp_offset);
-		$this->smarty->assign('entry_list', $entry_list);
+		// 投稿記事情報のリスト＆件数を取得
+		$this->load->model('Project', 'pj', TRUE);
+		list($listall, $countall) = $this->pj->get_postinglist($this->input->post(), $tmp_per_page, $tmp_offset);
+		$this->smarty->assign('listall', $listall);
 
 		// Pagination 設定
-		$set_pagination = $this->_get_Pagination($entry_countall, $tmp_per_page);
+		$set_pagination = $this->_get_Pagination($countall, $tmp_per_page);
 
 		$this->smarty->assign('set_pagination', $set_pagination['page_link']);
-		$this->smarty->assign('countall',       $entry_countall);
+		$this->smarty->assign('countall',       $countall);
 		$this->smarty->assign('serch_item',     $this->input->post());
 
-		$this->view('admin/entrylist/index.tpl');
+		$this->view('admin/posting/index.tpl');
 
 	}
 
@@ -72,13 +72,16 @@ class Entrylist extends MY_Controller
 		{
 			// セッションをフラッシュデータとして保存
 			$data = array(
-					'a_pe_entry_title' => $this->input->post('pe_entry_title'),
-					'a_pe_id'          => $this->input->post('pe_id'),
-					'a_pe_cl_id'       => $this->input->post('pe_cl_id'),
-					'a_pe_status'      => $this->input->post('pe_status'),
-					'a_pe_genre01'     => $this->input->post('pe_genre01'),
-					'a_orderid'        => $this->input->post('orderid'),
-					'a_orderstatus'    => $this->input->post('orderstatus'),
+					'a_pj_id'           => $this->input->post('pj_id'),
+					'a_pj_pe_id'        => $this->input->post('pj_pe_id'),
+					'a_pj_pe_cl_id'     => $this->input->post('pj_pe_cl_id'),
+					'a_pj_status'       => $this->input->post('pj_status'),
+					'a_pj_work_status'  => $this->input->post('pj_work_status'),
+					'a_pj_genre01'      => $this->input->post('pj_genre01'),
+					'a_pj_title'        => $this->input->post('pj_title'),
+					'a_pj_entry_status' => $this->input->post('pj_entry_status'),
+					'a_orderid'         => $this->input->post('orderid'),
+					'a_orderstatus'     => $this->input->post('orderstatus'),
 			);
 			$this->session->set_userdata($data);
 
@@ -87,15 +90,16 @@ class Entrylist extends MY_Controller
 
 		} else {
 			// セッションからフラッシュデータ読み込み
-			$tmp_inputpost['pe_entry_title'] = $this->session->userdata('a_pe_entry_title');
-			$tmp_inputpost['pe_id']          = $this->session->userdata('a_pe_id');
-			$tmp_inputpost['pe_cl_id']       = $this->session->userdata('a_pe_cl_id');
-			$tmp_inputpost['pe_status']      = $this->session->userdata('a_pe_status');
-			$tmp_inputpost['pe_genre01']     = $this->session->userdata('a_pe_genre01');
-			$tmp_inputpost['orderid']        = $this->session->userdata('a_orderid');
-			$tmp_inputpost['orderstatus']    = $this->session->userdata('a_orderstatus');
-
-			//$this->session->set_flashdata($tmp_inputpost);
+			$tmp_inputpost['pj_id']           = $this->session->userdata('a_pj_id');
+			$tmp_inputpost['pj_pe_id']        = $this->session->userdata('a_pj_pe_id');
+			$tmp_inputpost['pj_pe_cl_id']     = $this->session->userdata('a_pj_pe_cl_id');
+			$tmp_inputpost['pj_status']       = $this->session->userdata('a_pj_status');
+			$tmp_inputpost['pj_work_status']  = $this->session->userdata('a_pj_work_status');
+			$tmp_inputpost['pj_genre01']      = $this->session->userdata('a_pj_genre01');
+			$tmp_inputpost['pj_title']        = $this->session->userdata('a_pj_title');
+			$tmp_inputpost['pj_entry_status'] = $this->session->userdata('a_pj_entry_status');
+			$tmp_inputpost['orderid']         = $this->session->userdata('a_orderid');
+			$tmp_inputpost['orderstatus']     = $this->session->userdata('a_orderstatus');
 		}
 
 		// バリデーション・チェック
@@ -103,7 +107,6 @@ class Entrylist extends MY_Controller
 		$this->form_validation->run();
 
 		// Pagination 現在ページ数の取得：：URIセグメントの取得
-		//$this->load->helper('url');
 		$segments = $this->uri->segment_array();
 		if (isset($segments[3]))
 		{
@@ -116,22 +119,23 @@ class Entrylist extends MY_Controller
 		$this->config->load('config_comm');
 		$tmp_per_page = $this->config->item('PAGINATION_PER_PAGE');
 
-		// 案件申請情報のリスト＆件数を取得
-		$this->load->model('Project_entry', 'pro', TRUE);
-		list($entry_list, $entry_countall) = $this->pro->get_entrylist($tmp_inputpost, $tmp_per_page, $tmp_offset);
-		$this->smarty->assign('entry_list', $entry_list);
+		// 投稿記事情報のリスト＆件数を取得
+		$this->load->model('Project', 'pj', TRUE);
+		list($listall, $countall) = $this->pj->get_postinglist($tmp_inputpost, $tmp_per_page, $tmp_offset);
+		$this->smarty->assign('listall', $listall);
 
 		// Pagination 設定
-		$set_pagination = $this->_get_Pagination($entry_countall, $tmp_per_page);
+		$set_pagination = $this->_get_Pagination($countall, $tmp_per_page);
 
 		// 検索項目 初期値セット
 		$this->_search_set();
 
 		$this->smarty->assign('set_pagination', $set_pagination['page_link']);
-		$this->smarty->assign('countall',       $entry_countall);
+		$this->smarty->assign('countall',       $countall);
 		$this->smarty->assign('serch_item',     $tmp_inputpost);
+		$this->smarty->assign('not_disp',       FALSE);
 
-		$this->view('admin/entrylist/index.tpl');
+		$this->view('admin/posting/index.tpl');
 
 	}
 
@@ -139,61 +143,59 @@ class Entrylist extends MY_Controller
 	public function detail00()
 	{
 
-		// SELECT項目 初期値セット
-		$this->_form_item_set00();
-
 		// セッションからフラッシュデータ読み込み
-		$flash_data['a_pe_id'] = $this->session->userdata('a_pe_id');
+		$flash_data['a_pj_id'] = $this->session->userdata('a_pj_id');
 
 
-		// 申請内容データ 初期値セット
-		$this->load->model('Project_entry', 'pro', TRUE);
+		// 投稿内容データ 初期値セット
+		$this->load->model('Project', 'pj', TRUE);
 
 
 		// 案件申請ID取得
 		$input_post = $this->input->post();
-		if (empty($input_post['peid_uniq']))
+		if (empty($input_post['pjid_uniq']))
 		{
 			// ２回目以降
-			$tmp_peid = $flash_data['a_pe_id'];
+			$tmp_pjid = $flash_data['a_pj_id'];
 		} else {
 			// 初回
-			$tmp_peid = $input_post['peid_uniq'];
+			$tmp_pjid = $input_post['pjid_uniq'];
 		}
 
 
 
 
 		print("flash_data00 == ");
-		print($tmp_peid);
+		print($tmp_pjid);
 		print("<br><br>");
 
 
 
 
-		$get_data = $this->pro->get_entry($tmp_peid);
+		$get_data = $this->pj->get_posting($tmp_pjid);
 
-		// ジャンル 選択項目セット
-		$this->load->model('comm_genre', 'gr', TRUE);
-		$genre_list = $this->gr->get_genre();
-		$get_data[0]['genre01_name']     = $genre_list[$get_data[0]['pe_genre01']];
+		// SELECT項目 初期値セット
+		$this->_form_item_set00($get_data[0]['pj_pe_cl_id']);
 
-		$get_data[0]['pe_open_date']     = date('Y-m-d', strtotime($get_data[0]['pe_open_date']));
-		$get_data[0]['pe_delivery_date'] = date('Y-m-d', strtotime($get_data[0]['pe_delivery_date']));
+		$get_data[0]['pj_delivery_time'] = date('Y-m-d H:i', strtotime($get_data[0]['pj_delivery_time']));
+		$get_data[0]['pj_start_time']    = date('Y-m-d H:i', strtotime($get_data[0]['pj_start_time']));
+		$get_data[0]['pj_end_time']      = date('Y-m-d H:i', strtotime($get_data[0]['pj_end_time']));
+		$get_data[0]['pj_pe_entry_date'] = date('Y-m-d',     strtotime($get_data[0]['pj_pe_entry_date']));
 
 		$this->smarty->assign('entry_info', $get_data[0]);
 
 		// session:フラッシュデータに案件申請ID書き込み
-		$tmp_flash_peid = array('a_pe_id' => $get_data[0]['pe_id']);
-		$this->session->set_userdata( $tmp_flash_peid);
+		$tmp_flash_pjid = array('a_pj_id' => $get_data[0]['pj_id']);
+		$this->session->set_userdata( $tmp_flash_pjid);
 
 		// バリデーション設定
 		$this->_set_validation00();
 		//$this->form_validation->run();
 
 		$this->smarty->assign('entry_no', '00');
+		$this->smarty->assign('not_disp', FALSE);
 
-		$this->view('admin/entrylist/detail.tpl');
+		$this->view('admin/posting/detail.tpl');
 
 	}
 
@@ -205,23 +207,18 @@ class Entrylist extends MY_Controller
 		//$this->_search_set01();
 
 		// セッションからフラッシュデータ読み込み＆書き込み
-		$flash_data['a_pe_id'] = $this->session->userdata('a_pe_id');
+		$flash_data['a_pj_id'] = $this->session->userdata('a_pj_id');
 		//$this->session->set_flashdata( $flash_data);
 
 
 		print("flash_data01 == ");
-		print_r($flash_data['a_pe_id']);
+		print_r($flash_data['a_pj_id']);
 		print("<br><br>");
 
 
-		// 申請案件データ 初期値セット
-		$this->load->model('Project_entry', 'pro', TRUE);					// models 読み込み
-		$get_data = $this->pro->get_entry_info($flash_data['a_pe_id'], $pei_seq = 0);
-
-
-
-		//print_r($get_data[0]);
-
+		// 投稿データ 初期値セット
+		$this->load->model('Project_info', 'pji', TRUE);					// models 読み込み
+		$get_data = $this->pji->get_order_info($flash_data['a_pj_id'], $pji_seq = 0);
 
 		$this->smarty->assign('entry_info', $get_data[0]);
 
@@ -230,7 +227,9 @@ class Entrylist extends MY_Controller
 		//$this->form_validation->run();
 
 		$this->smarty->assign('entry_no', '01');
-		$this->view('admin/entrylist/detail.tpl');
+		$this->smarty->assign('not_disp', FALSE);
+
+		$this->view('admin/posting/detail.tpl');
 
 	}
 
@@ -239,26 +238,28 @@ class Entrylist extends MY_Controller
 	{
 
 		// セッションからフラッシュデータ読み込み＆書き込み
-		$flash_data['a_pe_id'] = $this->session->userdata('a_pe_id');
+		$flash_data['a_pj_id'] = $this->session->userdata('a_pj_id');
 		//$this->session->set_flashdata( $flash_data);
 
 
 		print("flash_data02 == ");
-		print_r($flash_data['a_pe_id']);
+		print_r($flash_data['a_pj_id']);
 		print("<br><br>");
 
 
 		// 申請案件データ 初期値セット
-		$this->load->model('Project_entry', 'pro', TRUE);					// models 読み込み
-		$get_data = $this->pro->get_entry_info($flash_data['a_pe_id'], $pei_seq = 1);
+		$this->load->model('Project_info', 'pji', TRUE);					// models 読み込み
+		$get_data = $this->pji->get_order_info($flash_data['a_pj_id'], $pji_seq = 1);
 		if (empty($get_data))
 		{
 			// 各項目 初期値セット
-			$this->_form_item_set01($flash_data['a_pe_id']);
+			$this->_form_item_set01($flash_data['a_pj_id']);
+			$this->smarty->assign('not_disp', TRUE);
 		} else {
 			// 各項目 初期値セット
-			$this->_form_item_set01($flash_data['a_pe_id']);
+			$this->_form_item_set01($flash_data['a_pj_id']);
 			$this->smarty->assign('entry_info', $get_data[0]);
+			$this->smarty->assign('not_disp', FALSE);
 		}
 
 		// バリデーション・チェック
@@ -266,7 +267,7 @@ class Entrylist extends MY_Controller
 		//$this->form_validation->run();
 
 		$this->smarty->assign('entry_no', '02');
-		$this->view('admin/entrylist/detail.tpl');
+		$this->view('admin/posting/detail.tpl');
 
 	}
 
@@ -275,26 +276,28 @@ class Entrylist extends MY_Controller
 	{
 
 		// セッションからフラッシュデータ読み込み＆書き込み
-		$flash_data['a_pe_id'] = $this->session->userdata('a_pe_id');
+		$flash_data['a_pj_id'] = $this->session->userdata('a_pj_id');
 		//$this->session->set_flashdata( $flash_data);
 
 
 		print("flash_data03 == ");
-		print_r($flash_data['a_pe_id']);
+		print_r($flash_data['a_pj_id']);
 		print("<br><br>");
 
 
 		// 申請案件データ 初期値セット
-		$this->load->model('Project_entry', 'pro', TRUE);					// models 読み込み
-		$get_data = $this->pro->get_entry_info($flash_data['a_pe_id'], $pei_seq = 2);
+		$this->load->model('Project_info', 'pji', TRUE);					// models 読み込み
+		$get_data = $this->pji->get_order_info($flash_data['a_pj_id'], $pji_seq = 2);
 		if (empty($get_data))
 		{
 			// 各項目 初期値セット
-			$this->_form_item_set01($flash_data['a_pe_id']);
+			$this->_form_item_set01($flash_data['a_pj_id']);
+			$this->smarty->assign('not_disp', TRUE);
 		} else {
 			// 各項目 初期値セット
-			$this->_form_item_set01($flash_data['a_pe_id']);
+			$this->_form_item_set01($flash_data['a_pj_id']);
 			$this->smarty->assign('entry_info', $get_data[0]);
+			$this->smarty->assign('not_disp', FALSE);
 		}
 
 		// バリデーション・チェック
@@ -302,7 +305,7 @@ class Entrylist extends MY_Controller
 		//$this->form_validation->run();
 
 		$this->smarty->assign('entry_no', '03');
-		$this->view('admin/entrylist/detail.tpl');
+		$this->view('admin/posting/detail.tpl');
 
 	}
 
@@ -310,108 +313,324 @@ class Entrylist extends MY_Controller
 	public function data_entry()
 	{
 
+		$this->load->model('Project_info', 'pji', TRUE);							// models 読み込み
+		$this->load->model('Report_info',  'rep', TRUE);
+
+
 		// セッションからフラッシュデータ読み込み＆書き込み
-		$flash_data['a_pe_id'] = $this->session->userdata('a_pe_id');
-		//$this->session->set_flashdata($flash_data);
+		$flash_data['a_pj_id'] = $this->session->userdata('a_pj_id');
 
 
 
 		print("flash_data_entry == ");
-		print_r($flash_data['a_pe_id']);
+		print_r($flash_data['a_pj_id']);
 		print("<br><br>");
 
 
 
+		$get_post_data = array();
+		$get_post_data = $this->input->post();
+		$set_orderno   = $get_post_data['entry_no'];
+
+
+		// バリデーション・チェック::TAB毎に処理振り分け
+		$this->_set_validation01();
+		if ($this->form_validation->run() == TRUE)
+		{
+			// 案件個別情報('pji_')を抽出＆更新
+			$set_update_data['pji_pj_id']   = $flash_data['a_pj_id'];				// 案件ID
+			$set_update_data['pji_seq']     = intval($set_orderno) -1;				// 枝番
+			$set_update_data['pji_addwork'] = $get_post_data['pji_addwork'];		// 追加仕事情報
+
+			// UPDATE
+			$result = $this->pji->update_orderinfo($set_update_data);
+
+			// 納品前の校正
+			if (isset($get_post_data['rep_title']))
+			{
+				$time = time();
+
+				$set_update_info['rep_title']       = $get_post_data['rep_title'];			// タイトル
+				$set_update_info['rep_text_body']   = $get_post_data['rep_text_body'];		// 本文
+				$set_update_info['rep_update_date'] = date("Y-m-d H:i", $time);				// 更新日
+
+				$this->rep->update_entryinfo($set_update_info, $flash_data['a_pj_id'], intval($set_orderno) -1);
+			}
+
+		}
+
+		// 各項目 初期値セット
+		$get_data = $this->pji->get_order_info($flash_data['a_pj_id'], intval($set_orderno) -1);
+
+		$this->smarty->assign('not_disp', FALSE);
+
+		$this->smarty->assign('entry_info', $get_data[0]);
+		$this->smarty->assign('entry_no', $set_orderno);
+		$this->view('admin/posting/detail.tpl');
+
+	}
+
+	// データ更新 (更新＆審査＆納品)
+	public function data_update()
+	{
+
+		$this->load->model('Project',      'pj',     TRUE);
+		$this->load->model('Project_info', 'pjinfo', TRUE);
+		$this->load->model('Report_info',  'rep',    TRUE);
+		$this->load->model('Writer',       'wr',     TRUE);
+		$this->load->model('Writer_info',  'wrinfo', TRUE);
+		$this->config->load('config_status');
+
+
+		// セッションからフラッシュデータ読み込み＆書き込み
+		$flash_data['a_pj_id'] = $this->session->userdata('a_pj_id');
 
 		// バリデーション・チェック::TAB毎に処理振り分け
 		$this->_set_validation00();
 		if ($this->form_validation->run() == FALSE)
 		{
-			// 各項目 初期値セット
-			$this->_form_item_set00();
+
+			// 投稿内容データの再取得
+			$tmp_pjid = $flash_data['a_pj_id'];
+			$get_data = $this->pj->get_posting($tmp_pjid);
+
+			// 初期値セット
+			$this->_form_item_set00($get_data[0]['pj_pe_cl_id']);
+
+			$get_data[0]['pj_delivery_time'] = date('Y-m-d H:i', strtotime($get_data[0]['pj_delivery_time']));
+			$get_data[0]['pj_start_time']    = date('Y-m-d H:i', strtotime($get_data[0]['pj_start_time']));
+			$get_data[0]['pj_end_time']      = date('Y-m-d H:i', strtotime($get_data[0]['pj_end_time']));
+			$get_data[0]['pj_pe_entry_date'] = date('Y-m-d',     strtotime($get_data[0]['pj_pe_entry_date']));
+
+			$this->smarty->assign('entry_info', $get_data[0]);
+
+			$this->smarty->assign('entry_no', '00');
+			$this->smarty->assign('not_disp', FALSE);
+
+			$this->view('admin/posting/detail.tpl');
+
 		} else {
 
-			$this->load->model('Project_entry', 'pro', TRUE);						// models 読み込み
-			$this->config->load('config_status');
+			// 「pj_work_status」毎に処理を分ける
+			$input_post = $this->input->post();
+			$time = time();
 
-			$tmp_submit = $this->input->post('submit');
-
-			if ($tmp_submit == '_accept')
+			if ($input_post['submit'] == '_update')
 			{
-
-				// トランザクション・START
-				$this->db->trans_strict(FALSE);									// StrictモードをOFF
-				$this->db->trans_start();										// trans_begin
-
-				// 「承認」の場合
-				$set_update_data = array();
-				$set_update_data['pe_id']          = $flash_data['a_pe_id'];							// 案件申請ID
-				$set_update_data['pe_status']      = $this->config->item('C_ENTRY_SYOUNIN_ID');			// 承認
-				$set_update_data['pe_reason']      = $this->input->post('pe_reason');					// 非承認　理由
-				$time = time();
-				$set_update_data['pe_accept_date'] = date("Y-m-d H:i:s", $time);						// (非)承認日
-
-				// UPDATE <- 'tb_project_entry'
-				$this->pro->update_pro_entry($set_update_data);
-
-
-
-
-				// 案件情報テーブルを新規作成 -> 案件IDを取得「pj_id」
-				$get_pj_id = $this->pro->create_project($set_update_data['pe_id']);
-				$tmp_pj_id = $get_pj_id[0]['LAST_INSERT_ID()'];
-
-				// 案件個別情報 ＆ 投稿記事個別情報テーブルを新規作成 -> 案件個別ID ＆ 投稿記事個別IDを取得
-				list($get_pji_id, $get_rep_id) = $this->pro->create_project_info($set_update_data['pe_id'], $tmp_pj_id);
-
-
-				// トランザクション・COMMIT
-				$this->db->trans_complete();									// trans_rollback & trans_commit
-				if ($this->db->trans_status() === FALSE)
-				{
-					log_message('error', 'ADMIN::[data_entry()]案件承認処理 トランザクションエラー');
-				} else {
-					// ステータス変更で確認メールを送信
-					$this->_mail_send($flash_data['a_pe_id'], '承認');
-				}
-
-			} else {
-				// 「非承認」の場合
-				$set_update_data = array();
-				$set_update_data['pe_id']          = $flash_data['a_pe_id'];							// 案件申請ID
-				$set_update_data['pe_status']      = $this->config->item('C_ENTRY_HISYOUNIN_ID');		// 非承認
-				$set_update_data['pe_reason']      = $this->input->post('pe_reason');					// 非承認　理由
-				$time = time();
-				$set_update_data['pe_accept_date'] = date("Y-m-d H:i:s", $time);						// (非)承認日
+				// ★「追加内容」の更新
+				$set_update_data['pj_id']          = $flash_data['a_pj_id'];						// 案件ID
+				$set_update_data['pj_addwork']     = $input_post['pj_addwork'];						// 追加仕事情報
+				$set_update_data['pj_update_date'] = date("Y-m-d H:i", $time);						// 更新日
 
 				// UPDATE
-				$result = $this->pro->update_pro_entry($set_update_data);
+				$result = $this->pj->update_pj_posting($set_update_data);
 
-				// ステータス変更で確認メールを送信
-				$this->_mail_send($flash_data['a_pe_id'], '非承認');
+			} elseif ($input_post['submit'] == '_ok') {
+				// ★「審査OK」処理
+
+				// 総文字数をカウント
+				$get_data_info = $this->pjinfo->get_order_info($flash_data['a_pj_id']);
+				$tmp_wordcnt = 0;
+				foreach ($get_data_info as $key => $val)
+				{
+					$tmp_wordcnt += $get_data_info[$key]['rep_title_wordcount'] + $get_data_info[$key]['rep_body_wordcount'];
+				}
+
+				// ライター情報の読み込み
+				$get_data_wr = $this->pj->get_posting($flash_data['a_pj_id']);
+
+				$set_widata['wi_wr_id'] = $get_data_wr[0]['pj_wr_id'];								// ライターID
+				$set_widata['wi_pj_id'] = $flash_data['a_pj_id'];									// 案件ID
+				$set_widata['wi_pj_work_status']  = $this->config->item('PJ_WSTATUS_CHECKOK_ID');	// 「審査OK」
+				$set_widata['wi_word_count'] = $tmp_wordcnt;										// 総文字数
+
+				$this->load->model('Admin', ad, TRUE);
+				$get_point = $this->ad->cal_point($tmp_wordcnt, $get_data_wr[0]['wi_word_tanka']);
+				$set_widata['wi_point'] = $get_point["val"];										// 獲得ポイント
+
+				$set_widata['wi_check_date'] = date("Y-m-d H:i", $time);							// 審査完了日
+				$set_widata['wi_update_date']  = date("Y-m-d H:i", $time);							// 更新日
+
+				$set_wdata['wr_id'] = $get_data_wr[0]['pj_wr_id'];									// ライターID
+				$set_wdata['wr_entry_count']  = $get_data_wr[0]['wr_entry_count'] + 1;				// エントリー回数
+				$set_wdata['wr_saiyo_count']  = $get_data_wr[0]['wr_saiyo_count'] + 1;				// 採用回数
+				$set_wdata['wr_point_total']  = $get_data_wr[0]['wr_point_total'] + $get_point["val"];	// ポイント累計
+				$set_wdata['wr_update_date']  = date("Y-m-d H:i", $time);							// 更新日
+
+				$set_pdata['pj_id'] = $flash_data['a_pj_id'];										// 案件ID
+				$set_pdata['pj_status'] = $this->config->item('PJ_STATUS_END_ID');					// 「公開終了」
+				$set_pdata['pj_work_status']  = $this->config->item('PJ_WSTATUS_CHECKOK_ID');		// 「審査OK」
+				$set_pdata['pj_wi_point'] = $get_point["val"];										// 獲得ポイント
+				$set_pdata['pj_wi_check_date'] = date("Y-m-d H:i", $time);							// 審査完了日
+				$set_pdata['pj_update_date'] = date("Y-m-d H:i", $time);							// 更新日
+
+				// トランザクション・START
+				$this->db->trans_strict(FALSE);										// StrictモードをOFF
+				$this->db->trans_start();											// trans_begin
+
+					// UPDATE:ライター個別情報
+					$this->wrinfo->update_wi_posting($set_widata);
+
+					// UPDATE:ライター情報
+					$this->wr->update_wr_posting($set_wdata);
+
+					// UPDATE:案件情報
+					$this->pj->update_pj_posting($set_pdata);
+
+				// トランザクション・COMMIT
+				$this->db->trans_complete();										// trans_rollback & trans_commit
+				if ($this->db->trans_status() === FALSE)
+				{
+					log_message('error', 'ADMIN::[data_update()]ADMIN：投稿審査OK処理 トランザクションエラー');
+				} else {
+					// 審査OKメールを送信
+					$set_mail['wr_email'] = $get_data_wr[0]['wr_email'];
+					$set_mail['wr_nickname'] = $get_data_wr[0]['wr_nickname'];
+					$set_mail['pj_id'] = $flash_data['a_pj_id'];
+					$set_mail['pj_order_title'] = $get_data_info[0]['pj_order_title'];
+					$set_mail['pj_wi_point'] = $get_point["val"];
+					$this->_mail_send01($set_mail, '審査合格');
+				}
+
+
+
+			} elseif ($input_post['submit'] == '_ng') {
+				// ★「審査NG」処理
+
+				$get_data_info = $this->pjinfo->get_order_info($flash_data['a_pj_id']);
+				$get_data_wr = $this->pj->get_posting($flash_data['a_pj_id']);
+
+				$set_widata['wi_wr_id'] = $get_data_wr[0]['pj_wr_id'];								// ライターID
+				$set_widata['wi_pj_id'] = $flash_data['a_pj_id'];									// 案件ID
+				$set_widata['wi_pj_work_status']  = $this->config->item('PJ_WSTATUS_CHECKNG_ID');	// 「審査NG」
+				$set_widata['wi_check_date'] = date("Y-m-d H:i", $time);							// 審査完了日
+				$set_widata['wi_update_date'] = date("Y-m-d H:i", $time);							// 更新日
+
+				$set_wdata['wr_id'] = $get_data_wr[0]['pj_wr_id'];									// ライターID
+				$set_wdata['wr_entry_count']  = $get_data_wr[0]['wr_entry_count'] + 1;				// エントリー回数
+				$set_wdata['wr_update_date']  = date("Y-m-d H:i", $time);							// 更新日
+
+				$set_pdata['pj_id'] = $flash_data['a_pj_id'];										// 案件ID
+				$set_pdata['pj_status'] = $this->config->item('PJ_STATUS_REOPEN_ID');				// 「(再)公開」
+				$set_pdata['pj_entry_status'] = $this->config->item('PJ_ESTATUS_NOENTRY_ID');		// 「エントリー無」
+				$set_pdata['pj_work_status']  = $this->config->item('PJ_WSTATUS_ENTRY_ID');			// 「投稿なし」
+				$set_pdata['pj_wr_id'] = NULL;														// ライターID:int
+				$set_pdata['pj_wi_id'] = NULL;														// ライター個別情報ID:int
+				$set_pdata['pj_update_date'] = date("Y-m-d H:i", $time);							// 更新日
+
+				$set_pdata['pj_id'] = $flash_data['a_pj_id'];										// 案件ID
+				$set_edata['rep_check_flg'] = FALSE;												// チェックフラグ
+				$set_edata['rep_title'] = NULL;														// タイトル
+				$set_edata['rep_title_wordcount'] = 0;												// タイトル文字数:int
+				$set_edata['rep_text_body'] = NULL;													// 本文
+				$set_edata['rep_body_wordcount'] = 0;												// 本文文字数:int
+				$set_edata['rep_update_date'] = date("Y-m-d H:i", $time);							// 更新日
+
+				// トランザクション・START
+				$this->db->trans_strict(FALSE);										// StrictモードをOFF
+				$this->db->trans_start();											// trans_begin
+
+					// UPDATE:ライター個別情報
+					$this->wrinfo->update_wi_posting($set_widata);
+
+					// UPDATE:ライター情報
+					$this->wr->update_wr_posting($set_wdata);
+
+					// UPDATE:案件情報
+					$this->pj->update_pj_posting($set_pdata);
+
+					// UPDATE:投稿記事個別情報
+					$get_infodata = $this->pj->get_order_info($flash_data['a_pj_id']);
+					$tmp_arr_cnt  = count($get_infodata);											// 作業件数有無チェック(作業1～3)
+					for ($rep_seq = 0; $rep_seq < $tmp_arr_cnt; $rep_seq++)
+					{
+						$this->rep->update_entryinfo($set_edata, $set_edata['rep_pji_pj_id'], $rep_seq);
+					}
+
+				// トランザクション・COMMIT
+				$this->db->trans_complete();										// trans_rollback & trans_commit
+				if ($this->db->trans_status() === FALSE)
+				{
+					log_message('error', 'ADMIN::[data_update()]ADMIN：投稿審査NG処理 トランザクションエラー');
+				} else {
+					// 審査NGメールを送信
+					$set_mail['wr_email'] = $get_data_wr[0]['wr_email'];
+					$set_mail['wr_nickname'] = $get_data_wr[0]['wr_nickname'];
+					$set_mail['pj_id'] = $flash_data['a_pj_id'];
+					$set_mail['pj_order_title'] = $get_data_info[0]['pj_order_title'];
+					$set_mail['pj_wi_point'] = 0;
+					$this->_mail_send01($set_mail, '審査不合格');
+				}
+
+			} elseif ($input_post['submit'] == '_deliver') {
+				// ★「納品」処理
+
+				// バリデーション・チェック::TAB毎に処理振り分け
+				$this->_set_validation01();
+				$this->form_validation->run();
+
+				$set_pdata['pj_id'] = $flash_data['a_pj_id'];										// 案件ID
+				$set_pdata['pj_deliver_flg'] = $this->config->item('PJ_DSTATUS_OK_ID');				// 「納品済」
+				$set_pdata['pj_delivery_date'] = date("Y-m-d H:i", $time);							// 納品日
+				$set_pdata['pj_update_date'] = date("Y-m-d H:i", $time);							// 更新日
+
+				// UPDATE:案件情報
+				$this->pj->update_pj_posting($set_pdata);
+
+				// 納品メールを送信
+				$get_data_info = $this->pjinfo->get_order_info($flash_data['a_pj_id']);
+
+				$set_mail['pj_id'] = $flash_data['a_pj_id'];
+				$set_mail['pj_pe_cl_id'] = $get_data_info[0]['pj_pe_cl_id'];
+				$set_mail['pj_order_title'] = $input_post['pj_order_title'];
+				$set_mail['pj_delivery_date'] = date("Y-m-d H:i", $time);
+				$this->_mail_send02($set_mail);
 
 			}
+
+			redirect('/posting/');
+
 		}
+	}
 
-		// session:フラッシュデータに案件申請ID書き込み
-		//$this->smarty->assign('flashdata_peid', $flash_data['a_pe_id']);
+	// 審査完了メールを送信
+	private function _mail_send01($set_mail, $accept = NULL)
+	{
 
-		redirect('/entrylist/');
-		//$this->view('admin/entrylist/index.tpl');
+		// メール送信先設定
+		$mail['from']      = "";
+		$mail['from_name'] = "";
+		$mail['subject']   = "";
+		$mail['to']        = $set_mail['wr_email'];
+		$mail['cc']        = "";
+		$mail['bcc']       = "";
 
-		//$this->smarty->assign('entry_info', $this->input->post());
-		//$this->smarty->assign('entry_info', $this->input->post());
-		//$this->smarty->assign('entry_no', $tmp_entry_no);
-		//$this->view('admin/entrylist/detail.tpl');
+		// メール本文置き換え文字設定
+		$arrRepList = array(
+				'wr_nickname'    => $set_mail['wr_nickname'],
+				'pj_id'          => $set_mail['pj_id'],
+				'pj_order_title' => $set_mail['pj_order_title'],
+				'pj_wi_point'    => $set_mail['pj_wi_point'],
+				'accept'         => $accept,
+		);
+
+		// メールテンプレートの読み込み
+		$this->config->load('config_mailtpl');								// メールテンプレート情報読み込み
+		$mail_tpl = $this->config->item('MAILTPL_AD_CHECKOK_ID');
+
+		// メール送信
+		$this->load->model('Mailtpl', 'mailtpl', TRUE);
+		$this->mailtpl->getMailTpl($mail, $arrRepList, $mail_tpl);
 
 	}
 
-	// ステータス変更で確認メールを送信
-	private function _mail_send($get_pe_id, $accept = NULL)
+	// 納品確認メールを送信
+	private function _mail_send02($set_mail)
 	{
 
 		// メール送信先クライアントの会社名＆メールアドレスを取得
-		$get_client_info = $this->pro->get_client_name($get_pe_id);
+		$this->load->model('Client', 'cl', TRUE);
+		$get_client_info = $this->cl->get_client_name($set_mail['pj_pe_cl_id']);
 
 		// メール送信先設定
 		$mail['from']      = "";
@@ -423,17 +642,17 @@ class Entrylist extends MY_Controller
 
 		// メール本文置き換え文字設定
 		$arrRepList = array(
-				'cl_company'     => $get_client_info[0]['cl_company'],
-				'cl_person01'    => $get_client_info[0]['cl_person01'],
-				'cl_person02'    => $get_client_info[0]['cl_person02'],
-				'pe_id'          => $get_pe_id,
-				'pe_entry_title' => $get_client_info[0]['pe_entry_title'],
-				'accept'         => $accept,
+				'cl_company'       => $get_client_info[0]['cl_company'],
+				'cl_person01'      => $get_client_info[0]['cl_person01'],
+				'cl_person02'      => $get_client_info[0]['cl_person02'],
+				'pj_id'            => $set_mail['pj_id'],
+				'pj_order_title'   => $set_mail['pj_order_title'],
+				'pj_delivery_date' => $set_mail['pj_delivery_date'],
 		);
 
 		// メールテンプレートの読み込み
 		$this->config->load('config_mailtpl');								// メールテンプレート情報読み込み
-		$mail_tpl = $this->config->item('MAILTPL_AD_EL_ACCEPT_ID');
+		$mail_tpl = $this->config->item('MAILTPL_AD_DELIVER_ID');
 
 		// メール送信
 		$this->load->model('Mailtpl', 'mailtpl', TRUE);
@@ -442,12 +661,12 @@ class Entrylist extends MY_Controller
 	}
 
 	// Pagination 設定
-	private function _get_Pagination($entry_countall, $tmp_per_page)
+	private function _get_Pagination($countall, $tmp_per_page)
 	{
 
-		$config['base_url']       = base_url() . '/entrylist/search/';		// ページの基本URIパス。「/コントローラクラス/アクションメソッド/」
+		$config['base_url']       = base_url() . '/posting/search/';		// ページの基本URIパス。「/コントローラクラス/アクションメソッド/」
 		$config['per_page']       = $tmp_per_page;							// 1ページ当たりの表示件数。
-		$config['total_rows']     = $entry_countall;						// 総件数。where指定するか？
+		$config['total_rows']     = $countall;								// 総件数。where指定するか？
 		$config['uri_segment']    = 4;										// オフセット値がURIパスの何セグメント目とするか設定
 		$config['num_links']      = 5;										//現在のページ番号の左右にいくつのページ番号リンクを生成するか設定
 		$config['full_tag_open']  = '<p class="pagination">';				// ページネーションリンク全体を階層化するHTMLタグの先頭タグ文字列を指定
@@ -470,17 +689,41 @@ class Entrylist extends MY_Controller
 
 		// ステータス状態 選択項目セット
 		$this->config->load('config_status');
-		$arroptions_pestatus = array (
+		$arroptions_pjstatus = array (
 				''  => '選択してください',
-				'1' => $this->config->item('C_ENTRY_SHINSEI'),
-				'3' => $this->config->item('C_ENTRY_HISYOUNIN'),
+				'1' => $this->config->item('PJ_STATUS_OPEN'),
+				'2' => $this->config->item('PJ_STATUS_REOPEN'),
+				'3' => $this->config->item('PJ_STATUS_PREMIERE'),
+				'4' => $this->config->item('PJ_STATUS_NOMINATE'),
+				'5' => $this->config->item('PJ_STATUS_CLOSE'),
+				'6' => $this->config->item('PJ_STATUS_END'),
+				'8' => $this->config->item('PJ_STATUS_HORYU'),
+				'9' => $this->config->item('PJ_STATUS_DELETE'),
+		);
+
+		$arroptions_pjworkstatus = array (
+				''  => '選択してください',
+				'0' => $this->config->item('PJ_WSTATUS_ENTRY'),
+				'1' => $this->config->item('PJ_WSTATUS_CREATE'),
+				'2' => $this->config->item('PJ_WSTATUS_RECREATE'),
+				'3' => $this->config->item('PJ_WSTATUS_CHECK'),
+				'4' => $this->config->item('PJ_WSTATUS_CHECKOK'),
+				'5' => $this->config->item('PJ_WSTATUS_CHECKNG'),
+				'6' => $this->config->item('PJ_WSTATUS_TIMEOVER'),
+				'7' => $this->config->item('PJ_WSTATUS_CANCEL'),
+		);
+
+		$arroptions_pjentrystatus = array (
+				''  => '選択してください',
+				'0' => $this->config->item('PJ_ESTATUS_NOENTRY'),
+				'1' => $this->config->item('PJ_ESTATUS_ENTRY'),
 		);
 
 		// ジャンル 選択項目セット
-		$this->load->model('comm_genre', 'gr', TRUE);
-		$genre_list = $this->gr->get_genre();
+		$this->load->model('comm_select', 'select', TRUE);
+		$genre_list = $this->select->get_genre();
 
-		// 案件申請ID 並び替え選択項目セット
+		// 申請ID 並び替え選択項目セット
 		$arroptions_id = array (
 				''     => '選択してください',
 				'DESC' => '降順',
@@ -494,34 +737,70 @@ class Entrylist extends MY_Controller
 				'ASC'  => '昇順',
 		);
 
-		$this->smarty->assign('options_pe_status',   $arroptions_pestatus);
-		$this->smarty->assign('options_genre_list',  $genre_list);
-		$this->smarty->assign('options_orderid',     $arroptions_id);
-		$this->smarty->assign('options_orderstatus', $arroptions_status);
+		$this->smarty->assign('options_pj_status',       $arroptions_pjstatus);
+		$this->smarty->assign('options_pj_work_status',  $arroptions_pjworkstatus);
+		$this->smarty->assign('options_pj_entry_status', $arroptions_pjentrystatus);
+		$this->smarty->assign('options_genre_list',      $genre_list);
+		$this->smarty->assign('options_orderid',         $arroptions_id);
+		$this->smarty->assign('options_orderstatus',     $arroptions_status);
 
 	}
 
 	// 各項目 初期値セット :: 申請内容
-	private function _form_item_set00()
+	private function _form_item_set00($cl_id)
 	{
 
 		// ステータス状態 選択項目セット
 		$this->config->load('config_status');
-		$arroptions_entrystatus = array (
-				//'0' => $this->config->item('C_ENTRY_JYUNBI'),
-				//'1' => $this->config->item('C_ENTRY_SHINSEI'),
-				'2' => $this->config->item('C_ENTRY_SYOUNIN'),
-				'3' => $this->config->item('C_ENTRY_HISYOUNIN'),
-				//'4' => $this->config->item('C_ENTRY_CANSEL'),
-				//'5' => $this->config->item('C_ENTRY_DELETE'),
+		$arroptions_pjstatus = array (
+				'1' => $this->config->item('PJ_STATUS_OPEN'),
+				'2' => $this->config->item('PJ_STATUS_REOPEN'),
+				'3' => $this->config->item('PJ_STATUS_PREMIERE'),
+				'4' => $this->config->item('PJ_STATUS_NOMINATE'),
+				'5' => $this->config->item('PJ_STATUS_CLOSE'),
+				'6' => $this->config->item('PJ_STATUS_END'),
+				'8' => $this->config->item('PJ_STATUS_HORYU'),
+				'9' => $this->config->item('PJ_STATUS_DELETE'),
 		);
 
-		// ジャンル 選択項目セット
-		$this->load->model('comm_genre', 'gr', TRUE);
-		$genre_list = $this->gr->get_genre();
+		$arroptions_pjworkstatus = array (
+				''  => '選択してください',
+				'0' => $this->config->item('PJ_WSTATUS_ENTRY'),
+				'1' => $this->config->item('PJ_WSTATUS_CREATE'),
+				'2' => $this->config->item('PJ_WSTATUS_RECREATE'),
+				'3' => $this->config->item('PJ_WSTATUS_CHECK'),
+				'4' => $this->config->item('PJ_WSTATUS_CHECKOK'),
+				'5' => $this->config->item('PJ_WSTATUS_CHECKNG'),
+				'6' => $this->config->item('PJ_WSTATUS_TIMEOVER'),
+				'7' => $this->config->item('PJ_WSTATUS_CANCEL'),
+		);
 
-		$this->smarty->assign('options_entry_status', $arroptions_entrystatus);
-		$this->smarty->assign('options_genre_list',   $genre_list);
+		$delivre_flg = $this->config->item('PJ_DELIVER_FLG');
+
+
+		// ジャンル 選択項目セット
+		$this->load->model('comm_select', 'select', TRUE);
+		$genre_list = $this->select->get_genre();
+
+		// 会員ランク 選択項目セット
+		$memrank_list = $this->select->get_memrank();
+
+		// 加算単価情報 難易度セット
+		$this->config->load('config_comm');
+		$arroptions_diff = array (
+				'0' => $this->config->item('ADDTANKA_KANTAN'),
+				'1' => $this->config->item('ADDTANKA_FUTUU'),
+				'2' => $this->config->item('ADDTANKA_NAN'),
+		);
+		$tankaadd_list = $this->select->get_tankaadd($cl_id);
+
+		$this->smarty->assign('options_pj_status',       $arroptions_pjstatus);
+		$this->smarty->assign('options_pj_work_status',  $arroptions_pjworkstatus);
+		$this->smarty->assign('options_pj_deliver_flg',  $delivre_flg);
+		$this->smarty->assign('options_genre_list',      $genre_list);
+		$this->smarty->assign('options_memrank_list',    $memrank_list);
+		$this->smarty->assign('options_difficulty_id',   $arroptions_diff);
+		$this->smarty->assign('options_tankaadd_list',   $tankaadd_list);
 
 
 
@@ -598,19 +877,29 @@ class Entrylist extends MY_Controller
 
 		$rule_set = array(
 				array(
-						'field'   => 'pe_entry_title',
-						'label'   => '申請案件タイトル',
-						'rules'   => 'trim|max_length[100]'
-				),
-				array(
-						'field'   => 'pe_id',
-						'label'   => '案件申請ID',
+						'field'   => 'pj_id',
+						'label'   => '案件ID',
 						'rules'   => 'trim|numeric'
 				),
 				array(
-						'field'   => 'pe_cl_id',
+						'field'   => 'pj_pe_id',
+						'label'   => '申請ID',
+						'rules'   => 'trim|numeric'
+				),
+				array(
+						'field'   => 'pj_pe_cl_id',
 						'label'   => 'クライアントID',
 						'rules'   => 'trim|numeric'
+				),
+				array(
+						'field'   => 'pj_status',
+						'label'   => 'ステータス',
+						'rules'   => 'trim|numeric'
+				),
+				array(
+						'field'   => 'pj_work_status',
+						'label'   => '作業ステータス',
+						'rules'   => 'trim|max_length[100]'
 				),
 				array(
 						'field'   => 'pe_genre01',
@@ -618,8 +907,13 @@ class Entrylist extends MY_Controller
 						'rules'   => 'trim|numeric'
 				),
 				array(
-						'field'   => 'pe_status',
-						'label'   => 'ステータス',
+						'field'   => 'pj_title',
+						'label'   => '案件タイトル',
+						'rules'   => 'trim|max_length[100]'
+				),
+				array(
+						'field'   => 'pj_entry_status',
+						'label'   => 'エントリー',
 						'rules'   => 'trim|numeric'
 				),
 		);
@@ -700,9 +994,9 @@ class Entrylist extends MY_Controller
 				//		'rules'   => 'trim|max_length[2000]'
 				//),
 				array(
-						'field'   => 'pe_reason',
-						'label'   => '非承認　理由',
-						'rules'   => 'trim|max_length[2000]'
+						'field'   => 'pj_addwork',
+						'label'   => '追加内容',
+						'rules'   => 'trim|max_length[10000]'
 				),
 
 		);
@@ -874,33 +1168,26 @@ class Entrylist extends MY_Controller
 		//				'label'   => '案件申請：注意事項',
 		//				'rules'   => 'trim|max_length[10000]'
 		//		),
-		//		array(
-		//				'field'   => 'pei_example',
-		//				'label'   => '案件申請：例文',
-		//				'rules'   => 'trim|max_length[10000]'
-		//		),
-		//		array(
-		//				'field'   => 'pei_other',
-		//				'label'   => '案件申請：その他',
-		//				'rules'   => 'trim|max_length[10000]'
-		//		),
-		//		array(
-		//				'field'   => 'pei_addwork',
-		//				'label'   => '案件申請：追加内容',
-		//				'rules'   => 'trim|max_length[10000]'
-		//		),
-        //
+				array(
+						'field'   => 'rep_title',
+						'label'   => 'タイトル',
+						'rules'   => 'trim|max_length[100]'
+				),
+				array(
+						'field'   => 'rep_text_body',
+						'label'   => '本文',
+						'rules'   => 'trim|max_length[10000]'
+				),
+				array(
+						'field'   => 'pji_addwork',
+						'label'   => '追加内容',
+						'rules'   => 'trim|max_length[10000]'
+				),
+
 		);
-		//
+
 		$this->load->library('form_validation', $rule_set);							// バリデーションクラス読み込み
 
 	}
-
-
-
-
-
-
-
 
 }

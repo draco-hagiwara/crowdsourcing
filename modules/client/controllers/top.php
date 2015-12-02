@@ -7,13 +7,16 @@ class Top extends MY_Controller
 	{
 		parent::__construct();
 
-		if (($this->session->userdata('login_mem') == 'client') && ($this->session->userdata('login_chk') == TRUE))
+		if ($this->session->userdata('c_login') == TRUE)
 		{
 			$this->smarty->assign('login_chk', TRUE);
+        	//$this->smarty->assign('login_mem', 'client');
+			$this->smarty->assign('login_name', $this->session->userdata('c_memNAME'));
 		} else {
         	$this->smarty->assign('login_chk', FALSE);
-        	$this->smarty->assign('login_mem', 'client');
-			$this->load->helper('url');
+        	//$this->smarty->assign('login_mem', 'client');
+
+			//$this->load->helper('url');
 			redirect('/login/');
 		}
 
@@ -22,6 +25,10 @@ class Top extends MY_Controller
 	// ログイン 初期表示
 	public function index()
 	{
+
+		// セッションデータをクリア
+		$this->load->model('comm_auth', 'comm_auth', TRUE);
+		$this->comm_auth->delete_session('client');
 
 		$this->view('client/top/index.tpl');
 

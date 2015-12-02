@@ -25,12 +25,12 @@ class Clienttop extends MY_Controller
 		parent::__construct();
 
 		// セッション書き込み
-		if (($this->session->userdata('login_mem') == 'client') && ($this->session->userdata('login_chk') == TRUE))
+		if ($this->session->userdata('c_login') == TRUE)
 		{
 		} else {
 			$setData = array(
-					'login_chk' => '',
-					'login_mem' => 'client',
+					'c_login' => FALSE,
+					//'login_mem' => 'client',
 			);
 			$this->session->set_userdata($setData);
 		}
@@ -40,7 +40,7 @@ class Clienttop extends MY_Controller
 	{
 
 		// クライアント・ログイン画面へリダイレクト
-		$this->load->helper('url');
+		//$this->load->helper('url');
 		redirect('/login/');
 
 	}

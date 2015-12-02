@@ -67,13 +67,14 @@
 
 		    <li><a href="#" class="dropdown-toggle" data-toggle="dropdown">マイページ<b class="caret"></b></a>
 			  <ul class="dropdown-menu right">
-				<li><a href="/search_list/">エントリー一覧</a></li>
-				<li><a href="/search_genre/">月別明細</a></li>
-				<li><a href="/search_genre/">会員情報 編集</a></li>
-				<li><a href="/search_genre/">退会</a></li>
+				<li><a href="/my_entrylist/">エントリー一覧</a></li>
+				<li><a href="/my_pay/">月別明細</a></li>
+				<li><a href="/my_profile/">プロフィール 編集</a></li>
+				<li><a href="/my_memfile/">会員情報 編集</a></li>
+				<li><a href="/my_byebye/">登録解除</a></li>
 			  </ul>
 		    </li>
-		    <li><a href="/admin/top/">ご利用ガイド</a></li>
+		    <li><a href="/top/guide/">ご利用ガイド</a></li>
           </ul>
           <ul class="nav navbar-nav navbar-right">
 		    <li><a href="/top/logout/">ログアウト</a></li>
@@ -101,12 +102,13 @@
         <div id="patern05" class="collapse navbar-collapse">
           <ul class="nav navbar-nav">
 		    <li><a href="/">TOP</a></li>
-		    <li><a href="/admin/top/">ご利用ガイド</a></li>
+		    <li><a href="/top/guide/">ご利用ガイド</a></li>
           </ul>
         </div>
         </nav>
 
         <ul class="list-inline text-right">
+          <li><a href="../../entryclient">クライアント新規登録</a></li>
           <li><a href="/client/login/">Clientログイン</a></li>
           <li><a href="/admin/login/">ADMIINログイン</a></li>
         </ul>

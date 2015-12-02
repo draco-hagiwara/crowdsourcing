@@ -23,12 +23,14 @@ class Comm_auth extends CI_Model
 	public function check_Login($loginid, $password, $login_member)
     {
 
+    	$err_mess = NULL;
     	switch ($login_member)
     	{
     		case 'writer':
     			$sql = 'SELECT * FROM `tb_writer` '
     					. 'WHERE `wr_email` = ? '
-    					. 'AND `wr_status`  = 4 ';
+    					. 'AND `wr_status`  = 4 '
+    					. 'AND `wr_del_flg` = 0 ';
 
     			$values = array(
     					$loginid
@@ -52,26 +54,31 @@ class Comm_auth extends CI_Model
 
    				// ログインID＆パスワード読み込み
    				$arrData = $query->result('array');
-    			if (is_array($arrData))
+   				if (is_array($arrData))
     			{
-
+    				// パスワードのチェック
     				$this->_hash_passwd = $arrData[0]['wr_password'];
-    				$this->_memberID    = $arrData[0]['wr_id'];
-    				$this->_memberRANK  = $arrData[0]['wr_mm_rank_id'];
-    				$this->_memberRATE  = $arrData[0]['wr_measure'];
-    				$this->_memberNAME  = $arrData[0]['wr_nickname'];
+    				$res = $this->_check_password($password);
+    				if ($res == TRUE)
+    				{
+    					$err_mess = '入力されたパスワードが誤っています。';
+    					return $err_mess;
+    				} else {
+	    				$this->_memberID    = $arrData[0]['wr_id'];
+	    				$this->_memberRANK  = $arrData[0]['wr_mm_rank_id'];
+	    				$this->_memberRATE  = $arrData[0]['wr_measure'];
+	    				$this->_memberNAME  = $arrData[0]['wr_nickname'];
 
-    				$this->_update_Session($login_member);
-    			//} else {
-    			//	$err_mess = '入力されたログインID（メールアドレス）は登録されていません。';
-    			//	return $err_mess;
+	    				$this->_update_Session($login_member);
+    				}
     			}
 
     			break;
     		case 'client':
     	    	$sql = 'SELECT * FROM `tb_client` '
-    					. 'WHERE `cl_email`  = ? '
-    					. 'AND   `cl_status` = 1 ';
+    					. 'WHERE `cl_email`   = ? '
+    					. 'AND   `cl_status`  = 1 '
+    					. 'AND   `cl_del_flg` = 0 ';
 
     			$values = array(
     					$loginid
@@ -95,19 +102,23 @@ class Comm_auth extends CI_Model
 
    				// ログインID＆パスワード読み込み
    				$arrData = $query->result('array');
-    			if (is_array($arrData))
+   				if (is_array($arrData))
     			{
-
+    				// パスワードのチェック
     				$this->_hash_passwd = $arrData[0]['cl_password'];
-    				$this->_memberID    = $arrData[0]['cl_id'];
-    				//$this->_memberRANK  = '';
-    				//$this->_memberRATE  = ''];
-    				$this->_memberNAME  = $arrData[0]['cl_company'];
+    				$res = $this->_check_password($password);
+    				if ($res == TRUE)
+    				{
+    					$err_mess = '入力されたパスワードが誤っています。';
+    					return $err_mess;
+    				} else {
+	    				$this->_memberID    = $arrData[0]['cl_id'];
+	    				//$this->_memberRANK  = '';
+	    				//$this->_memberRATE  = ''];
+	    				$this->_memberNAME  = $arrData[0]['cl_company'];
 
-    				$this->_update_Session($login_member);
-    			//} else {
-    			//	$err_mess = '入力されたログインID（メールアドレス）は登録されていません。';
-    			//	return $err_mess;
+	    				$this->_update_Session($login_member);
+    				}
     			}
 
     			break;
@@ -116,8 +127,9 @@ class Comm_auth extends CI_Model
     			 * ADMIN管理者は クライアント登録(tb_client) の クライアントID(cl_id)=='1' 固定とする。
     			*/
     	    	$sql = 'SELECT * FROM `tb_client` '
-    					. 'WHERE `cl_email` = ? '
-    					. 'AND   `cl_status` = 1 ';
+    					. 'WHERE `cl_email`   = ? '
+    					. 'AND   `cl_status`  = 1 '
+    					. 'AND   `cl_del_flg` = 0 ';
 
     			$values = array(
     					$loginid
@@ -141,33 +153,38 @@ class Comm_auth extends CI_Model
 
    				// ログインID＆パスワード読み込み
    				$arrData = $query->result('array');
-    			if (is_array($arrData))
+   				if (is_array($arrData))
     			{
     				// クライアントID(cl_id)=='1' チェック
     				if ((isset($arrData[0]['cl_id'])) && ($arrData[0]['cl_id'] == 1))
     				{
+    					// パスワードのチェック
     					$this->_hash_passwd = $arrData[0]['cl_password'];
-    					$this->_memberID    = $arrData[0]['cl_id'];
-    					//$this->_memberRANK  = '';
-    					//$this->_memberRATE  = ''];
-    					$this->_memberNAME  = $arrData[0]['cl_company'];
+    					$res = $this->_check_password($password);
+    					if ($res == TRUE)
+    					{
+    						$err_mess = '入力されたパスワードが誤っています。';
+    						return $err_mess;
+    					} else {
+	    					$this->_hash_passwd = $arrData[0]['cl_password'];
+	    					$this->_memberID    = $arrData[0]['cl_id'];
+	    					//$this->_memberRANK  = '';
+	    					//$this->_memberRATE  = ''];
+	    					$this->_memberNAME  = $arrData[0]['cl_company'];
 
-    					$this->_update_Session($login_member);
+	    					$this->_update_Session($login_member);
+    					}
     				} else {
     					$err_mess = '入力されたログインID（メールアドレス）は管理者IDではありません。';
     					return $err_mess;
     				}
-
-    			//} else {
-    			//	$err_mess = '入力されたログインID（メールアドレス）は登録されていません。';
-    			//	return $err_mess;
     			}
 
     			break;
     		default:
     	}
 
-    	$err_mess = $this->_check_password($password);
+    	//$err_mess = $this->_check_password($password);
     	return $err_mess;
 
     }
@@ -362,10 +379,13 @@ class Comm_auth extends CI_Model
 	 private function _check_password($password)
     {
 		// パスワードハッシュ認証チェック
-    	if (!password_verify($password, $this->_hash_passwd)) {
-    		$err_mess = '入力されたパスワードが一致しません。';
-    		return $err_mess;
+    	if (password_verify($password, $this->_hash_passwd)) {
+    		$result = FALSE;
+    	} else {
+    		$result = TRUE;
     	}
+
+    	return $result;
     }
 
 

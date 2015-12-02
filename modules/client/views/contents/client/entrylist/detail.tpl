@@ -137,6 +137,16 @@
       {if form_error('pe_comment')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('pe_comment')}</font></label>{/if}
     </div>
   </div>
+
+  {if isset($entry_info.pe_reason)}
+    <div class="form-group">
+    <label for="pe_reason" class="col-sm-3 control-label">非承認 理由</label>
+    <div class="col-sm-9">
+      {$entry_info.pe_reason}
+    </div>
+  </div>
+  {/if}
+
 {/if}
 
 {if $entry_no != '00'}

@@ -43,7 +43,7 @@ class Writerlist extends MY_Controller
 		$this->_search_set();
 
 		// Pagination 現在ページ数の取得：：URIセグメントの取得
-		$this->load->helper('url');
+		//$this->load->helper('url');
 		$segments = $this->uri->segment_array();
 		if (isset($segments[3]))
 		{
@@ -105,7 +105,7 @@ class Writerlist extends MY_Controller
 		$this->form_validation->run();
 
 		// Pagination 現在ページ数の取得：：URIセグメントの取得
-		$this->load->helper('url');
+		//$this->load->helper('url');
 		$segments = $this->uri->segment_array();
 		if (isset($segments[3]))
 		{
@@ -173,8 +173,9 @@ class Writerlist extends MY_Controller
 
 		} else {
 
-			$set_data['wr_status'] = $this->input->post('wr_status');
-			$set_data['wr_id']     = $this->input->post('wr_id');
+			$set_data['wr_status']     = $this->input->post('wr_status');
+			$set_data['wr_id']         = $this->input->post('wr_id');
+			$set_data['wr_mm_rank_id'] = $this->input->post('wr_mm_rank_id');
 
 			if ($this->wr->update_Writer($set_data))
 			{
@@ -183,7 +184,7 @@ class Writerlist extends MY_Controller
 			}
 
 			// 検索一覧へ
-			$this->load->helper('url');
+			//$this->load->helper('url');
 			redirect('/writerlist/');
 
 		}
@@ -242,6 +243,17 @@ class Writerlist extends MY_Controller
 				'9' => $this->config->item('WRITER_TAIKAI'),
 		);
 
+		// 会員ランク 選択項目セット
+		$this->config->load('config_comm');
+		$arroptions_mrank = array (
+				//'0' => $this->config->item('RANK_GUEST'),
+				'1' => $this->config->item('RANK_BRONZE'),
+				'2' => $this->config->item('RANK_SILVER'),
+				'3' => $this->config->item('RANK_GOLD'),
+				//'4' => $this->config->item('RANK_PLATINUM'),
+				//'5' => $this->config->item('RANK_PREMIERE'),
+		);
+
 		// ライターID 並び替え選択項目セット
 		$arroptions_id = array (
 				''     => '選択してください',
@@ -256,10 +268,11 @@ class Writerlist extends MY_Controller
 				'ASC'  => '昇順',
 		);
 
-		$this->smarty->assign('options_wr_status01', $arroptions_wrstatus01);
-		$this->smarty->assign('options_wr_status02', $arroptions_wrstatus02);
-		$this->smarty->assign('options_orderid',     $arroptions_id);
-		$this->smarty->assign('options_orderstatus', $arroptions_status);
+		$this->smarty->assign('options_wr_status01',   $arroptions_wrstatus01);
+		$this->smarty->assign('options_wr_status02',   $arroptions_wrstatus02);
+		$this->smarty->assign('options_wr_mm_rank_id', $arroptions_mrank);
+		$this->smarty->assign('options_orderid',       $arroptions_id);
+		$this->smarty->assign('options_orderstatus',   $arroptions_status);
 
 	}
 

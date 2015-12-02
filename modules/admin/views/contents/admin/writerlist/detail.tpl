@@ -23,6 +23,12 @@
     </div>
   </div>
   <div class="form-group">
+    <label for="wr_mm_rank_id" class="col-sm-3 control-label">会員ランク</label>
+    <div class="col-sm-4">
+	  {form_dropdown('wr_mm_rank_id', $options_wr_mm_rank_id, {$writer_info.wr_mm_rank_id})}
+    </div>
+  </div>
+  <div class="form-group">
     <label for="wr_name" class="col-sm-3 control-label">お名前</label>
     <div class="col-sm-4">
       {$writer_info.wr_name01} {$writer_info.wr_name02}
