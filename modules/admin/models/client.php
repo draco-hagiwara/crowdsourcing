@@ -9,6 +9,27 @@ class Client extends CI_Model
     }
 
     /**
+     * メール送信先クライアントの会社名＆メールアドレスを取得
+     *
+     * @param	int
+     * @return	array()
+     */
+    public function get_client_name($get_cl_id)
+    {
+
+    	$sql = 'SELECT cl_company, cl_person01, cl_person02, cl_email';
+    	$sql .= ' FROM tb_client';
+    	$sql .= ' WHERE cl_id = ' . $get_cl_id;
+
+    	// クエリー実行
+    	$query = $this->db->query($sql);
+    	$get_client_info = $query->result('array');
+
+    	return $get_client_info;
+
+    }
+
+    /**
      * クライアントメンバーの取得
      *
      * @param	array() : 検索項目値

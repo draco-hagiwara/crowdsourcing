@@ -44,21 +44,26 @@
         <div id="patern05" class="collapse navbar-collapse">
           <ul class="nav navbar-nav">
 		    <li><a href="/client/top/">TOP</a></li>
-		    <li><a href="#" class="dropdown-toggle" data-toggle="dropdown">案件申請<b class="caret"></b></a>
+		    <li><a href="#" class="dropdown-toggle" data-toggle="dropdown">申請案件管理<b class="caret"></b></a>
 			  <ul class="dropdown-menu right">
-				<li><a href="/client/entrylist/">案件申請一覧</a></li>
-				<li><a href="/client/entryorder/">新規作成</a></li>
+				<li><a href="/client/entrylist/">申請案件一覧</a></li>
+				<li><a href="/client/entryorder/index/0/">新規作成</a></li>
 			  </ul>
 		    </li>
-		    <li><a href="">納品案件</a></li>
-		    <li><a href="">支払管理</a></li>
+		    <li><a href="/client/orderlist/">案件状況管理</a></li>
+		    <li><a href="#" class="dropdown-toggle" data-toggle="dropdown">支払管理<b class="caret"></b></a>
+			  <ul class="dropdown-menu right">
+				<li><a href="/client/entrylist/">支払明細</a></li>
+				<li><a href="/client/entryorder/index/0/">契約情報</a></li>
+			  </ul>
+		    </li>
           </ul>
 
 		  <ul class="nav navbar-nav navbar-right">
 		    <li><a href="#" class="dropdown-toggle" data-toggle="dropdown">{$login_name}<b class="caret"></b></a>
 			  <ul class="dropdown-menu right">
-				<li><a href="#">会社情報</a></li>
-				<li><a href="#">問合せ</a></li>
+				<li><a href="/client/cl_profile/">プロフィール編集</a></li>
+				<li><a href="/client/cl_info/">情報編集</a></li>
 				<li><a href="/client/login/logout/">ログアウト</a></li>
 			  </ul>
 		    </li>

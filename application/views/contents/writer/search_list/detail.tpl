@@ -81,6 +81,7 @@
     <div class="col-sm-4">
       {$options_pj_taa_difficulty_id[$order_info.pj_taa_difficulty_id]}
       {form_hidden('pj_taa_difficulty_id', $order_info.pj_taa_difficulty_id)}
+      <br>【現行設定値：：{$diff_tanka0} / {$diff_tanka1} / {$diff_tanka2}】
     </div>
   </div>
 
@@ -89,12 +90,6 @@
     <div class="col-sm-4">
       {$order_info.pj_limit_time}
       {form_hidden('pj_limit_time', $order_info.pj_limit_time)}
-    </div>
-  </div>
-  <div class="form-group">
-    <label for="pj_delivery_time" class="col-sm-3 control-label">投稿納期</label>
-    <div class="col-sm-4">
-      {$order_info.pj_delivery_time}
     </div>
   </div>
   <div class="form-group">
@@ -107,6 +102,7 @@
     <label for="pj_end_time" class="col-sm-3 control-label">公開(募集)終了日時</label>
     <div class="col-sm-4">
       {$order_info.pj_end_time}
+      {form_hidden('pj_end_time', $order_info.pj_end_time)}
     </div>
   </div>
 
@@ -147,7 +143,7 @@
     <div class="col-sm-offset-3 col-sm-9">
       {$attr_sub['name']  = 'submit'}
       {$attr_sub['type']  = 'submit'}
-      {$attr_new['value'] = '_submit'}
+      {$attr_sub['value'] = '_submit'}
       {form_button($attr_sub , 'エントリーする' , $js)}
     </div>
   </div>

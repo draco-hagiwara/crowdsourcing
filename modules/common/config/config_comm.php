@@ -47,6 +47,8 @@ $config['PJ_EVENT_LONG_ID']      = '4';
 $config['PJ_EVENT_LONG']         = '期間長';
 $config['PJ_EVENT_MOJISHORT_ID'] = '5';
 $config['PJ_EVENT_MOJISHORT']    = '文字数少';
+$config['PJ_EVENT_MOJISHORT_ID'] = '99';
+$config['PJ_EVENT_MOJISHORT']    = '締切間近';
 
 
 
@@ -54,11 +56,39 @@ $config['PJ_EVENT_MOJISHORT']    = '文字数少';
 
 
 
-// ライター投稿制限時間
+// ライター投稿制限時間デフォルト値
 $config['POSTING_LIMIT_TIME'] = '120';					// 「分」指定
 
-// 仮PW発行制限時間
-$config['REPASSWD_TIME']     = '30';					// 「分」指定
+// 仮PW発行制限時間デフォルト値
+$config['REPASSWD_TIME']      = '30';					// 「分」指定
+
+// ポイント計算
+$config['POINT_CAL'] =
+	array(
+		'0' => '切り上げ',
+		'1' => '切り捨て',
+		'2' => '四捨五入',
+);
+$config['POINT_CAL_ID']       = '0';					// デフォルト値指定
+
+// 税額計算
+$config['TAX_CAL'] =
+array(
+		'0' => '切り上げ',
+		'1' => '切り捨て',
+		'2' => '四捨五入',
+);
+$config['TAX_CAL_ID']         = '1';					// デフォルト値指定
+
+$config['TAX_INOUT'] =
+array(
+		'0' => '税抜',
+		'1' => '税込',
+);
+$config['TAX_INOUT_ID']       = '0';					// デフォルト値指定
+$config['TAX_RATE']           = '8';					// 税率 8％
+
+
 
 
 

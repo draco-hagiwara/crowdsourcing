@@ -53,8 +53,8 @@
 			<tr>
 				<th></th>
 				<th></th>
-				<th>ジャンル</th>
 				<th>仕事タイトル</th>
+				<th>ジャンル</th>
 				<th>対象ランク</th>
 				<th>文字単価</th>
 				<th>最低文字数</th>
@@ -73,11 +73,11 @@
 				<td>
 					{$options_diff_list[$list.pj_taa_difficulty_id]}
 				</td>
-				<td>
-					{$options_genre_list[$list.pj_genre01]}
-				</td>
 				<td style="width: 450px; max-width: 450px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
 					{$list.pj_title}
+				</td>
+				<td>
+					{$options_genre_list[$list.pj_genre01]}
 				</td>
 				<td>
 					{$options_rank_list[$list.pj_mm_rank_id]} 以上
@@ -86,7 +86,7 @@
 					{$list.word_tanka} 円
 				</td>
 				<td>
-					{$list.pj_char_cnt} 文字以上
+					{$list.pj_char_cnt} 文字
 				</td>
 				<td>
 					{$list.pj_end_time|date_format:"%Y-%m-%d %H:%M"}

@@ -33,6 +33,13 @@ class Entrylist extends MY_Controller
 	public function index()
 	{
 
+		// セッションデータをクリア
+		$this->load->model('comm_auth', 'comm_auth', TRUE);
+		$this->comm_auth->delete_session('client');
+
+		// セッション::案件申請IDをクリア
+		$flash_data['c_memID'] = $this->session->userdata('c_memID');
+
 		// バリデーション・チェック
 		$this->_set_validation();											// バリデーション設定
 		$this->form_validation->run();
@@ -56,7 +63,8 @@ class Entrylist extends MY_Controller
 
 		// 案件申請情報のリスト＆件数を取得
 		$this->load->model('Project_entry', 'pro', TRUE);
-		list($entry_list, $entry_countall) = $this->pro->get_entrylist($this->input->post(), $tmp_per_page, $tmp_offset);
+		$tmp_inputpost = $this->input->post();
+		list($entry_list, $entry_countall) = $this->pro->get_entrylist($flash_data['c_memID'], $tmp_inputpost, $tmp_per_page, $tmp_offset);
 		$this->smarty->assign('entry_list', $entry_list);
 
 		// Pagination 設定
@@ -74,33 +82,36 @@ class Entrylist extends MY_Controller
 	public function search()
 	{
 
+		// セッション::案件申請IDをクリア
+		$flash_data['c_memID'] = $this->session->userdata('c_memID');
+
 		// 検索項目の保存が上手くいかない。応急的に対応！
 		if ($this->input->post('submit') == '_submit')
 		{
 			// セッションをフラッシュデータとして保存
 			$data = array(
-					'pe_entry_title' => $this->input->post('pe_entry_title'),
-					'pe_id'          => $this->input->post('pe_id'),
-					'pe_status'      => $this->input->post('pe_status'),
-					'pe_genre01'     => $this->input->post('pe_genre01'),
-					'orderid'        => $this->input->post('orderid'),
-					'orderstatus'    => $this->input->post('orderstatus'),
+					'c_pe_entry_title' => $this->input->post('pe_entry_title'),
+					'c_pe_id'          => $this->input->post('pe_id'),
+					'c_pe_status'      => $this->input->post('pe_status'),
+					'c_pe_genre01'     => $this->input->post('pe_genre01'),
+					'c_orderid'        => $this->input->post('orderid'),
+					'c_orderstatus'    => $this->input->post('orderstatus'),
 			);
-			$this->session->set_flashdata($data);
+			$this->session->set_userdata($data);
 
 			$tmp_inputpost = $this->input->post();
 			unset($tmp_inputpost["submit"]);
 
 		} else {
 			// セッションからフラッシュデータ読み込み
-			$tmp_inputpost['pe_entry_title'] = $this->session->flashdata('pe_entry_title');
-			$tmp_inputpost['pe_id']          = $this->session->flashdata('pe_id');
-			$tmp_inputpost['pe_status']      = $this->session->flashdata('pe_status');
-			$tmp_inputpost['pe_genre01']     = $this->session->flashdata('pe_genre01');
-			$tmp_inputpost['orderid']        = $this->session->flashdata('orderid');
-			$tmp_inputpost['orderstatus']    = $this->session->flashdata('orderstatus');
+			$tmp_inputpost['pe_entry_title'] = $this->session->userdata('c_pe_entry_title');
+			$tmp_inputpost['pe_id']          = $this->session->userdata('c_pe_id');
+			$tmp_inputpost['pe_status']      = $this->session->userdata('c_pe_status');
+			$tmp_inputpost['pe_genre01']     = $this->session->userdata('c_pe_genre01');
+			$tmp_inputpost['orderid']        = $this->session->userdata('c_orderid');
+			$tmp_inputpost['orderstatus']    = $this->session->userdata('c_orderstatus');
 
-			$this->session->set_flashdata($tmp_inputpost);
+			//$this->session->set_flashdata($tmp_inputpost);
 		}
 
 		// バリデーション・チェック
@@ -123,7 +134,7 @@ class Entrylist extends MY_Controller
 
 		// 案件申請情報のリスト＆件数を取得
 		$this->load->model('Project_entry', 'pro', TRUE);
-		list($entry_list, $entry_countall) = $this->pro->get_entrylist($tmp_inputpost, $tmp_per_page, $tmp_offset);
+		list($entry_list, $entry_countall) = $this->pro->get_entrylist($flash_data['c_memID'], $tmp_inputpost, $tmp_per_page, $tmp_offset);
 		$this->smarty->assign('entry_list', $entry_list);
 
 		// Pagination 設定
@@ -148,7 +159,7 @@ class Entrylist extends MY_Controller
 		$this->_form_item_set00();
 
 		// セッションからフラッシュデータ読み込み
-		$flash_data['pe_id'] = $this->session->flashdata('pe_id');
+		$flash_data['c_pe_id'] = $this->session->userdata('c_pe_id');
 
 
 		// 申請内容データ 初期値セット
@@ -156,14 +167,14 @@ class Entrylist extends MY_Controller
 
 
 		// 案件申請ID取得
-		if (empty($flash_data['pe_id']))
+		$input_post = $this->input->post();
+		if (empty($input_post['peid_uniq']))
 		{
-			// 初回
-			$input_post = $this->input->post();
-			$tmp_peid = $input_post['peid_uniq'];
-		} else {
 			// ２回目以降
-			$tmp_peid = $flash_data['pe_id'];
+			$tmp_peid = $flash_data['c_pe_id'];
+		} else {
+			// 初回
+			$tmp_peid = $input_post['peid_uniq'];
 		}
 
 
@@ -184,8 +195,8 @@ class Entrylist extends MY_Controller
 		$this->smarty->assign('entry_info', $get_data[0]);
 
 		// session:フラッシュデータに案件申請ID書き込み
-		$tmp_flash_peid = array('pe_id' => $get_data[0]['pe_id']);
-		$this->session->set_flashdata( $tmp_flash_peid);
+		$tmp_flash_peid = array('c_pe_id' => $get_data[0]['pe_id']);
+		$this->session->set_userdata( $tmp_flash_peid);
 
 		// バリデーション設定
 		$this->_set_validation00();
@@ -205,18 +216,18 @@ class Entrylist extends MY_Controller
 		//$this->_search_set01();
 
 		// セッションからフラッシュデータ読み込み＆書き込み
-		$flash_data['pe_id'] = $this->session->flashdata('pe_id');
-		$this->session->set_flashdata( $flash_data);
+		$flash_data['c_pe_id'] = $this->session->userdata('c_pe_id');
+		//$this->session->set_flashdata( $flash_data);
 
 
 		print("flash_data01 == ");
-		print_r($flash_data['pe_id']);
+		print_r($flash_data['c_pe_id']);
 		print("<br><br>");
 
 
 		// 申請案件データ 初期値セット
 		$this->load->model('Project_entry', 'pro', TRUE);					// models 読み込み
-		$get_data = $this->pro->get_entry_info($flash_data['pe_id'], $pei_seq = 0);
+		$get_data = $this->pro->get_entry_info($flash_data['c_pe_id'], $pei_seq = 0);
 
 
 
@@ -239,25 +250,25 @@ class Entrylist extends MY_Controller
 	{
 
 		// セッションからフラッシュデータ読み込み＆書き込み
-		$flash_data['pe_id'] = $this->session->flashdata('pe_id');
-		$this->session->set_flashdata( $flash_data);
+		$flash_data['c_pe_id'] = $this->session->userdata('c_pe_id');
+		//$this->session->set_flashdata( $flash_data);
 
 
 		print("flash_data02 == ");
-		print_r($flash_data['pe_id']);
+		print_r($flash_data['c_pe_id']);
 		print("<br><br>");
 
 
 		// 申請案件データ 初期値セット
 		$this->load->model('Project_entry', 'pro', TRUE);					// models 読み込み
-		$get_data = $this->pro->get_entry_info($flash_data['pe_id'], $pei_seq = 1);
+		$get_data = $this->pro->get_entry_info($flash_data['c_pe_id'], $pei_seq = 1);
 		if (empty($get_data))
 		{
 			// 各項目 初期値セット
-			$this->_form_item_set01($flash_data['pe_id']);
+			$this->_form_item_set01($flash_data['c_pe_id']);
 		} else {
 			// 各項目 初期値セット
-			$this->_form_item_set01($flash_data['pe_id']);
+			$this->_form_item_set01($flash_data['c_pe_id']);
 			$this->smarty->assign('entry_info', $get_data[0]);
 		}
 
@@ -275,25 +286,25 @@ class Entrylist extends MY_Controller
 	{
 
 		// セッションからフラッシュデータ読み込み＆書き込み
-		$flash_data['pe_id'] = $this->session->flashdata('pe_id');
-		$this->session->set_flashdata( $flash_data);
+		$flash_data['c_pe_id'] = $this->session->userdata('c_pe_id');
+		//$this->session->set_flashdata( $flash_data);
 
 
 		print("flash_data03 == ");
-		print_r($flash_data['pe_id']);
+		print_r($flash_data['c_pe_id']);
 		print("<br><br>");
 
 
 		// 申請案件データ 初期値セット
 		$this->load->model('Project_entry', 'pro', TRUE);					// models 読み込み
-		$get_data = $this->pro->get_entry_info($flash_data['pe_id'], $pei_seq = 2);
+		$get_data = $this->pro->get_entry_info($flash_data['c_pe_id'], $pei_seq = 2);
 		if (empty($get_data))
 		{
 			// 各項目 初期値セット
-			$this->_form_item_set01($flash_data['pe_id']);
+			$this->_form_item_set01($flash_data['c_pe_id']);
 		} else {
 			// 各項目 初期値セット
-			$this->_form_item_set01($flash_data['pe_id']);
+			$this->_form_item_set01($flash_data['c_pe_id']);
 			$this->smarty->assign('entry_info', $get_data[0]);
 		}
 
@@ -316,13 +327,13 @@ class Entrylist extends MY_Controller
 	{
 
 		// セッションからフラッシュデータ読み込み＆書き込み
-		$flash_data['pe_id'] = $this->session->flashdata('pe_id');
-		$this->session->set_flashdata($flash_data);
+		$flash_data['c_pe_id'] = $this->session->userdata('c_pe_id');
+		//$this->session->set_flashdata($flash_data);
 
 
 
 		print("flash_data_entry == ");
-		print_r($flash_data['pe_id']);
+		print_r($flash_data['c_pe_id']);
 		print("<br><br>");
 
 
@@ -358,8 +369,14 @@ class Entrylist extends MY_Controller
 
 			if ($set_entryno == '00')
 			{
-				$set_update_data['pe_id']        = $flash_data['pe_id'];								// 案件申請ID
+				$set_update_data['pe_id']        = $flash_data['c_pe_id'];								// 案件申請ID
 				$set_update_data['pe_cl_id']     = $this->session->userdata('c_memID');					// クライアントID
+
+				if ($set_update_data['pe_status'] == '1')
+				{
+					$set_update_data['pe_reason'] = NULL;												// 非承認 理由
+				}
+
 
 				unset($set_update_data["entry_no"]) ;
 				unset($set_update_data["submit"]) ;
@@ -371,7 +388,7 @@ class Entrylist extends MY_Controller
 				$this->_form_item_set00();
 
 			} else {
-				$set_update_data['pei_pe_id']    = $flash_data['pe_id'];								// 案件申請ID
+				$set_update_data['pei_pe_id']    = $flash_data['c_pe_id'];								// 案件申請ID
 				$set_update_data['pei_pe_cl_id'] = $this->session->userdata('c_memID');					// クライアントID
 
 				// 入力項目がNULLの場合unset
@@ -389,7 +406,7 @@ class Entrylist extends MY_Controller
 				$result = $this->pro->update_pro_entryinfo($set_entryno, $set_update_data);
 
 				// 各項目 初期値セット
-				$this->_form_item_set01($flash_data['pe_id']);
+				$this->_form_item_set01($flash_data['c_pe_id']);
 
 			}
 
@@ -398,7 +415,7 @@ class Entrylist extends MY_Controller
 		}
 
 		// session:フラッシュデータに案件申請ID書き込み
-		$this->smarty->assign('flashdata_peid', $flash_data['pe_id']);
+		$this->smarty->assign('flashdata_peid', $flash_data['c_pe_id']);
 
 		$this->smarty->assign('entry_info', $this->input->post());
 		//$this->smarty->assign('entry_info', $this->input->post());
@@ -444,12 +461,13 @@ class Entrylist extends MY_Controller
 				''  => '選択してください',
 				'0' => $this->config->item('C_ENTRY_JYUNBI'),
 				'1' => $this->config->item('C_ENTRY_SHINSEI'),
+				'3' => $this->config->item('C_ENTRY_HISYOUNIN'),
 				'4' => $this->config->item('C_ENTRY_CANSEL'),
 		);
 
 		// ジャンル 選択項目セット
-		$this->load->model('comm_genre', 'gr', TRUE);
-		$genre_list = $this->gr->get_genre();
+		$this->load->model('comm_select', 'select', TRUE);
+		$genre_list = $this->select->get_genre();
 		//$genre_list[''] = '選択してください';
 
 		// 案件申請ID 並び替え選択項目セット
@@ -489,8 +507,8 @@ class Entrylist extends MY_Controller
 		);
 
 		// ジャンル 選択項目セット
-		$this->load->model('comm_genre', 'gr', TRUE);
-		$genre_list = $this->gr->get_genre();
+		$this->load->model('comm_select', 'select', TRUE);
+		$genre_list = $this->select->get_genre();
 
 		$this->smarty->assign('options_entry_status', $arroptions_entrystatus);
 		$this->smarty->assign('options_genre_list',   $genre_list);
@@ -743,27 +761,27 @@ class Entrylist extends MY_Controller
 				array(
 						'field'   => 'pei_b_word01',
 						'label'   => '本文：必須ワード指定',
-						'rules'   => 'trim|max_length[10]'
+						'rules'   => 'trim|max_length[100]'
 				),
 				array(
 						'field'   => 'pei_b_word02',
 						'label'   => '本文：必須ワード指定',
-						'rules'   => 'trim|max_length[10]'
+						'rules'   => 'trim|max_length[100]'
 				),
 				array(
 						'field'   => 'pei_b_word03',
 						'label'   => '本文：必須ワード指定',
-						'rules'   => 'trim|max_length[10]'
+						'rules'   => 'trim|max_length[100]'
 				),
 				array(
 						'field'   => 'pei_b_word04',
 						'label'   => '本文：必須ワード指定',
-						'rules'   => 'trim|max_length[10]'
+						'rules'   => 'trim|max_length[100]'
 				),
 				array(
 						'field'   => 'pei_b_word05',
 						'label'   => '本文：必須ワード指定',
-						'rules'   => 'trim|max_length[10]'
+						'rules'   => 'trim|max_length[100]'
 				),
 				array(
 						'field'   => 'pei_b_count_min01',
@@ -857,12 +875,5 @@ class Entrylist extends MY_Controller
 		$this->load->library('form_validation', $rule_set);							// バリデーションクラス読み込み
 
 	}
-
-
-
-
-
-
-
 
 }

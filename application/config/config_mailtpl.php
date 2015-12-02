@@ -16,6 +16,8 @@ $config['MAILTPL_ENT_CLIENT_ID'] = '12';				// クライアント新規会員登
 $config['MAILTPL_REPASSWORD_ID'] = '20';				// 仮パスワード登録メール
 
 $config['MAILTPL_W_ENTRY_ID']    = '30';				// 仕事エントリー確認メール
+$config['MAILTPL_W_POSTING_ID']  = '31';				// 仕事投稿確認メール
+$config['MAILTPL_W_CANSEL_ID']   = '32';				// 仕事エントリーキャンセル確認メール
 
 
 

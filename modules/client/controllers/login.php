@@ -15,8 +15,11 @@ class Login extends MY_Controller
 	public function index()
 	{
 
-		if (($this->session->userdata('login_mem') == 'client') && ($this->session->userdata('login_chk') == TRUE))
+		if ($this->session->userdata('c_login') == TRUE)
 		{
+			$this->smarty->assign('login_chk', TRUE);
+			$this->smarty->assign('login_name', $this->session->userdata('c_memNAME'));
+
 			$this->view('client/top/index.tpl');
 		} else {
 			$this->smarty->assign('err_mess', '');
@@ -54,7 +57,7 @@ class Login extends MY_Controller
 				// 認証OK
 				// ログイン日時 更新
 				$this->load->model('Client', 'cl', TRUE);
-				$this->cl->update_Logindate($this->session->userdata('memberID'));
+				$this->cl->update_Logindate($this->session->userdata('c_memID'));
 
 				// クライアント・マイページ画面TOPへ
 				//$this->view('client/top/index.tpl');
@@ -69,10 +72,10 @@ class Login extends MY_Controller
 	{
 		// SESSION クリア
 		$this->load->model('comm_auth', 'auth', TRUE);
-		$this->auth->logout();
+		$this->auth->logout('client');
 
 		// TOPへリダイレクト
-		$this->load->helper('url');
+		//$this->load->helper('url');
 		redirect(base_url());
 	}
 

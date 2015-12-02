@@ -14,9 +14,9 @@ class Entryclient extends MY_Controller
 		$this->config->load('config_pref');									// 都道府県情報読み込み
 
 				// セッション書き込み
-		if (!$this->session->userdata('ticket')) {
+		if (!$this->session->userdata('w_ticket')) {
 			$setData = array(
-					'ticket' => md5(uniqid(mt_rand(), true)),
+					'w_ticket' => md5(uniqid(mt_rand(), true)),
 					'w_login' => FALSE,
 					//'login_mem' => '',
 			);
@@ -49,7 +49,7 @@ class Entryclient extends MY_Controller
 	{
 
 		// セッションのチェック
-		$this->ticket = $this->session->userdata('ticket');
+		$this->ticket = $this->session->userdata('w_ticket');
 		//if (!$this->input->post('ticket') || $this->input->post('ticket') !== $this->ticket) {
 		if (!$this->ticket) {
 			$message = 'セッション・エラーが発生しました。';
@@ -68,7 +68,7 @@ class Entryclient extends MY_Controller
 	{
 
 		// セッションのチェック
-		$this->ticket = $this->session->userdata('ticket');
+		$this->ticket = $this->session->userdata('w_ticket');
 		if (!$this->input->post('ticket') || $this->input->post('ticket') !== $this->ticket) {
 			$message = 'セッション・エラーが発生しました。';
 			show_error($message, 400);
@@ -102,7 +102,7 @@ class Entryclient extends MY_Controller
 	{
 
 		// セッションのチェック
-		$this->ticket = $this->session->userdata('ticket');
+		$this->ticket = $this->session->userdata('w_ticket');
 		if (!$this->input->post('ticket') || $this->input->post('ticket') !== $this->ticket) {
 			$message = 'セッション・エラーが発生しました。';
 			show_error($message, 400);

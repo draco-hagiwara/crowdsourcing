@@ -100,11 +100,11 @@ class Project_entry extends CI_Model
 
 		// ORDER BY
 		$set_orderby["pe_status"] = $arr_post['orderstatus'];
-		if ($arr_post['orderid'] == 'ASC')
+		if ($arr_post['orderid'] == '')
 		{
-			$set_orderby["pe_id"] = $arr_post['orderid'];
+			$set_orderby["pe_id"] = '';
 		}else {
-			$set_orderby["pe_id"] = 'DESC';
+			$set_orderby["pe_id"] = $arr_post['orderid'];
 		}
 
 		// 対象クライアントメンバーの取得
@@ -147,7 +147,7 @@ class Project_entry extends CI_Model
     	//$tmp_firstitem = FALSE;
     	foreach ($set_select_like as $key => $val)
     	{
-	    	if (isset($val))
+	    	if (isset($val) && $val != '')
 	    	{
 	    		//if ($tmp_firstitem == FALSE)
 	    		//{
@@ -163,7 +163,7 @@ class Project_entry extends CI_Model
     	$tmp_firstitem = FALSE;
     	foreach ($set_orderby as $key => $val)
     	{
-    		if (isset($val))
+    		if (isset($val) && $val != '')
     		{
     			if ($tmp_firstitem == FALSE)
     			{
@@ -174,7 +174,11 @@ class Project_entry extends CI_Model
     			}
     		}
     	}
-    	$sql .= ' , pe_entry_date DESC';									// デフォルト：「申請日」降順
+    	if ($tmp_firstitem == FALSE)
+    	{
+    		$sql .= ' ORDER BY pe_id DESC';									// デフォルト：「申請id」降順
+    		//$sql .= ' ORDER BY pe_entry_date DESC';						// デフォルト：「申請日」降順
+    	}
 
     	// 対象全件数を取得
     	$query = $this->db->query($sql);
@@ -345,12 +349,13 @@ class Project_entry extends CI_Model
     			'pj_other'             => $get_data[0]['pe_other'],
     			'pj_addwork'           => $get_data[0]['pe_addwork'],
     			'pj_word_tanka'        => $get_data[0]['pe_word_tanka'],
-    			'pj_delivery_time'     => $get_data[0]['pe_delivery_date'],
     			'pj_start_time'        => $get_data[0]['pe_open_date'],
-    			'pj_end_time'          => $get_data[0]['pe_open_date'],
+    			'pj_end_time'          => $get_data[0]['pe_delivery_date'],
+    			'pj_delivery_time'     => $get_data[0]['pe_delivery_date'],
     			'pj_pe_id'             => $get_data[0]['pe_id'],
     			'pj_pe_cl_id'          => $get_data[0]['pe_cl_id'],
     			'pj_pe_entry_date'     => $get_data[0]['pe_entry_date'],
+    			'pj_pe_delivery_date'  => $get_data[0]['pe_delivery_date'],
     	);
 
     	$this->load->model('Project', 'pj', TRUE);

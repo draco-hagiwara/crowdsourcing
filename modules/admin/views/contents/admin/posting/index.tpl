@@ -6,37 +6,52 @@
 
 <div id="contents" class="container">
 
-<h4>【申請案件　検索】</h4>
-{form_open('/entrylist/search/' , 'name="searchForm" class="form-horizontal"')}
+<h4>【投稿状況　検索】</h4>
+{form_open('/posting/search/' , 'name="searchForm" class="form-horizontal"')}
   <table class="table table-hover table-bordered">
 	<tbody>
 
 	<div class="row">
 	  <tr>
+		<td class="col-sm-2">案件ID</td>
+		<td class="col-sm-2">
+		  {form_input('pj_id' , set_value('pj_id', $serch_item.pj_id) , 'class="form-control" placeholder=""')}
+		  {if form_error('pj_id')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('pj_id')}</font></label>{/if}
+		</td>
 		<td class="col-sm-2">申請ID</td>
 		<td class="col-sm-2">
-		  {form_input('pe_id' , set_value('pe_id', $serch_item.pe_id) , 'class="form-control" placeholder=""')}
-		  {if form_error('pe_id')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('pe_id')}</font></label>{/if}
+		  {form_input('pj_pe_id' , set_value('pj_pe_id', $serch_item.pj_pe_id) , 'class="form-control" placeholder=""')}
+		  {if form_error('pj_pe_id')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('pj_pe_id')}</font></label>{/if}
 		</td>
 		<td class="col-sm-2">クライアントID</td>
 		<td class="col-sm-2">
-		  {form_input('pe_cl_id' , set_value('pe_cl_id', $serch_item.pe_cl_id) , 'class="form-control" placeholder=""')}
-		  {if form_error('pe_cl_id')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('pe_cl_id')}</font></label>{/if}
-		</td>
-		<td class="col-sm-2">ステータス</td>
-		<td class="col-sm-2">
-		  {form_dropdown('pe_status', $options_pe_status, set_value('pe_status', $serch_item.pe_status))}
+		  {form_input('pj_pe_cl_id' , set_value('pj_pe_cl_id', $serch_item.pj_pe_cl_id) , 'class="form-control" placeholder=""')}
+		  {if form_error('pj_pe_cl_id')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('pj_pe_cl_id')}</font></label>{/if}
 		</td>
 	  </tr>
 	  <tr>
-		<td class="col-sm-2">申請案件タイトル</td>
-		<td class="col-sm-6" colspan="3">
-		  {form_input('pe_entry_title' , set_value('pe_entry_title', $serch_item.pe_entry_title) , 'class="form-control" placeholder="申請案件タイトルを入力してください。"')}
-		  {if form_error('pe_entry_title')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('pe_entry_title')}</font></label>{/if}
+		<td class="col-sm-2">ステータス</td>
+		<td class="col-sm-2">
+		  {form_dropdown('pj_status', $options_pj_status, set_value('pj_status', $serch_item.pj_status))}
+		</td>
+		<td class="col-sm-2">作業ステータス</td>
+		<td class="col-sm-2">
+		  {form_dropdown('pj_work_status', $options_pj_work_status, set_value('pj_work_status', $serch_item.pj_work_status))}
 		</td>
 		<td class="col-sm-2">ジャンル</td>
 		<td class="col-sm-2">
-		  {form_dropdown('pe_genre01', $options_genre_list, set_value('pe_genre01', $serch_item.pe_genre01))}
+		  {form_dropdown('pj_genre01', $options_genre_list, set_value('pj_genre01', $serch_item.pj_genre01))}
+		</td>
+	  </tr>
+	  <tr>
+		<td class="col-sm-2">案件タイトル</td>
+		<td class="col-sm-6" colspan="3">
+		  {form_input('pj_title' , set_value('pj_title', $serch_item.pj_title) , 'class="form-control" placeholder="案件タイトルを入力してください。"')}
+		  {if form_error('pj_title')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('pj_title')}</font></label>{/if}
+		</td>
+		<td class="col-sm-2">エントリー</td>
+		<td class="col-sm-2">
+		  {form_dropdown('pj_entry_status', $options_pj_entry_status, set_value('pj_entry_status', $serch_item.pj_entry_status))}
 		</td>
 	  </tr>
 	</div>
@@ -52,7 +67,7 @@
 		<td class="col-sm-2">
 		  {form_dropdown('orderstatus', $options_orderstatus, set_value('orderstatus', $serch_item.orderstatus))}
 		</td>
-		<td class="col-sm-2">案件申請ID</td>
+		<td class="col-sm-2">申請ID</td>
 		<td class="col-sm-2">
 		  {form_dropdown('orderid', $options_orderid, set_value('orderid', $serch_item.orderid))}
 		</td>
@@ -87,56 +102,82 @@
 
 
 
-{form_open('/entrylist/detail00/' , 'name="detailForm" class="form-horizontal"')}
+{form_open('/posting/detail00/' , 'name="detailForm" class="form-horizontal"')}
 	<table class="table table-striped table-hover">
 		<thead>
 			<tr>
 				<th></th>
-				<th>申請ID</th>
-				<th>clientID</th>
-				<th>status</th>
-				<th>申請案件タイトル</th>
-				<th>ジャンル</th>
-				<th>申請日</th>
+				<th>案件ID<br>ステータス</th>
+				<th>申請ID<br>エントリー</th>
+				<th>clientID<br>WR作業</th>
+				<th>案件タイトル<br>エントリー・ライター情報</th>
+				<th>ジャンル<br>〆切時間</th>
+				<th>申請日<br>納期</th>
 			</tr>
 		</thead>
 
 
-		{foreach from=$entry_list item=list}
+		{foreach from=$listall item=list}
 		<tbody>
 			<tr>
 				<td>
-					<button type="submit" class="btn btn-success btn-xs" name="peid_uniq" value="{$list.pe_id}">更新</button>
+					<button type="submit" class="btn btn-success btn-xs" name="pjid_uniq" value="{$list.pj_id}">更新</button>
 				</td>
 				<td>
-					{$list.pe_id}
+					{$list.pj_id}<br>
+				  {if $list.pj_deliver_flg == FALSE}
+					{if $list.pj_status == "1"}<font color="#ffffff" style="background-color:navy">公 開 中</font>
+					{elseif $list.pj_status == "2"}<font color="#ffffff" style="background-color:blue">再 公 開</font>
+					{elseif $list.pj_status == "3"}<font color="#ffffff" style="background-color:lime">プレ公開</font>
+					{elseif $list.pj_status == "4"}<font color="#ffffff" style="background-color:yellowgreen">指名公開</font>
+					{elseif $list.pj_status == "5"}<font color="#ffffff" style="background-color:whitesmoke">非 公 開</font>
+					{elseif $list.pj_status == "6"}<font color="#ffffff" style="background-color:plum">公開終了</font>
+					{elseif $list.pj_status == "8"}<font color="#ffffff" style="background-color:orange">保　　留</font>
+					{elseif $list.pj_status == "9"}<font color="#ffffff" style="background-color:gray">削　　除</font>
+					{else}エラー
+					{/if}
+				  {else}
+				    <font color="#ffffff" style="background-color:red">納品済</font>
+				  {/if}
 				</td>
 				<td>
-					{$list.pe_cl_id}
-				</td>
-				<td>
-					{if $list.pe_status == "1"}<font color="#ffffff" style="background-color:#0000ff">申 請 中</font>
-					{elseif $list.pe_status == "3"}<font color="#ffffff" style="background-color:#a9a9a9">非 承 認</font>
-					{else}}エラー
+					{$list.pj_pe_id}<br>
+					{if $list.pj_entry_status == "1"}<font color="#ffffff" style="background-color:hotpink">ｴﾝﾄﾘｰ</font>
+					{else}
 					{/if}
 				</td>
-				<td style="text-overflow: ellipsis;">
-					{$list.pe_entry_title}
+				<td>
+					{$list.pj_pe_cl_id}<br>
+					{if $list.pj_entry_status == "1"}
+						{if $list.pj_work_status == "0"}<font color="#ffffff" style="background-color:navy">投稿なし</font>
+						{elseif $list.pj_work_status == "1"}<font color="#ffffff" style="background-color:blue">作成中</font>
+						{elseif $list.pj_work_status == "2"}<font color="#ffffff" style="background-color:lime">再作成中</font>
+						{elseif $list.pj_work_status == "3"}<font color="#ffffff" style="background-color:yellowgreen">審査待ち</font>
+						{elseif $list.pj_work_status == "4"}<font color="#ffffff" style="background-color:plum">審査OK</font>
+						{elseif $list.pj_work_status == "5"}<font color="#ffffff" style="background-color:gray">審査NG</font>
+						{elseif $list.pj_work_status == "6"}<font color="#ffffff" style="background-color:violet">時間オーバ</font>
+						{elseif $list.pj_work_status == "7"}<font color="#ffffff" style="background-color:whitesmoke">ライターキャンセル</font>
+						{else}エラー
+						{/if}
+					{/if}
+				</td>
+				<td style="width: 450px; max-width: 450px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+					{$list.pj_order_title}<br>
+					{$list.pj_wr_id}
 				</td>
 				<td>
-					{$options_genre_list[$list.pe_genre01]}
+					{$options_genre_list[$list.pj_genre01]}<br>
+					{$list.pj_delivery_time|date_format:"%Y-%m-%d %H:%M"}
 				</td>
 				<td>
-					{$list.pe_entry_date|date_format:"%Y-%m-%d"}
+					{$list.pj_pe_entry_date|date_format:"%Y-%m-%d"}<br>
+					{$list.pj_end_time|date_format:"%Y-%m-%d %H:%M"}
 				</td>
 			</tr>
 		</tbody>
 		{foreachelse}
 			検索結果はありませんでした。
 		{/foreach}
-
-
-
 	</table>
 
 {form_close()}

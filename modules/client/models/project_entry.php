@@ -28,7 +28,6 @@ class Project_entry extends CI_Model
 
 	}
 
-
 	/**
 	 * 案内申請個別情報の取得
 	 *
@@ -51,15 +50,6 @@ class Project_entry extends CI_Model
 
 	}
 
-
-
-
-
-
-
-
-
-
 	/**
 	 * 案件申請情報のリスト＆件数を取得
 	 *
@@ -68,16 +58,16 @@ class Project_entry extends CI_Model
 	 * @param	int     : オフセット値(ページ番号)
 	 * @return	array()
 	 */
-	public function get_entrylist($arr_post, $tmp_per_page, $tmp_offset=0)
+	public function get_entrylist($cl_id, $arr_post, $tmp_per_page, $tmp_offset=0)
 	{
 
 		// 各SQL項目へセット
 		// WHERE
 		$set_select_like["pe_entry_title"] = $arr_post['pe_entry_title'];
 		$set_select_like["pe_id"]          = $arr_post['pe_id'];
+    	$set_select["pe_cl_id"]            = $cl_id;
 		$set_select["pe_genre01"]          = $arr_post['pe_genre01'];
 		$set_select["pe_status"]           = $arr_post['pe_status'];
-		//$set_select['pe_cl_id']   = $this->session->userdata('memberID');				// セッションデータからクライアントID
 
 		// ORDER BY
 		$set_orderby["pe_status"] = $arr_post['orderstatus'];
@@ -112,7 +102,7 @@ class Project_entry extends CI_Model
     	$sql .= ' WHERE `pe_cl_id` = ' . $this->session->userdata('c_memID');	// セッションデータからクライアントID
     	$sql .= ' AND `pe_del_flg` = 0';										// 削除フラグ
     	$sql .= ' AND `pe_status` != 2';										// ステータス：「承認」
-    	$sql .= ' AND `pe_status` != 3';										// ステータス：「非承認」
+    	//$sql .= ' AND `pe_status` != 3';										// ステータス：「非承認」
     	if ($set_select["pe_status"] != '') 									// ステータス
     	{
     		$sql .= ' AND `pe_status`  = ' . $set_select["pe_status"];
@@ -217,8 +207,15 @@ class Project_entry extends CI_Model
     public function update_pro_entry($set_data)
     {
 
-    	// 更新日時をセット
     	$time = time();
+
+    	// 申請日時をチェック
+    	if ($set_data['pe_status'] == '1')
+    	{
+    		$set_data['pe_entry_date'] = date("Y-m-d H:i:s", $time);
+    	}
+
+    	// 更新日時をセット
     	$set_data['pe_update_date'] = date("Y-m-d H:i:s", $time);
 
     	$where = array(

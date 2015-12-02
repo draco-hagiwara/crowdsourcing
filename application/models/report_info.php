@@ -10,7 +10,28 @@ class Report_info extends CI_Model
 
 
     /**
-     * 文字数カウント
+     * 個別投稿情報を取得
+     *
+     * @param	int
+     * @param	int
+     * @return	array()
+     */
+    public function get_report_data($pji_id, $pji_seq)
+    {
+
+    	$set_where["rep_pji_pj_id"] = $pji_id;
+    	$set_where["rep_pji_seq"]   = $pji_seq;
+
+    	$query = $this->db->get_where('tb_report_info', $set_where);
+
+    	$get_data = $query->result('array');
+
+    	return $get_data;
+
+    }
+
+    /**
+     * 指定された最小文字数カウント
      *
      * @param	int
      * @return	array()
@@ -31,7 +52,7 @@ class Report_info extends CI_Model
     }
 
     /**
-     * 1レコード更新 :: 案件内容
+     * 1レコード更新>投稿記事個別ID :: 案件内容
      *
      * @param	array()
      * @return	bool
@@ -45,6 +66,31 @@ class Report_info extends CI_Model
 
     	$where = array(
     			'rep_pji_pj_id' => $set_data['rep_pji_pj_id']
+    	);
+
+    	$result = $this->db->update('tb_report_info', $set_data, $where);
+    	return $result;
+    }
+
+    /**
+     * 1レコード更新>rep_pji_seq :: 個別投稿内容
+     *
+     * @param	array()
+     * @param	int
+     * @param	boolean
+     * @return	boolean
+     */
+    public function update_entryinfo($set_data, $pj_id, $rep_seq)
+    {
+
+    	$time = time();
+
+    	// 更新日時をセット
+    	$set_data['rep_update_date'] = date("Y-m-d H:i:s", $time);
+
+    	$where = array(
+    			'rep_pji_pj_id' => $pj_id,
+    			'rep_pji_seq'   => $rep_seq,
     	);
 
     	$result = $this->db->update('tb_report_info', $set_data, $where);

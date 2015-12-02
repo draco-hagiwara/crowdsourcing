@@ -1,60 +1,231 @@
-<?php if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+<?php
 
+//class Top extends CI_Controller {
 class Top extends MY_Controller
 {
-//class Top extends CI_Controller {
-
-	/**
-	 * Index Page for this controller.
-	 *
-	 * Maps to the following URL
-	 * 		http://example.com/index.php/welcome
-	 *	- or -
-	 * 		http://example.com/index.php/welcome/index
-	 *	- or -
-	 * Since this controller is set as the default controller in
-	 * config/routes.php, it's displayed at http://example.com/
-	 *
-	 * So any other public methods not prefixed with an underscore will
-	 * map to /index.php/welcome/<method_name>
-	 * @see http://codeigniter.com/user_guide/general/urls.html
-	 */
 
 	function __construct()
 	{
 		parent::__construct();
 
-		// セッション書き込み
-		if (!$this->session->userdata('ticket')) {
-			$setData = array(
-					'ticket' => md5(uniqid(mt_rand(), true)),
-					'w_login' => FALSE,
-					//'login_mem' => '',
-			);
-			$this->session->set_userdata($setData);
+		// セッションチェック
+		if ($this->session->userdata('w_login') == TRUE)
+		{
+			$this->smarty->assign('login_chk', TRUE);
 		} else {
-			// ログイン有無のチェック
-			$this->smarty->assign('login_chk', $this->session->userdata('w_login'));
-			//$this->smarty->assign('login_mem', $this->session->userdata('login_mem'));
+			$this->smarty->assign('login_chk', FALSE);
 		}
+
+		if (!$this->session->userdata('w_ticket')) {
+			$setData = array('w_ticket' => md5(uniqid(mt_rand(), true)));
+			$this->session->set_userdata($setData);
+		}
+
 	}
 
 	public function index()
 	{
 
-		$this->smarty->assign('login_chk', $this->session->userdata('w_login'));
-		//$this->smarty->assign('login_mem', $this->session->userdata('login_mem'));
+		// セッションデータをクリア
+		$this->load->model('comm_auth', 'comm_auth', TRUE);
+		$this->comm_auth->delete_session('writer');
+
+		// 初期値セット
+		$this->_form_item_set00();
+
+		// バリデーション・チェック
+		$this->_set_validation();											// バリデーション設定
+		$this->form_validation->run();
+
+		if ($this->session->userdata('w_login') == FALSE)
+		{
+
+			// 案件リストを取得
+			$this->load->model('Project', 'pj', TRUE);
+			$seach_list = $this->pj->get_seachlist(20);						// 表示件数=LIMIT値
+			$this->smarty->assign('seach_list', $seach_list);
+
+		} else {
+			$this->smarty->assign('login_name', $this->session->userdata('w_memNAME'));
+			$this->smarty->assign('mem_rank', $this->session->userdata('w_memRANK'));
+
+			// エントリー有無のチェック
+			$wr_id = $this->session->userdata('w_memID');
+			$this->load->model('Writer_info', 'wrinfo', TRUE);
+			if ($this->wrinfo->check_entry($wr_id))
+			{
+				$this->session->set_userdata('w_memENTRY', TRUE);
+				$this->smarty->assign('mem_entry', TRUE);
+			} else {
+				$this->session->set_userdata('w_memENTRY', FALSE);
+				$this->smarty->assign('mem_entry', FALSE);
+			}
+
+		}
+
+		//$this->session->set_userdata('w_memID',   $this->_memberID);		// メンバーID
+		//$this->session->set_userdata('w_memRANK', $this->_memberRANK);		// メンバーランキング(writerのみ)
+		//$this->session->set_userdata('w_memNAME', $this->_memberNAME);		// メンバー名前(writerはニックネーム)
+
+		//$this->smarty->assign('login_chk', $this->session->userdata('w_login'));
+
 		$this->view('writer/top/index.tpl');
 
 		//phpinfo();
 
 	}
 
+	// ご利用ガイド
+	public function guide()
+	{
+
+		// セッションデータをクリア
+		$this->load->model('comm_auth', 'comm_auth', TRUE);
+		$this->comm_auth->delete_session('writer');
+
+		// バリデーション・チェック
+		$this->_set_validation();											// バリデーション設定
+		$this->form_validation->run();
+
+		if ($this->session->userdata('w_login') == TRUE)
+		{
+
+			$this->smarty->assign('login_name', $this->session->userdata('w_memNAME'));
+			$this->smarty->assign('mem_rank', $this->session->userdata('w_memRANK'));
+
+			// エントリー有無のチェック
+			$wr_id = $this->session->userdata('w_memID');
+			$this->load->model('Writer_info', 'wrinfo', TRUE);
+			if ($this->wrinfo->check_entry($wr_id))
+			{
+				$this->session->set_userdata('w_memENTRY', TRUE);
+				$this->smarty->assign('mem_entry', TRUE);
+			} else {
+				$this->session->set_userdata('w_memENTRY', FALSE);
+				$this->smarty->assign('mem_entry', FALSE);
+			}
+
+		}
+
+		$this->view('writer/top/guide.tpl');
+
+	}
+
+	// 会社概要
+	public function aboutus()
+	{
+
+		// セッションデータをクリア
+		$this->load->model('comm_auth', 'comm_auth', TRUE);
+		$this->comm_auth->delete_session('writer');
+
+		// バリデーション・チェック
+		$this->_set_validation();											// バリデーション設定
+		$this->form_validation->run();
+
+		if ($this->session->userdata('w_login') == TRUE)
+		{
+
+			$this->smarty->assign('login_name', $this->session->userdata('w_memNAME'));
+			$this->smarty->assign('mem_rank', $this->session->userdata('w_memRANK'));
+
+			// エントリー有無のチェック
+			$wr_id = $this->session->userdata('w_memID');
+			$this->load->model('Writer_info', 'wrinfo', TRUE);
+			if ($this->wrinfo->check_entry($wr_id))
+			{
+				$this->session->set_userdata('w_memENTRY', TRUE);
+				$this->smarty->assign('mem_entry', TRUE);
+			} else {
+				$this->session->set_userdata('w_memENTRY', FALSE);
+				$this->smarty->assign('mem_entry', FALSE);
+			}
+
+		}
+
+		$this->view('writer/top/aboutus.tpl');
+
+	}
+
+	// 個人情報保護方針
+	public function privacy()
+	{
+
+		// セッションデータをクリア
+		$this->load->model('comm_auth', 'comm_auth', TRUE);
+		$this->comm_auth->delete_session('writer');
+
+		// バリデーション・チェック
+		$this->_set_validation();											// バリデーション設定
+		$this->form_validation->run();
+
+		if ($this->session->userdata('w_login') == TRUE)
+		{
+
+			$this->smarty->assign('login_name', $this->session->userdata('w_memNAME'));
+			$this->smarty->assign('mem_rank', $this->session->userdata('w_memRANK'));
+
+			// エントリー有無のチェック
+			$wr_id = $this->session->userdata('w_memID');
+			$this->load->model('Writer_info', 'wrinfo', TRUE);
+			if ($this->wrinfo->check_entry($wr_id))
+			{
+				$this->session->set_userdata('w_memENTRY', TRUE);
+				$this->smarty->assign('mem_entry', TRUE);
+			} else {
+				$this->session->set_userdata('w_memENTRY', FALSE);
+				$this->smarty->assign('mem_entry', FALSE);
+			}
+
+		}
+
+		$this->view('writer/top/privacy.tpl');
+
+	}
+
+	// サイトマップ
+	public function sitemap()
+	{
+
+		// セッションデータをクリア
+		$this->load->model('comm_auth', 'comm_auth', TRUE);
+		$this->comm_auth->delete_session('writer');
+
+		// バリデーション・チェック
+		$this->_set_validation();											// バリデーション設定
+		$this->form_validation->run();
+
+		if ($this->session->userdata('w_login') == TRUE)
+		{
+
+			$this->smarty->assign('login_name', $this->session->userdata('w_memNAME'));
+			$this->smarty->assign('mem_rank', $this->session->userdata('w_memRANK'));
+
+			// エントリー有無のチェック
+			$wr_id = $this->session->userdata('w_memID');
+			$this->load->model('Writer_info', 'wrinfo', TRUE);
+			if ($this->wrinfo->check_entry($wr_id))
+			{
+				$this->session->set_userdata('w_memENTRY', TRUE);
+				$this->smarty->assign('mem_entry', TRUE);
+			} else {
+				$this->session->set_userdata('w_memENTRY', FALSE);
+				$this->smarty->assign('mem_entry', FALSE);
+			}
+
+		}
+
+		$this->view('writer/top/sitemap.tpl');
+
+	}
+
+
+
 	// ログアウト チェック
 	public function logout()
 	{
 		// セッションのチェック
-		$this->ticket = $this->session->userdata('ticket');
+		$this->ticket = $this->session->userdata('w_ticket');
 		if (!$this->ticket) {
 			$message = 'セッション・エラーが発生しました。';
 			show_error($message, 400);
@@ -71,7 +242,33 @@ class Top extends MY_Controller
 		redirect(base_url());
 	}
 
+
+	// 項目 初期値セット
+	private function _form_item_set00()
+	{
+
+		// ジャンル 選択項目セット
+		$this->load->model('comm_select', 'select', TRUE);
+		$genre_list = $this->select->get_genre();
+
+		$this->smarty->assign('options_genre_list',   $genre_list);
+
+	}
+
+	// フォーム・バリデーションチェック
+	private function _set_validation()
+	{
+
+		$rule_set = array(
+		);
+
+		$this->load->library('form_validation', $rule_set);						// バリデーションクラス読み込み
+
+	}
+
+
+
 }
 
-/* End of file welcome.php */
-/* Location: ./application/controllers/welcome.php */
+/* End of file top.php */
+/* Location: ./application/controllers/top.php */

@@ -304,14 +304,14 @@
     <div class="col-sm-offset-3 col-sm-1">
       {$attr_sub['name']  = 'submit'}
       {$attr_sub['type']  = 'submit'}
-      {$attr_new['value'] = '_submit'}
+      {$attr_sub['value'] = '_submit'}
       {form_button($attr_sub , '更　新' , 'class="btn btn-default"')}
     </div>
     <div class="col-sm-offset-1 col-sm-1">
-      {$attr_new['name']  = 'submit'}
-      {$attr_new['type']  = 'submit'}
-      {$attr_new['value'] = '_new'}
-      {form_button($attr_new , '続けて新規登録' , 'class="btn btn-default"')}
+      {$attr_sub['name']  = 'submit'}
+      {$attr_sub['type']  = 'submit'}
+      {$attr_sub['value'] = '_new'}
+      {form_button($attr_sub , '続けて新規登録' , 'class="btn btn-default"')}
     </div>
   </div>
   {else}
@@ -319,7 +319,7 @@
     <div class="col-sm-offset-3 col-sm-9">
       {$attr_sub['name']  = 'submit'}
       {$attr_sub['type']  = 'submit'}
-      {$attr_new['value'] = '_submit'}
+      {$attr_sub['value'] = '_submit'}
       {form_button($attr_sub , '登　　録' , 'class="btn btn-default"')}
     </div>
   </div>

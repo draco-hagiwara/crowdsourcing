@@ -108,9 +108,10 @@
 					{$list.pe_id}
 				</td>
 				<td>
-					{if $list.pe_status == "0"}<font color="#ffffff" style="background-color:#008000">準 備 中</font>
-					{elseif $list.pe_status == "1"}<font color="#ffffff" style="background-color:#0000ff">申 請 中</font>
-					{elseif $list.pe_status == "4"}<font color="#ffffff" style="background-color:#a9a9a9">取　　消</font>
+					{if $list.pe_status == "0"}<font color="#ffffff" style="background-color:green">準 備 中</font>
+					{elseif $list.pe_status == "1"}<font color="#ffffff" style="background-color:blue">申 請 中</font>
+					{elseif $list.pe_status == "3"}<font color="#ffffff" style="background-color:silver">非 承 認</font>
+					{elseif $list.pe_status == "4"}<font color="#ffffff" style="background-color:gray">取　　消</font>
 					{else}}エラー
 					{/if}
 				</td>

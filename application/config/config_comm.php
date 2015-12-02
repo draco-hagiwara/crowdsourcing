@@ -7,9 +7,9 @@
 */
 
 // ログインメンバー
-$config['LOGIN_WRITER']     = 'writer';							// ライター
-$config['LOGIN_CLIENT']     = 'client';							// クライアント
-$config['LOGIN_ADMIN']      = 'admin';							// 管理者
+$config['LOGIN_WRITER']     = 'writer';						// ライター
+$config['LOGIN_CLIENT']     = 'client';						// クライアント
+$config['LOGIN_ADMIN']      = 'admin';						// 管理者
 
 
 
@@ -29,6 +29,27 @@ $config['MEM_RANK_NAME'] =
 			"4" => "プラチナ",
 			"5" => "プレミアム",
 	);
+
+// 会員ランク
+$config['RANK_GUEST_ID']    = '0';							// ゲスト
+$config['RANK_GUEST']       = 'ゲスト';
+$config['RANK_BRONZE_ID']   = '1';							// ブロンズ
+$config['RANK_BRONZE']      = 'ブロンズ';
+$config['RANK_SILVER_ID']   = '2';							// シルバー
+$config['RANK_SILVER']      = 'シルバー';
+$config['RANK_GOLD_ID']     = '3';							// ゴールド
+$config['RANK_GOLD']        = 'ゴールド';
+$config['RANK_PLATINUM_ID'] = '4';							// プラチナ
+$config['RANK_PLATINUM']    = 'プラチナ';
+$config['RANK_PREMIERE_ID'] = '5';							// プレミアム
+$config['RANK_PREMIERE']    = 'プレミアム';
+
+
+
+
+
+
+
 
 
 // 仮PW発行制限時間
@@ -74,6 +95,19 @@ $config['TANKA_ADD_PRICE'] =
 			"1" => "0.0",										// ふつう
 			"2" => "+0.1",										// 難しい
 	);
+
+
+
+
+
+/**
+ * 【その他】
+ */
+
+// Pagination 設定:1ページ当たりの表示件数
+$config['PAGINATION_PER_PAGE'] = '5';
+
+
 
 
 

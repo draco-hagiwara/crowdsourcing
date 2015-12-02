@@ -14,19 +14,116 @@ class Project extends CI_Model
      * @param	int
      * @return	array()
      */
-    public function get_seachlist()
+    public function get_seachlist($limit_cnt)
     {
 
-    	$query = $this->db->get('vw_searchlist_pj', 20);							// LIMIT=20
+    	$query = $this->db->get('vw_searchlist_pj', $limit_cnt);					// LIMIT=20
     	$get_data = $query->result('array');
 
     	return $get_data;
 
     }
 
+    /**
+     * 作業エントリー一覧の取得
+     *
+     * @param	int
+     * @return	array()
+     */
+    public function get_entry_data($get_pj_id)
+    {
+
+    	$set_where["pj_id"] = $get_pj_id;
+
+    	$query = $this->db->get_where('vw_posting_pj', $set_where);
+
+    	$get_data = $query->result('array');
+
+    	return $get_data;
+
+    }
 
     /**
-     * 案件情報のリスト＆件数を取得
+     * 作業個別情報の取得
+     *
+     * @param	int
+     * @param	int
+     * @param	tinyint
+     * @return	array()
+     */
+    public function get_entry_info($get_pj_id, $pji_seq = NULL, $pji_status = NULL)
+    {
+
+    	$set_where["pji_pj_id"]      = $get_pj_id;
+    	if ($pji_seq != NULL)
+    	{
+    		$set_where["pji_seq"]    = $pji_seq;
+    	}
+    	if ($pji_status != NULL)
+    	{
+    		$set_where["pji_status"] = 1;
+    	}
+
+    	// view から取得
+    	$query = $this->db->get_where('vw_posting_pji', $set_where);
+
+    	$get_data = $query->result('array');
+
+    	return $get_data;
+
+    }
+
+    /**
+     * 作業情報の取得
+     *
+     * @param	int
+     * @return	array()
+     */
+    public function get_order($get_pj_id)
+    {
+
+    	$set_where["pj_id"] = $get_pj_id;
+
+    	$query = $this->db->get_where('tb_project', $set_where);
+
+    	$get_data = $query->result('array');
+
+    	return $get_data;
+
+    }
+
+    /**
+     * 作業個別情報の取得
+     *
+     * @param	int
+     * @param	int
+     * @param	tinyint
+     * @return	array()
+     */
+    public function get_order_info($get_pj_id, $pji_seq = NULL, $pji_status = NULL)
+    {
+
+    	$set_where["pji_pj_id"]      = $get_pj_id;
+    	if ($pji_seq != NULL)
+    	{
+    		$set_where["pji_seq"]    = $pji_seq;
+    	}
+    	if ($pji_status != NULL)
+    	{
+    		$set_where["pji_status"] = 1;
+    	}
+
+    	// view から取得
+    	$query = $this->db->get_where('vw_searchlist_pji', $set_where);
+
+    	$get_data = $query->result('array');
+
+    	return $get_data;
+
+    }
+
+    /**
+     * 作業情報のリスト＆件数を取得
      *
      * @param	array() : 検索項目値
      * @param	int     : 1ページ当たりの表示件数(LIMIT値)
@@ -67,7 +164,7 @@ class Project extends CI_Model
     }
 
     /**
-     * 案件情報のリスト＆件数を取得
+     * 作業情報のリスト＆件数を取得
      *
      * @param	array() : WHERE句項目
      * @param	array() : WHERE LIKE句項目
@@ -155,6 +252,24 @@ class Project extends CI_Model
 
     }
 
+    /**
+     * 1レコード更新
+     *
+     * @param	array()
+     * @return	bool
+     */
+    public function update_project($set_data)
+    {
+
+    	$where = array(
+    			'pj_id' => $set_data['pj_id'],
+    	);
+
+    	$result = $this->db->update('tb_project', $set_data, $where);
+    	return $result;
+    }
+
+
 
 
 
@@ -206,54 +321,8 @@ class Project extends CI_Model
 
 
 
-    /**
-     * 案件情報の取得
-     *
-     * @param	int
-     * @return	array()
-     */
-    public function get_order($get_pj_id)
-    {
 
-    	$set_where["pj_id"] = $get_pj_id;
 
-    	$query = $this->db->get_where('tb_project', $set_where);
-
-    	$get_data = $query->result('array');
-
-    	return $get_data;
-
-    }
-
-    /**
-     * 案件情報の取得
-     *
-     * @param	int
-     * @param	int
-     * @param	tinyint
-     * @return	array()
-     */
-    public function get_order_info($get_pj_id, $pji_seq = NULL, $pji_status = NULL)
-    {
-
-    	$set_where["pji_pj_id"]      = $get_pj_id;
-    	if ($pji_seq != NULL)
-    	{
-    		$set_where["pji_seq"]    = $pji_seq;
-    	}
-    	if ($pji_status != NULL)
-    	{
-    		$set_where["pji_status"] = 1;
-    	}
-
-    	// view から取得
-    	$query = $this->db->get_where('vw_searchlist_pji', $set_where);
-
-    	$get_data = $query->result('array');
-
-    	return $get_data;
-
-    }
 
 
 	/**
@@ -320,36 +389,6 @@ class Project extends CI_Model
     	// 追加された「案件ID」を返す
     	return $get_rep_id;
 
-    }
-
-
-
-    /**
-     * 1レコード更新 :: 案件内容
-     *
-     * @param	array()
-     * @return	bool
-     */
-    public function update_project($set_data)
-    {
-
-    	$time = time();
-
-    	// 公開設置日時をチェック
-    	if ($set_data['pj_status'] == '1')
-    	{
-    		$set_data['pj_open_date'] = date("Y-m-d H:i:s", $time);
-    	}
-
-    	// 更新日時をセット
-    	$set_data['pj_update_date'] = date("Y-m-d H:i:s", $time);
-
-    	$where = array(
-    			'pj_id' => $set_data['pj_id']
-    	);
-
-    	$result = $this->db->update('tb_project', $set_data, $where);
-    	return $result;
     }
 
 

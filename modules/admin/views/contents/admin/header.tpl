@@ -44,17 +44,9 @@
         <div id="patern05" class="collapse navbar-collapse">
           <ul class="nav navbar-nav">
 		    <li><a href="/admin/top/">TOP</a></li>
-		    <li><a href="#" class="dropdown-toggle" data-toggle="dropdown">CL申請管理<b class="caret"></b></a>
-			  <ul class="dropdown-menu right">
-				<li><a href="/admin/entrylist/">CL案件申請一覧</a></li>
-			  </ul>
-		    </li>
-		    <li><a href="#" class="dropdown-toggle" data-toggle="dropdown">案件管理<b class="caret"></b></a>
-			  <ul class="dropdown-menu right">
-				<li><a href="/admin/orderlist/">案件一覧</a></li>
-			  </ul>
-		    </li>
-		    <li><a href="">投稿記事管理</a></li>
+		    <li><a href="/admin/entrylist/">CL案件申請一覧</a></li>
+		    <li><a href="/admin/orderlist/">案件一覧</a></li>
+		    <li><a href="/admin/posting/">投稿記事一覧</a></li>
 		    <li><a href="#" class="dropdown-toggle" data-toggle="dropdown">ライター管理<b class="caret"></b></a>
 			  <ul class="dropdown-menu right">
 				<li><a href="/admin/writerlist/">ライター一覧</a></li>

@@ -145,6 +145,7 @@ if (defined('ENVIRONMENT'))
 	if (defined('STDIN'))
 	{
 		chdir(dirname(__FILE__));
+		$assign_to_config['uri_protocol'] = 'CLI';		// コマンドライン(CLI)使用可
 	}
 
 	if (realpath($system_path) !== FALSE)

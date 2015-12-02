@@ -128,6 +128,7 @@ function fmSubmit(formName, url, method, num) {
 				<th></th>
 				<th>ID</th>
 				<th>status</th>
+				<th>ランク</th>
 				<th>ニックネーム</th>
 				<th>名前</th>
 				<th>メールアドレス</th>
@@ -153,6 +154,14 @@ function fmSubmit(formName, url, method, num) {
 					{elseif $wr.wr_status == "7"}<font color="#8a2be2">一時停止</font>
 					{elseif $wr.wr_status == "8"}<font color="#ffffff" style="background-color:#800000">強制停止</font>
 					{elseif $wr.wr_status == "9"}<font color="#ffffff" style="background-color:#a9a9a9">退　　　会</font>
+					{else}}エラー
+					{/if}
+				</td>
+				<td>
+					{if $wr.wr_mm_rank_id == "0"}<font color="#ffffff" style="background-color:lime">ゲスト</font>
+					{elseif $wr.wr_mm_rank_id == "1"}<font color="#ffffff" style="background-color:sienna">ブロンズ</font>
+					{elseif $wr.wr_mm_rank_id == "2"}<font color="#ffffff" style="background-color:silver">シルバー</font>
+					{elseif $wr.wr_mm_rank_id == "3"}<font color="#ffffff" style="background-color:gold">ゴールド</font>
 					{else}}エラー
 					{/if}
 				</td>

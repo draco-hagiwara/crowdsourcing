@@ -25,6 +25,7 @@ class Writer extends CI_Model
     	$set_select["wr_id"]       = $arr_post['wr_id'];
     	$set_select["wr_email"]    = $arr_post['wr_email'];
     	$set_select["wr_status"]   = $arr_post['wr_status'];
+    	$set_select["wr_del_flg"]  = 0;
 
     	// ORDER BY
     	if ($arr_post['orderid'] == 'ASC')
@@ -54,6 +55,7 @@ class Writer extends CI_Model
     	// 各SQL項目へセット
     	$sql = 'SELECT * FROM `tb_writer` ';
     	$sql .= ' WHERE wr_id = ' . $tmp_writerid;
+    	$sql .= ' AND wr_del_flg = 0';
 
     	// クエリー実行
     	$query = $this->db->query($sql);
@@ -166,7 +168,8 @@ class Writer extends CI_Model
     				'wr_update_date' => date("Y-m-d H:i:s", $time),
     		);
     		$where = array(
-    				'wr_id' => $wr_id
+    				'wr_id' => $wr_id,
+    				'wr_del_flg' => 0,
     		);
     	} else {
     		// 仮パスワード更新
@@ -178,7 +181,8 @@ class Writer extends CI_Model
 	    			'wr_tmp_pwtime'   => date("Y-m-d H:i:s", $time),
 	    	);
 			$where = array(
-						'wr_email' => $wr_email
+					'wr_email' => $wr_email,
+    				'wr_del_flg' => 0,
 			);
     	}
 
@@ -200,12 +204,33 @@ class Writer extends CI_Model
     	$set_data['wr_update_date'] = date("Y-m-d H:i:s", $time);
 
     	$where = array(
-    			'wr_id' => $set_data['wr_id']
+    			'wr_id' => $set_data['wr_id'],
+    			'wr_del_flg' => 0,
     	);
 
     	$result = $this->db->update('tb_writer', $set_data, $where);
     	return $result;
     }
+
+
+    /**
+     * 1レコード更新 :: 投稿記事 <= 審査OK
+     *
+     * @param	array()
+     * @return	bool
+     */
+    public function update_wr_posting($set_data)
+    {
+
+    	$where = array(
+    			'wr_id' => $set_data['wr_id'],
+    			'wr_del_flg' => 0,
+    	);
+
+    	$result = $this->db->update('tb_writer', $set_data, $where);
+    	return $result;
+    }
+
 
     /**
      * ログイン日時の更新
@@ -221,7 +246,8 @@ class Writer extends CI_Model
     			'wr_lastlogin' => date("Y-m-d H:i:s", $time)
     	);
     	$where = array(
-    			'wr_id' => $wr_id
+    			'wr_id' => $wr_id,
+    			'wr_del_flg' => 0,
     	);
     	$this->db->update('tb_writer', $setData, $where);
     	return $result;
@@ -246,7 +272,8 @@ class Writer extends CI_Model
     			'wr_update_date'  => date("Y-m-d H:i:s", $time),
     	);
     	$where = array(
-    			'wr_id' => $wr_id
+    			'wr_id' => $wr_id,
+    			'wr_del_flg' => 0,
     	);
     	$result = $this->db->update('tb_writer', $setData, $where);
     	return $result;
@@ -262,6 +289,7 @@ class Writer extends CI_Model
     {
     	$where = array(
     			'wr_email' => $loginid,
+    			'wr_del_flg' => 0,
     	);
     	$query = $this->db->get_where('tb_writer', $where);
 
@@ -283,6 +311,7 @@ class Writer extends CI_Model
     {
     	$where = array(
     			'wr_id' => $wrid,
+    			'wr_del_flg' => 0,
     	);
     	$query = $this->db->get_where('tb_writer', $where);
 
@@ -305,7 +334,8 @@ class Writer extends CI_Model
     {
 
     	$sql = 'SELECT * FROM `tb_writer` '
-    			. 'WHERE `wr_email` = ? ';
+    			. 'WHERE `wr_email` = ? '
+    			. 'AND `wr_del_flg` = 0 ';
 
     	$values = array(
     			$loginid

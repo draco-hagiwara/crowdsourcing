@@ -161,7 +161,7 @@
 
   {if ($entry_no == '02') OR ($entry_no == '03')}
   <div class="form-group">
-    <label for="pei_status" class="col-sm-3 control-label">使用有無<font color=red>【必須】</font></label>
+    <label for="pei_status" class="col-sm-3 control-label">使用有無</label>
     <div class="col-sm-9">
 		  {if  $entry_info.pei_status == '1'}使用する{else}使用しない{/if}
 		  {form_hidden('pei_status', $entry_info.pei_status)}

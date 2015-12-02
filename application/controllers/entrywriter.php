@@ -13,11 +13,11 @@ class Entrywriter extends MY_Controller
 		$this->config->load('config_pref');									// 都道府県情報読み込み
 
 			// セッション書き込み
-		if (!$this->session->userdata('ticket')) {
+		if (!$this->session->userdata('w_ticket')) {
 			$setData = array(
-					'ticket' => md5(uniqid(mt_rand(), true)),
+					'w_ticket' => md5(uniqid(mt_rand(), true)),
 					'login_chk' => '',
-					'login_mem' => '',
+					//'login_mem' => '',
 			);
 			$this->session->set_userdata($setData);
 		} else {
@@ -54,7 +54,7 @@ class Entrywriter extends MY_Controller
 	{
 
 		// セッションのチェック
-		$this->ticket = $this->session->userdata('ticket');
+		$this->ticket = $this->session->userdata('w_ticket');
 		//if (!$this->input->post('ticket') || $this->input->post('ticket') !== $this->ticket) {
 		if (!$this->ticket) {
 			$message = 'セッション・エラーが発生しました。';
@@ -72,7 +72,7 @@ class Entrywriter extends MY_Controller
 	{
 
 		// セッションのチェック
-		$this->ticket = $this->session->userdata('ticket');
+		$this->ticket = $this->session->userdata('w_ticket');
 		if (!$this->input->post('ticket') || $this->input->post('ticket') !== $this->ticket) {
 			$message = 'セッション・エラーが発生しました。';
 			show_error($message, 400);
@@ -99,7 +99,7 @@ class Entrywriter extends MY_Controller
 	{
 
 			// セッションのチェック
-		$this->ticket = $this->session->userdata('ticket');
+		$this->ticket = $this->session->userdata('w_ticket');
 		if (!$this->input->post('ticket') || $this->input->post('ticket') !== $this->ticket) {
 			$message = 'セッション・エラーが発生しました。';
 			show_error($message, 400);
@@ -142,7 +142,7 @@ class Entrywriter extends MY_Controller
 	{
 
 		// セッションのチェック
-		$this->ticket = $this->session->userdata('ticket');
+		$this->ticket = $this->session->userdata('w_ticket');
 		if (!$this->input->post('ticket') || $this->input->post('ticket') !== $this->ticket) {
 			$message = 'セッション・エラーが発生しました。';
 			show_error($message, 400);
@@ -186,8 +186,13 @@ class Entrywriter extends MY_Controller
 
 		// 会員ステータス（：仮登録）の読み込み
 		$this->config->load('config_status');
-		$this->member_status = $this->config->item('WRITER_KARITOUROKU');
+		$this->member_status = $this->config->item('WRITER_KARITOUROKU_ID');
 		$this->setData["wr_status"] = $this->member_status;
+
+		// 会員ランク設定:初期=ブロンズ
+		$this->config->load('config_comm');
+		$this->member_rank = $this->config->item('RANK_BRONZE_ID');
+		$this->setData["wr_mm_rank_id"] = $this->member_rank;
 
 		// メルマガ有無フラグ判定
 		if ($mm_flg == FALSE) {

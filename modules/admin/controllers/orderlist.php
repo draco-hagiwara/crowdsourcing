@@ -142,9 +142,6 @@ class Orderlist extends MY_Controller
 	public function detail00()
 	{
 
-		// SELECT項目 初期値セット
-		$this->_form_item_set00();
-
 		// セッションからフラッシュデータ読み込み
 		$flash_data['a_pj_id'] = $this->session->userdata('a_pj_id');
 
@@ -174,11 +171,14 @@ class Orderlist extends MY_Controller
 
 
 
+		// SELECT項目 初期値セット
+		$this->_form_item_set00();
 
-		// ジャンル 選択項目セット
-		$this->load->model('comm_genre', 'gr', TRUE);
-		$genre_list = $this->gr->get_genre();
-		$get_data[0]['genre01_name']     = $genre_list[$get_data[0]['pj_genre01']];
+
+		//// ジャンル 選択項目セット
+		//$this->load->model('comm_select', 'select', TRUE);
+		//$genre_list = $this->select->get_genre();
+		//$get_data[0]['genre01_name']     = $genre_list[$get_data[0]['pj_genre01']];
 
 		$get_data[0]['pj_delivery_time'] = date('Y-m-d H:i', strtotime($get_data[0]['pj_delivery_time']));
 		$get_data[0]['pj_start_time']    = date('Y-m-d H:i', strtotime($get_data[0]['pj_start_time']));
@@ -364,9 +364,48 @@ class Orderlist extends MY_Controller
 			if ($set_orderno == '00')
 			{
 
-				$this->load->model('Project', 'pj', TRUE);							// models 読み込み
+				$this->load->model('Project',     'pj',    TRUE);					// models 読み込み
+				$this->load->model('Report_info', 'rep',   TRUE);
+				$this->load->model('Tanka',       'tanka', TRUE);
 
-				$set_update_data['pj_id']        = $flash_data['a_pj_id'];			// 案件ID
+
+				// 各項目 初期値セット
+				$this->_form_item_set00();
+
+				// 現在の会員ランク単価を取得
+				$get_data = $this->pj->get_order($set_update_data['pj_id']);
+				$tmp_clid = $get_data[0]['pj_pe_cl_id'];
+				$this->_get_member_tanka($tmp_clid);
+
+
+				$set_update_data['pj_id'] = $flash_data['a_pj_id'];					// 案件ID
+
+				// 最低会員単価の計算
+				if ($set_update_data['pj_word_tanka'] > 0)
+				{
+					// 難易度単価の取得 : カンタン="0"固定指定
+					$tmp_diff_tanka = $this->tanka->get_difftanka($tmp_clid, 0);
+
+					$set_update_data['pj_char_tanka'] =  $set_update_data['pj_word_tanka'] +  $tmp_diff_tanka['taa_price'];
+				} else {
+					// 会員単価の取得 : ブロンズ="1"固定指定
+					$tmp_rank_tanka = $this->tanka->get_memtanka($tmp_clid, 1);
+
+					// 難易度単価の取得
+					$tmp_diff_tanka = $this->tanka->get_difftanka($tmp_clid, 0);
+
+					$set_update_data['pj_char_tanka'] =  $tmp_rank_tanka['ta_price'] +  $tmp_diff_tanka['taa_price'];
+				}
+
+				// 最低文字数の取得 (タイトル+本文の最小文字数)
+				$tmp_wordcnt = $this->rep->get_word_cnt($flash_data['a_pj_id']);
+				$set_update_data['pj_char_cnt'] = $tmp_wordcnt['SUM(rep_t_char_min)'] + $tmp_wordcnt['SUM(rep_b_char_min)'];
+
+				// ライター最終投稿時間を求める。=公開(募集)終了日時-ライター原稿作成max時間
+				$tmp_end_time   = $set_update_data['pj_end_time'];
+				$tmp_limit_time = intval($set_update_data['pj_limit_time']);
+				$set_update_data['pj_delivery_time'] = date('Y-m-d H:i', strtotime("$tmp_end_time - $tmp_limit_time minute"));
+
 				unset($set_update_data["order_no"]) ;
 				unset($set_update_data["submit"]) ;
 
@@ -377,16 +416,6 @@ class Orderlist extends MY_Controller
 				{
 					redirect('/orderlist/');
 				}
-
-
-
-				// 各項目 初期値セット
-				$this->_form_item_set00();
-
-				// 現在の会員ランク単価を取得
-				$this->load->model('Project', 'pj', TRUE);							// models 読み込み
-				$get_data = $this->pj->get_order($set_update_data['pj_id']);
-				$this->_get_member_tanka($get_data[0]['pj_pe_cl_id']);
 
 			} else {
 
@@ -520,8 +549,8 @@ class Orderlist extends MY_Controller
 	{
 
 		// ジャンル 選択項目セット
-		$this->load->model('comm_genre', 'gr', TRUE);
-		$genre_list = $this->gr->get_genre();
+		$this->load->model('comm_select', 'select', TRUE);
+		$genre_list = $this->select->get_genre();
 
 		// 案件ID 並び替え選択項目セット
 		$arroptions_orderpjid = array (
@@ -584,8 +613,8 @@ class Orderlist extends MY_Controller
 		);
 
 		// ジャンル 選択項目セット
-		$this->load->model('comm_genre', 'gr', TRUE);
-		$genre_list = $this->gr->get_genre();
+		$this->load->model('comm_select', 'select', TRUE);
+		$genre_list = $this->select->get_genre();
 
 		$this->smarty->assign('options_pj_status',            $arroptions_pjstatus);
 		$this->smarty->assign('options_pj_mm_rank_id',        $arroptions_mrank);
@@ -754,11 +783,11 @@ class Orderlist extends MY_Controller
 						'rules'   => 'trim|numeric'
 				),
 
-				array(
-						'field'   => 'pj_delivery_time',
-						'label'   => 'ライター投稿納期',
-						'rules'   => 'trim|required|regex_match[/^\d{4}-\d{1,2}-\d{1,2} \d{1,2}:\d{1,2}+$/]|max_length[16]'
-				),
+				//array(
+				//		'field'   => 'pj_delivery_time',
+				//		'label'   => 'ライター投稿納期',
+				//		'rules'   => 'trim|required|regex_match[/^\d{4}-\d{1,2}-\d{1,2} \d{1,2}:\d{1,2}+$/]|max_length[16]'
+				//),
 				array(
 						'field'   => 'pj_limit_time',
 						'label'   => 'ライター投稿制限時間',
@@ -845,12 +874,12 @@ class Orderlist extends MY_Controller
 				array(
 						'field'   => 'rep_t_char_min',
 						'label'   => 'タイトル：最低 使用文字数',
-						'rules'   => 'trim|max_length[10000]'
+						'rules'   => 'trim|required|max_length[10000]'
 				),
 				array(
 						'field'   => 'rep_t_char_max',
 						'label'   => 'タイトル：最大 使用文字数',
-						'rules'   => 'trim|max_length[10000]'
+						'rules'   => 'trim|required|max_length[10000]'
 				),
 
 				array(
@@ -931,12 +960,12 @@ class Orderlist extends MY_Controller
 				array(
 						'field'   => 'rep_b_char_min',
 						'label'   => 'タイトル：最低 使用文字数',
-						'rules'   => 'trim|max_length[10000]'
+						'rules'   => 'trim|required|max_length[10000]'
 				),
 				array(
 						'field'   => 'rep_b_char_max',
 						'label'   => 'タイトル：最大 使用文字数',
-						'rules'   => 'trim|max_length[10000]'
+						'rules'   => 'trim|required|max_length[10000]'
 				),
 
 				array(

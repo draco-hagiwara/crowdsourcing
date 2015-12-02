@@ -12,9 +12,9 @@ class Contact extends MY_Controller
 		$this->load->library('form_validation');							// バリデーションクラス読み込み
 
 		// セッション書き込み
-		if (!$this->session->userdata('ticket')) {
+		if (!$this->session->userdata('w_ticket')) {
 			$this->ticket = md5(uniqid(mt_rand(), true));
-			$this->session->set_userdata('ticket', $this->ticket);
+			$this->session->set_userdata('w_ticket', $this->ticket);
 		}
 
 	}
@@ -24,7 +24,7 @@ class Contact extends MY_Controller
 	{
 
 		// セッションのチェック
-		$this->ticket = $this->session->userdata('ticket');
+		$this->ticket = $this->session->userdata('w_ticket');
 		//if (!$this->input->post('ticket') || $this->input->post('ticket') !== $this->ticket) {
 		if (!$this->ticket)
 		{
@@ -45,7 +45,7 @@ class Contact extends MY_Controller
 
 
 		// セッションのチェック
-		$this->ticket = $this->session->userdata('ticket');
+		$this->ticket = $this->session->userdata('w_ticket');
 		if (!$this->input->post('ticket') || $this->input->post('ticket') !== $this->ticket)
 		{
 			$message = 'セッション・エラーが発生しました。';
@@ -68,7 +68,7 @@ class Contact extends MY_Controller
 	{
 
 		// セッションのチェック
-		$this->ticket = $this->session->userdata('ticket');
+		$this->ticket = $this->session->userdata('w_ticket');
 		if (!$this->input->post('ticket') || $this->input->post('ticket') !== $this->ticket)
 		{
 			$message = 'セッション・エラーが発生しました。';
