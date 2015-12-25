@@ -1,5 +1,5 @@
 {* ヘッダー部分　START *}
-	{include file="../header.tpl" head_index="1"}
+    {include file="../header.tpl" head_index="1"}
 
 <script src="{base_url()}../js/my/cnfmandsubmit.js"></script>
 
@@ -16,9 +16,9 @@
 
 <ul class="nav nav-tabs">
   {if $entry_no == '00'}<li role="presentation" class="active">{else}<li role="presentation">{/if}<a href="/admin/posting/detail00">投稿内容</a></li>
-  {if $entry_no == '01'}<li role="presentation" class="active">{else}<li role="presentation">{/if}<a href="/admin/posting/detail01/">投稿１</a></li>
-  {if $entry_no == '02'}<li role="presentation" class="active">{else}<li role="presentation">{/if}<a href="/admin/posting/detail02/">投稿２</a></li>
-  {if $entry_no == '03'}<li role="presentation" class="active">{else}<li role="presentation">{/if}<a href="/admin/posting/detail03/">投稿３</a></li>
+  {if $entry_no == '01'}<li role="presentation" class="active">{else}<li role="presentation">{/if}<a href="/admin/posting/detail01/">投稿記事１</a></li>
+  {if $entry_no == '02'}<li role="presentation" class="active">{else}<li role="presentation">{/if}<a href="/admin/posting/detail02/">投稿記事２</a></li>
+  {if $entry_no == '03'}<li role="presentation" class="active">{else}<li role="presentation">{/if}<a href="/admin/posting/detail03/">投稿記事３</a></li>
 </ul>
 
 
@@ -31,23 +31,28 @@
   <div class="form-group">
     <label for="pj_id" class="col-sm-3 control-label">案件 ID</label>
     <div class="col-sm-4">
-		{$entry_info.pj_id}
-		{form_hidden('pj_id', $entry_info.pj_id)}
+        {$entry_info.pj_id}
+        {form_hidden('pj_id', $entry_info.pj_id)}
     </div>
   </div>
   <div class="form-group">
     <label for="pj_status" class="col-sm-3 control-label">ステータス</label>
     <div class="col-sm-4">
-      {$options_pj_status[$entry_info.pj_status]}
+      {if $entry_info.pj_entry_status == "1"}
+        {$options_pj_status[$entry_info.pj_status]}
+        {form_hidden('pj_status', $entry_info.pj_status)}
+      {else}
+        {form_dropdown('pj_status', $options_pj_status, {$entry_info.pj_status})}
+      {/if}
     </div>
   </div>
   <div class="form-group">
     <label for="pj_entry_status" class="col-sm-3 control-label">エントリー状態</label>
     <div class="col-sm-4">
-		{if $entry_info.pj_entry_status == "1"}<font color="#ffffff" style="background-color:navy">エントリー</font>
-		{else}<font color="#ffffff" style="background-color:hotpink">エントリーなし</font>
-		{/if}
-		{form_hidden('pj_entry_status', $entry_info.pj_entry_status)}
+        {if $entry_info.pj_entry_status == "1"}<font color="#ffffff" style="background-color:navy">エントリー</font>
+        {else}<font color="#ffffff" style="background-color:hotpink">エントリーなし</font>
+        {/if}
+        {form_hidden('pj_entry_status', $entry_info.pj_entry_status)}
     </div>
   </div>
   <div class="form-group">
@@ -71,74 +76,74 @@
   <div class="form-group">
     <label for="pj_wr_id" class="col-sm-3 control-label">ライターID</label>
     <div class="col-sm-4">
-		{$entry_info.pj_wr_id} ：「{$entry_info.wr_nickname}」
-		{form_hidden('pj_wr_id', $entry_info.pj_wr_id)}
+        {$entry_info.pj_wr_id} ：「{$entry_info.wr_nickname}」
+        {form_hidden('pj_wr_id', $entry_info.pj_wr_id)}
     </div>
   </div>
   <div class="form-group">
     <label for="wi_rank_id" class="col-sm-3 control-label">ライターランク</label>
     <div class="col-sm-4">
-		{if isset($entry_info.wi_rank_id)}{$options_memrank_list[$entry_info.wi_rank_id]}{/if}
+        {if isset($entry_info.wi_rank_id)}{$options_memrank_list[$entry_info.wi_rank_id]}{/if}
     </div>
   </div>
   <div class="form-group">
     <label for="wi_rank_id" class="col-sm-3 control-label">エントリー回数</label>
     <div class="col-sm-4">
-		{$entry_info.wr_entry_count}
+        {$entry_info.wr_entry_count}
     </div>
   </div>
   <div class="form-group">
     <label for="wi_rank_id" class="col-sm-3 control-label">採用回数</label>
     <div class="col-sm-4">
-		{$entry_info.wr_saiyo_count}
+        {$entry_info.wr_saiyo_count}
     </div>
   </div>
   <div class="form-group">
     <label for="wi_word_tanka" class="col-sm-3 control-label">文字単価</label>
     <div class="col-sm-4">
-		{$entry_info.wi_word_tanka}
+        {$entry_info.wi_word_tanka}
     </div>
   </div>
   <div class="form-group">
     <label for="wi_word_count" class="col-sm-3 control-label">今回文字数</label>
     <div class="col-sm-4">
-		{$entry_info.wi_word_count}
+        {$entry_info.wi_word_count}
     </div>
   </div>
   <div class="form-group">
     <label for="wi_point" class="col-sm-3 control-label">今回獲得ポイント数</label>
     <div class="col-sm-4">
-		{$entry_info.wi_point}
+        {$entry_info.wi_point}
     </div>
   </div>
   <div class="form-group">
     <label for="wi_entry_date" class="col-sm-3 control-label">エントリー日</label>
     <div class="col-sm-4">
-		{$entry_info.wi_entry_date|date_format:"%Y年%m月%d日 %H時%M分"}
+        {$entry_info.wi_entry_date|date_format:"%Y年%m月%d日 %H時%M分"}
     </div>
   </div>
   <div class="form-group">
     <label for="wi_posting_limit_date" class="col-sm-3 control-label">投稿〆切日</label>
     <div class="col-sm-4">
-		{$entry_info.wi_posting_limit_date|date_format:"%Y年%m月%d日 %H時%M分"}
+        {$entry_info.wi_posting_limit_date|date_format:"%Y年%m月%d日 %H時%M分"}
     </div>
   </div>
   <div class="form-group">
     <label for="wi_posting_date" class="col-sm-3 control-label">投稿日</label>
     <div class="col-sm-4">
-		{$entry_info.wi_posting_date|date_format:"%Y年%m月%d日 %H時%M分"}
+        {$entry_info.wi_posting_date|date_format:"%Y年%m月%d日 %H時%M分"}
     </div>
   </div>
   <div class="form-group">
     <label for="wi_check_date" class="col-sm-3 control-label">審査完了日</label>
     <div class="col-sm-4">
-		{$entry_info.wi_check_date|date_format:"%Y年%m月%d日 %H時%M分"}
+        {$entry_info.wi_check_date|date_format:"%Y年%m月%d日 %H時%M分"}
     </div>
   </div>
   <div class="form-group">
     <label for="pj_delivery_date" class="col-sm-3 control-label">原稿納品日</label>
     <div class="col-sm-4">
-		{$entry_info.pj_delivery_date|date_format:"%Y年%m月%d日 %H時%M分"}
+        {$entry_info.pj_delivery_date|date_format:"%Y年%m月%d日 %H時%M分"}
     </div>
   </div>
 
@@ -150,125 +155,128 @@
   <div class="form-group">
     <label for="pj_title" class="col-sm-3 control-label">タイトル（表示件名）</label>
     <div class="col-sm-9">
-		{$entry_info.pj_title}
+        {$entry_info.pj_title}
     </div>
   </div>
   <div class="form-group">
     <label for="pj_genre01" class="col-sm-3 control-label">ジャンル</label>
     <div class="col-sm-9">
-		{$options_genre_list[$entry_info.pj_genre01]}
+        {$options_genre_list[$entry_info.pj_genre01]}
     </div>
   </div>
   <div class="form-group">
     <label for="pj_order_title" class="col-sm-3 control-label">案件：タイトル</label>
     <div class="col-sm-9">
-		{$entry_info.pj_order_title}
-		{form_hidden('pj_order_title', $entry_info.pj_order_title)}
+        {$entry_info.pj_order_title}
+        {form_hidden('pj_order_title', $entry_info.pj_order_title)}
     </div>
   </div>
   <div class="form-group">
     <label for="pj_work" class="col-sm-3 control-label">案件：概要</label>
     <div class="col-sm-9">
-		{$entry_info.pj_work}
+        {$entry_info.pj_work|nl2br}
     </div>
   </div>
   <div class="form-group">
     <label for="pj_notice" class="col-sm-3 control-label">案件：注意事項</label>
     <div class="col-sm-9">
-		{$entry_info.pj_notice}
+        {$entry_info.pj_notice|nl2br}
     </div>
   </div>
   <div class="form-group">
     <label for="pj_example" class="col-sm-3 control-label">案件：例文</label>
     <div class="col-sm-9">
-		{$entry_info.pj_example}
+        {$entry_info.pj_example|nl2br}
     </div>
   </div>
   <div class="form-group">
     <label for="pj_other" class="col-sm-3 control-label">案件：その他</label>
     <div class="col-sm-9">
-		{$entry_info.pj_other}
+        {$entry_info.pj_other|nl2br}
     </div>
   </div>
   <div class="form-group">
     <label for="pj_mm_rank_id" class="col-sm-3 control-label">会員ランク指定</label>
     <div class="col-sm-9">
-    	{$options_memrank_list[$entry_info.pj_mm_rank_id]} 以上
+        {$options_memrank_list[$entry_info.pj_mm_rank_id]} 以上
     </div>
   </div>
   <div class="form-group">
     <label for="pj_taa_difficulty_id" class="col-sm-3 control-label">難易度指定</label>
     <div class="col-sm-4">
-		{$options_difficulty_id[$entry_info.pj_taa_difficulty_id]}　（加算単価={$options_tankaadd_list[$entry_info.pj_taa_difficulty_id]} 円）
+        {$options_difficulty_id[$entry_info.pj_taa_difficulty_id]}　（加算単価={$options_tankaadd_list[$entry_info.pj_taa_difficulty_id]} 円）
     </div>
   </div>
   <div class="form-group">
     <label for="pj_word_tanka" class="col-sm-3 control-label">文字単価指定</label>
     <div class="col-sm-4">
-		{$entry_info.pj_word_tanka} 円
+        {$entry_info.pj_word_tanka} 円
     </div>
   </div>
   <div class="form-group">
     <label for="pj_delivery_time" class="col-sm-3 control-label">ライター投稿期限</label>
     <div class="col-sm-4">
-		{$entry_info.pj_delivery_time}
+        {$entry_info.pj_delivery_time}
     </div>
   </div>
   <div class="form-group">
     <label for="pj_limit_time" class="col-sm-3 control-label">ライター投稿制限時間</label>
     <div class="col-sm-4">
-		{$entry_info.pj_limit_time}
+        {$entry_info.pj_limit_time}
     </div>
   </div>
   <div class="form-group">
     <label for="pj_start_time" class="col-sm-3 control-label">公開(募集)開始日時</label>
     <div class="col-sm-4">
-		{$entry_info.pj_start_time}
+        {$entry_info.pj_start_time}
     </div>
   </div>
   <div class="form-group">
     <label for="pj_end_time" class="col-sm-3 control-label">公開(募集)終了日時</label>
     <div class="col-sm-4">
-		{$entry_info.pj_end_time}
+        {$entry_info.pj_end_time}
     </div>
   </div>
   <div class="form-group">
-    <label for="pj_comment" class="col-sm-3 control-label">備考</label>
+    <label for="pj_en_id" class="col-sm-3 control-label">申請ID</label>
     <div class="col-sm-9">
-		{$entry_info.pj_comment}
+        {$entry_info.pj_en_id}
     </div>
   </div>
   <div class="form-group">
-    <label for="pj_pe_id" class="col-sm-3 control-label">申請ID</label>
+    <label for="pj_en_cl_id" class="col-sm-3 control-label">クライアントID</label>
     <div class="col-sm-9">
-		{$entry_info.pj_pe_id}
+        {$entry_info.pj_en_cl_id}
     </div>
   </div>
   <div class="form-group">
-    <label for="pj_pe_cl_id" class="col-sm-3 control-label">クライアントID</label>
+    <label for="pj_en_entry_date" class="col-sm-3 control-label">申請日</label>
     <div class="col-sm-9">
-		{$entry_info.pj_pe_cl_id}
-    </div>
-  </div>
-  <div class="form-group">
-    <label for="pj_pe_entry_date" class="col-sm-3 control-label">申請日</label>
-    <div class="col-sm-9">
-		{$entry_info.pj_pe_entry_date}
+        {$entry_info.pj_en_entry_date}
     </div>
   </div>
 
   <div class="form-group">
     <label for="pj_addwork" class="col-sm-3 control-label">案件追加内容</label>
     <div class="col-sm-9">
-  	{if ($entry_info.pj_work_status <= 1) OR ($entry_info.pj_work_status >= 5)}
-		{$attr['name'] = 'pj_addwork'}
-		{$attr['rows'] = 5}
-		{form_textarea($attr , set_value('pj_addwork', $entry_info.pj_addwork) , 'class="form-control" placeholder="追加内容を記入してください。"')}
-		{if form_error('pj_addwork')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('pj_addwork')}</font></label>{/if}
+      {if ($entry_info.pj_work_status <= 1) OR ($entry_info.pj_work_status >= 5)}
+        {$attr['name'] = 'pj_addwork'}
+        {$attr['rows'] = 5}
+        {form_textarea($attr , set_value('pj_addwork', $entry_info.pj_addwork) , 'class="form-control" placeholder="追加内容を記入してください。"')}
+        {if form_error('pj_addwork')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('pj_addwork')}</font></label>{/if}
     {else}
-		{$entry_info.pj_addwork}
-		{form_hidden('pj_addwork', $entry_info.pj_addwork)}
+        {$entry_info.pj_addwork|nl2br}
+        {form_hidden('pj_addwork', $entry_info.pj_addwork)}
     {/if}
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="pj_comment" class="col-sm-3 control-label">メ　　モ</label>
+    <div class="col-sm-9">
+        {$attr['name'] = 'pj_comment'}
+        {$attr['rows'] = 5}
+        {form_textarea($attr , set_value('pj_comment', $entry_info.pj_comment) , 'class="form-control" placeholder=""')}
+        {if form_error('pj_comment')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('pj_comment')}</font></label>{/if}
     </div>
   </div>
 
@@ -276,38 +284,38 @@
   <br /><br />
   {$js = 'class="btn btn-default" onClick="return cnfmAndSubmit()"'}
   {if ($entry_info.pj_work_status <= 1) OR ($entry_info.pj_work_status >= 6)}
-	  <div class="form-group">
-	    <div class="col-sm-offset-3 col-sm-1">
-			{$attr_sub['name']  = 'submit'}
-			{$attr_sub['type']  = 'submit'}
-			{$attr_sub['value'] = '_update'}
-			{form_button($attr_sub , '更　　新' , $js)}
-	    </div>
-	  </div>
+      <div class="form-group">
+        <div class="col-sm-offset-3 col-sm-1">
+            {$attr_sub['name']  = 'submit'}
+            {$attr_sub['type']  = 'submit'}
+            {$attr_sub['value'] = '_update'}
+            {form_button($attr_sub , '更　　新' , $js)}
+        </div>
+      </div>
   {elseif ($entry_info.pj_work_status == 3)}
-	  <div class="form-group">
-	    <div class="col-sm-offset-3 col-sm-1">
-			{$attr_sub['name']  = 'submit'}
-			{$attr_sub['type']  = 'submit'}
-			{$attr_sub['value'] = '_ok'}
-			{form_button($attr_sub , '審査ＯＫ' , $js)}
-	    </div>
-	    <div class="col-sm-offset-1 col-sm-7">
-			{$attr_sub['name']  = 'submit'}
-			{$attr_sub['type']  = 'submit'}
-			{$attr_sub['value'] = '_ng'}
-			{form_button($attr_sub , '審査ＮＧ' , $js)}
-	    </div>
-	  </div>
+      <div class="form-group">
+        <div class="col-sm-offset-3 col-sm-1">
+            {$attr_sub['name']  = 'submit'}
+            {$attr_sub['type']  = 'submit'}
+            {$attr_sub['value'] = '_ok'}
+            {form_button($attr_sub , '審査ＯＫ' , $js)}
+        </div>
+        <div class="col-sm-offset-1 col-sm-7">
+            {$attr_sub['name']  = 'submit'}
+            {$attr_sub['type']  = 'submit'}
+            {$attr_sub['value'] = '_ng'}
+            {form_button($attr_sub , '審査ＮＧ' , $js)}
+        </div>
+      </div>
   {elseif ($entry_info.pj_work_status == 4)}
-	  <div class="form-group">
-	    <div class="col-sm-offset-3 col-sm-1">
-			{$attr_sub['name']  = 'submit'}
-			{$attr_sub['type']  = 'submit'}
-			{$attr_sub['value'] = '_deliver'}
-			{form_button($attr_sub , '納　　品' , $js)}
-	    </div>
-	  </div>
+      <div class="form-group">
+        <div class="col-sm-offset-3 col-sm-1">
+            {$attr_sub['name']  = 'submit'}
+            {$attr_sub['type']  = 'submit'}
+            {$attr_sub['value'] = '_deliver'}
+            {form_button($attr_sub , '納　　品' , $js)}
+        </div>
+      </div>
   {/if}
 
 
@@ -495,14 +503,14 @@
       <div class="form-group">
     <label for="pji_addwork" class="col-sm-3 control-label">案件追加内容</label>
     <div class="col-sm-9">
-  	{if ($entry_info.pj_work_status <= 1) OR ($entry_info.pj_work_status >= 5)}
+      {if ($entry_info.pj_work_status <= 1) OR ($entry_info.pj_work_status >= 5)}
         {$attr['name'] = 'pji_addwork'}
         {$attr['rows'] = 5}
         {form_textarea($attr , set_value('pji_addwork', $entry_info.pji_addwork) , 'class="form-control" placeholder="追加内容を記入してください。"')}
         {if form_error('pji_addwork')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('pji_addwork')}</font></label>{/if}
     {else}
-		{$entry_info.pji_addwork}
-		{form_hidden('pji_addwork', $entry_info.pji_addwork)}
+        {$entry_info.pji_addwork|nl2br}
+        {form_hidden('pji_addwork', $entry_info.pji_addwork)}
     {/if}
     </div>
   </div>
@@ -513,10 +521,10 @@
   {$js = 'class="btn btn-default" onClick="return cnfmAndSubmit()"'}
   <div class="form-group">
     <div class="col-sm-offset-3 col-sm-1">
-		{$attr_sub['name']  = 'submit'}
-		{$attr_sub['type']  = 'submit'}
-		{$attr_sub['value'] = '_submit'}
-		{form_button($attr_sub , '更　　新' , $js)}
+        {$attr_sub['name']  = 'submit'}
+        {$attr_sub['type']  = 'submit'}
+        {$attr_sub['value'] = '_submit'}
+        {form_button($attr_sub , '更　　新' , $js)}
     </div>
   </div>
   {/if}

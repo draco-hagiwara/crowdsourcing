@@ -1,5 +1,5 @@
 {* ヘッダー部分　START *}
-	{include file="../header.tpl" head_index="1"}
+    {include file="../header.tpl" head_index="1"}
 
 <body>
 {* ヘッダー部分　END *}
@@ -22,46 +22,6 @@
     </div>
     <div class="col-sm-offset-8"></div>
   </div>
-
-  <div class="form-group">
-    <label for="cl_email" class="col-sm-3 control-label">メールアドレス（代表）＆　ログインID</label>
-    <div class="col-sm-8">
-      {form_input('cl_email' , set_value('cl_email', $client_info.cl_email) , 'class="col-sm-4 form-control" placeholder="メールアドレス（ログインID）を入力してください"')}
-      {if form_error('cl_email')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('cl_email')}</font></label>{/if}
-      {if $err_email==TRUE}<span class="label label-danger">Error : </span><label><font color=red>「メールアドレス」欄で入力したアドレスは既に他で使用されています。再度他のアドレスを入力してください。</font></label>{/if}
-    </div>
-    <div class="col-sm-1">
-      {$attr['name'] = 'submit'}
-      {$attr['type'] = 'submit'}
-      {$attr['value'] = '_mail'}
-      {form_button($attr , '更　新' , 'class="btn btn-default"')}
-    </div>
-  </div>
-  <div class="form-group">
-    <label for="cl_password" class="col-sm-3 control-label">パスワード</label>
-    <div class="col-sm-8">
-      {form_password('cl_password' , set_value('cl_password', '') , 'class="form-control" placeholder="パスワード　(半角英数字・記号：８文字以上)"')}
-      {if form_error('cl_password')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('cl_password')}</font></label>{/if}
-    </div>
-    <div class="col-sm-1">
-      {$attr['name'] = 'submit'}
-      {$attr['type'] = 'submit'}
-      {$attr['value'] = '_passwd'}
-      {form_button($attr , '更　新' , 'class="btn btn-default"')}
-    </div>
-  </div>
-  <div class="form-group">
-    <label for="retype_password" class="col-sm-3 control-label">パスワード再入力</label>
-    <div class="col-sm-8">
-      {form_password('retype_password' , set_value('retype_password', '') , 'class="form-control" placeholder="パスワード再入力　(半角英数字・記号：８文字以上)"')}
-      <p><small>確認のため、もう一度入力してください。</small></p>
-      {if form_error('retype_password')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('retype_password')}</font></label>{/if}
-    </div>
-    <div class="col-sm-1"></div>
-  </div>
-
-
-
 
   <div class="form-group">
     <label for="ta_price" class="col-sm-3 control-label">１文字単価設定（円）</label>

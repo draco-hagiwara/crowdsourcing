@@ -1,5 +1,5 @@
 {* ヘッダー部分　START *}
-	{include file="../header.tpl" head_index="1"}
+    {include file="../header.tpl" head_index="1"}
 
 <body>
 {* ヘッダー部分　END *}
@@ -44,7 +44,7 @@
       {if form_error('cl_president_kana02')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('cl_president_kana02')}</font></label>{/if}
     </div>
   </div>
-    <div class="form-group">
+  <div class="form-group">
     <label for="cl_department" class="col-sm-4 control-label">担当部署</label>
     <div class="col-sm-4">
       {form_input('cl_department' , set_value('cl_department', $client_info.cl_department) , 'class="form-control" placeholder="担当部署を入力してください"')}
@@ -113,9 +113,10 @@
     </div>
   </div>
   <div class="form-group">
-    <label for="cl_email" class="col-sm-4 control-label">メールアドレス（代表）<br>＆　ログインID<font color=red>【必須】</font></label>
+    <label for="cl_email" class="col-sm-4 control-label">メールアドレス（代表）<font color=red>【必須】</font></label>
     <div class="col-sm-8">
-      {$client_info.cl_email}
+      {form_input('cl_email' , set_value('cl_email', $client_info.cl_email) , 'class="col-sm-4 form-control" placeholder="メールアドレス（予備）を入力してください"')}
+      {if form_error('cl_email')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('cl_email')}</font></label>{/if}
     </div>
   </div>
   <div class="form-group">

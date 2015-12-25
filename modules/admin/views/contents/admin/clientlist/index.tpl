@@ -1,5 +1,5 @@
 {* ヘッダー部分　START *}
-	{include file="../header.tpl" head_index="1"}
+    {include file="../header.tpl" head_index="1"}
 
 <body>
 {* ヘッダー部分　END *}
@@ -49,59 +49,59 @@ function fmSubmit(formName, url, method, num) {
 <h4>【クライアント検索】</h4>
 {form_open('/clientlist/search/' , 'name="searchForm" class="form-horizontal"')}
   <table class="table table-hover table-bordered">
-	<tbody>
+    <tbody>
 
-	  <tr>
-		<td class="col-sm-2">会社名</td>
-		<td class="col-sm-6">
-		  {form_input('cl_company' , set_value('cl_company', '') , 'class="form-control" placeholder="会社名を入力してください。"')}
-		  {if form_error('cl_company')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('cl_company')}</font></label>{/if}
-		</td>
-		<td class="col-sm-2">クライアントID</td>
-		<td class="col-sm-2">
-		  {form_input('cl_id' , set_value('cl_id', '') , 'class="form-control" placeholder=""')}
-		  {if form_error('cl_id')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('cl_id')}</font></label>{/if}
-		</td>
-	  </tr>
+      <tr>
+        <td class="col-sm-2">会社名</td>
+        <td class="col-sm-6">
+          {form_input('cl_company' , set_value('cl_company', '') , 'class="form-control" placeholder="会社名を入力してください。"')}
+          {if form_error('cl_company')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('cl_company')}</font></label>{/if}
+        </td>
+        <td class="col-sm-2">クライアントID</td>
+        <td class="col-sm-2">
+          {form_input('cl_id' , set_value('cl_id', '') , 'class="form-control" placeholder=""')}
+          {if form_error('cl_id')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('cl_id')}</font></label>{/if}
+        </td>
+      </tr>
 
-	  <tr>
-		<td class="col-sm-2">メールアドレス</td>
-		<td class="col-sm-6">
-		  {form_input('cl_email' , set_value('cl_email', '') , 'class="form-control" placeholder="メールアドレスを入力してください。"')}
-		  {if form_error('cl_email')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('cl_email')}</font></label>{/if}
-		</td>
-		<td class="col-sm-2">ステータス</td>
-		<td class="col-sm-2">
-		  {form_dropdown('cl_status', $options_cl_status01, set_value('cl_status', ''))}
-		</td>
-	  </tr>
-	</tbody>
+      <tr>
+        <td class="col-sm-2">メールアドレス</td>
+        <td class="col-sm-6">
+          {form_input('cl_email' , set_value('cl_email', '') , 'class="form-control" placeholder="メールアドレスを入力してください。"')}
+          {if form_error('cl_email')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('cl_email')}</font></label>{/if}
+        </td>
+        <td class="col-sm-2">ステータス</td>
+        <td class="col-sm-2">
+          {form_dropdown('cl_status', $options_cl_status01, set_value('cl_status', ''))}
+        </td>
+      </tr>
+    </tbody>
   </table>
 
   <table class="table table-hover table-bordered">
-	<tbody>
-	  <tr>
-		<td class="col-sm-2">並び替え</td>
-		<td class="col-sm-2">クライアントID</td>
-		<td class="col-sm-2">
-		  {form_dropdown('orderid', $options_orderid, set_value('orderid', ''))}
-		</td>
-		<td class="col-sm-2">ステータス</td>
-		<td class="col-sm-2">
-		  {form_dropdown('orderstatus', $options_orderstatus, set_value('orderstatus', ''))}
-		</td>
-		<td class="col-sm-offset-2"></td>
-	  </tr>
-	</tbody>
+    <tbody>
+      <tr>
+        <td class="col-sm-2">並び替え</td>
+        <td class="col-sm-2">クライアントID</td>
+        <td class="col-sm-2">
+          {form_dropdown('orderid', $options_orderid, set_value('orderid', ''))}
+        </td>
+        <td class="col-sm-2">ステータス</td>
+        <td class="col-sm-2">
+          {form_dropdown('orderstatus', $options_orderstatus, set_value('orderstatus', ''))}
+        </td>
+        <td class="col-sm-offset-2"></td>
+      </tr>
+    </tbody>
   </table>
 
   <div class="row">
-	<div class="col-sm-5 col-sm-offset-5">
+    <div class="col-sm-5 col-sm-offset-5">
       {$attr['name']  = 'submit'}
       {$attr['type']  = 'submit'}
       {$attr['value'] = '_submit'}
       {form_button($attr , '検　　索' , 'class="btn btn-default"')}
-	</div>
+    </div>
   </div>
 
 {form_close()}
@@ -109,10 +109,10 @@ function fmSubmit(formName, url, method, num) {
 
 
 
-	<ul class="pagination pagination-sm">
-		検索結果： {$countall}件<br />
-		{$set_pagination}
-	</ul>
+    <ul class="pagination pagination-sm">
+        検索結果： {$countall}件<br />
+        {$set_pagination}
+    </ul>
 
 
 
@@ -122,56 +122,64 @@ function fmSubmit(formName, url, method, num) {
 
 
 {form_open('/clientlist/detail/' , 'name="detailForm" class="form-horizontal"')}
-	<table class="table table-striped table-hover">
-		<thead>
-			<tr>
-				<th></th>
-				<th>ID</th>
-				<th>status</th>
-				<th>会社名</th>
-				<th>メールアドレス</th>
-				<th>TEL</th>
-			</tr>
-		</thead>
+    <table class="table table-striped table-hover">
+        <thead>
+            <tr>
+                <th></th>
+                <th>ID</th>
+                <th>status<br>料金</th>
+                <th>会社名</th>
+                <th>メールアドレス<br>契約開始</th>
+                <th>TEL<br>契約終了</th>
+            </tr>
+        </thead>
 
 
-		{foreach from=$client_list item=cl}
-		<tbody>
-			<tr>
-				<td>
-					<button type="submit" class="btn btn-success btn-xs" name="clid_uniq" value="{$cl.cl_id}">更新</button>
-				</td>
-				<td>
-					{$cl.cl_id|escape}
-				</td>
-				<td>
-					{if $cl.cl_status == "0"}<font color="#ffffff" style="background-color:#008000">申 請 中</font>
-					{elseif $cl.cl_status == "1"}<font color="#ffffff" style="background-color:#0000ff">承　　認</font>
-					{elseif $cl.cl_status == "2"}<font color="#ffffff" style="background-color:#ff6347">非 承 認</font>
-					{elseif $cl.cl_status == "7"}<font color="#8a2be2">一時停止</font>
-					{elseif $cl.cl_status == "8"}<font color="#ffffff" style="background-color:#800000">強制停止</font>
-					{elseif $cl.cl_status == "9"}<font color="#ffffff" style="background-color:#a9a9a9">退　　会</font>
-					{else}}エラー
-					{/if}
-				</td>
-				<td>
-					{$cl.cl_company|escape}
-				</td>
-				<td>
-					{$cl.cl_email|escape}
-				</td>
-				<td>
-					{$cl.cl_tel01|escape}
-				</td>
-			</tr>
-		</tbody>
-		{foreachelse}
-			検索結果はありませんでした。
-		{/foreach}
+        {foreach from=$client_list item=cl}
+        <tbody>
+            <tr>
+                <td>
+                    <button type="submit" class="btn btn-success btn-xs" name="clid_uniq" value="{$cl.cl_id}">更新</button>
+                </td>
+                <td>
+                    {$cl.cl_id|escape}
+                </td>
+                <td>
+                    {if $cl.cl_status == "0"}<font color="#ffffff" style="background-color:#008000">申 請 中</font>
+                    {elseif $cl.cl_status == "1"}<font color="#ffffff" style="background-color:#0000ff">承　　認</font>
+                    {elseif $cl.cl_status == "2"}<font color="#ffffff" style="background-color:#ff6347">非 承 認</font>
+                    {elseif $cl.cl_status == "7"}<font color="#8a2be2">一時停止</font>
+                    {elseif $cl.cl_status == "8"}<font color="#ffffff" style="background-color:#800000">強制停止</font>
+                    {elseif $cl.cl_status == "9"}<font color="#ffffff" style="background-color:#a9a9a9">退　　会</font>
+                    {else}}エラー
+                    {/if}
+                    <br>
+                    {if $cl.ci_fee_id == "0"}成果
+                    {elseif $cl.ci_fee_id == "1"}固定
+                    {/if}
+                </td>
+                <td>
+                    {$cl.cl_company|escape}
+                </td>
+                <td>
+                    {$cl.cl_email|escape}
+                    <br>
+                    {$cl.ci_agreement_st}
+                </td>
+                <td>
+                    {$cl.cl_tel01|escape}
+                    <br>
+                    {$cl.ci_agreement_end}
+                </td>
+            </tr>
+        </tbody>
+        {foreachelse}
+            検索結果はありませんでした。
+        {/foreach}
 
 
 
-	</table>
+    </table>
 
 {form_close()}
 
@@ -182,9 +190,9 @@ function fmSubmit(formName, url, method, num) {
 
 
 
-	<ul class="pagination pagination-sm">
-	  {$set_pagination}
-	</ul>
+    <ul class="pagination pagination-sm">
+      {$set_pagination}
+    </ul>
 
 
 

@@ -1,5 +1,5 @@
 {* ヘッダー部分　START *}
-	{include file="../header.tpl" head_index="1"}
+    {include file="../header.tpl" head_index="1"}
 
 <body>
 {* ヘッダー部分　END *}
@@ -19,13 +19,13 @@
   <div class="form-group">
     <label for="wr_status" class="col-sm-3 control-label">ステータス (状態)</label>
     <div class="col-sm-4">
-	  {form_dropdown('wr_status', $options_wr_status02, {$writer_info.wr_status})}
+      {form_dropdown('wr_status', $options_wr_status02, {$writer_info.wr_status})}
     </div>
   </div>
   <div class="form-group">
     <label for="wr_mm_rank_id" class="col-sm-3 control-label">会員ランク</label>
     <div class="col-sm-4">
-	  {form_dropdown('wr_mm_rank_id', $options_wr_mm_rank_id, {$writer_info.wr_mm_rank_id})}
+      {form_dropdown('wr_mm_rank_id', $options_wr_mm_rank_id, {$writer_info.wr_mm_rank_id})}
     </div>
   </div>
   <div class="form-group">

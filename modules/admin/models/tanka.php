@@ -11,80 +11,80 @@ class Tanka extends CI_Model
     /**
      * ライター「会員ランク」単価を取得
      *
-     * @param	int
-     * @param	tinyint
-     * @return	array()
+     * @param    int
+     * @param    tinyint
+     * @return    array()
      */
     public function get_memtanka($get_cl_id, $rankid)
     {
 
-    	$set_where["ta_cl_id"]      = $get_cl_id;
-    	$set_where["ta_mm_rank_id"] = $rankid;
+        $set_where["ta_cl_id"]      = $get_cl_id;
+        $set_where["ta_mm_rank_id"] = $rankid;
 
-    	$query = $this->db->get_where('tb_tanka', $set_where);
+        $query = $this->db->get_where('tb_tanka', $set_where);
 
-    	$get_data = $query->result('array');
+        $get_data = $query->result('array');
 
-    	return $get_data[0];
+        return $get_data[0];
 
     }
 
     /**
      * ライター「難易度」単価を取得
      *
-     * @param	int
-     * @param	tinyint
-     * @return	array()
+     * @param    int
+     * @param    tinyint
+     * @return    array()
      */
     public function get_difftanka($get_cl_id, $diffid)
     {
 
-    	$set_where["taa_cl_id"]         = $get_cl_id;
-    	$set_where["taa_difficulty_id"] = $diffid;
+        $set_where["taa_cl_id"]         = $get_cl_id;
+        $set_where["taa_difficulty_id"] = $diffid;
 
-    	$query = $this->db->get_where('tb_tankaadd', $set_where);
+        $query = $this->db->get_where('tb_tankaadd', $set_where);
 
-    	$get_data = $query->result('array');
+        $get_data = $query->result('array');
 
-    	return $get_data[0];
+        return $get_data[0];
 
     }
 
     /**
      * 会員ランク単価を取得
      *
-     * @param	int
-     * @return	array()
+     * @param    int
+     * @return    array()
      */
     public function get_tanka($get_cl_id)
     {
 
-    	$set_where["ta_cl_id"] = $get_cl_id;
+        $set_where["ta_cl_id"] = $get_cl_id;
 
-    	$query = $this->db->get_where('tb_tanka', $set_where);
+        $query = $this->db->get_where('tb_tanka', $set_where);
 
-    	$get_data = $query->result('array');
+        $get_data = $query->result('array');
 
-    	return $get_data;
+        return $get_data;
 
     }
 
     /**
      * 難易度単価を取得
      *
-     * @param	int
-     * @return	array()
+     * @param    int
+     * @return    array()
      */
     public function get_tankaaad($get_cl_id)
     {
 
-    	$set_where["taa_cl_id"] = $get_cl_id;
+        $set_where["taa_cl_id"] = $get_cl_id;
 
-    	$query = $this->db->get_where('tb_tankaadd', $set_where);
+        $query = $this->db->get_where('tb_tankaadd', $set_where);
 
-    	$get_data = $query->result('array');
+        $get_data = $query->result('array');
 
-    	return $get_data;
+        return $get_data;
 
     }
 

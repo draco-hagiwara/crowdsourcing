@@ -16,9 +16,9 @@
 
 <ul class="nav nav-tabs">
   {if $order_no == '00'}<li role="presentation" class="active">{else}<li role="presentation">{/if}<a href="/admin/orderlist/detail00">案件内容【必須】</a></li>
-  {if $order_no == '01'}<li role="presentation" class="active">{else}<li role="presentation">{/if}<a href="/admin/orderlist/detail01/">案件詳細１</a></li>
-  {if $order_no == '02'}<li role="presentation" class="active">{else}<li role="presentation">{/if}<a href="/admin/orderlist/detail02/">案件詳細２</a></li>
-  {if $order_no == '03'}<li role="presentation" class="active">{else}<li role="presentation">{/if}<a href="/admin/orderlist/detail03/">案件詳細３</a></li>
+  {if $order_no == '01'}<li role="presentation" class="active">{else}<li role="presentation">{/if}<a href="/admin/orderlist/detail01/">記事詳細１</a></li>
+  {if $order_no == '02'}<li role="presentation" class="active">{else}<li role="presentation">{/if}<a href="/admin/orderlist/detail02/">記事詳細２</a></li>
+  {if $order_no == '03'}<li role="presentation" class="active">{else}<li role="presentation">{/if}<a href="/admin/orderlist/detail03/">記事詳細３</a></li>
 </ul>
 
 
@@ -51,7 +51,8 @@
   <div class="form-group">
     <label for="pj_genre01" class="col-sm-3 control-label">希望ジャンル<font color=red>【必須】</font></label>
     <div class="col-sm-9">
-          {form_dropdown('pj_genre01', $options_genre_list, set_value('pj_genre01', $order_info.pj_genre01))}
+      {form_dropdown('pj_genre01', $options_genre_list, set_value('pj_genre01', $order_info.pj_genre01))}
+      {if form_error('pj_genre01')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('pj_genre01')}</font></label>{/if}
     </div>
   </div>
   <div class="form-group">

@@ -1,5 +1,5 @@
 {* ヘッダー部分　START *}
-	{include file="../header.tpl" head_index="1"}
+    {include file="../header.tpl" head_index="1"}
 
 <body>
 {* ヘッダー部分　END *}
@@ -14,11 +14,11 @@
   <div class="form-group">
     <label for="cl_status" class="col-sm-2 control-label">ステータス (状態)</label>
     <div class="col-sm-4">
-		  {form_dropdown('cl_status', $options_cl_status02, {$client_info.cl_status})}
+          {form_dropdown('cl_status', $options_cl_status02, {$client_info.cl_status})}
     </div>
     <label for="ci_fee_id" class="col-sm-2 control-label">手数料設定<font color=red>【必須】</font></label>
     <div class="col-sm-2">
-		  {form_dropdown('ci_fee_id', $options_ci_fee_id, {$ci_fee_id})}
+          {form_dropdown('ci_fee_id', $options_ci_fee_id, {$ci_fee_id})}
     </div>
     <div class="col-sm-2">
       {form_input('ci_fee' , $ci_fee , 'class="form-control" placeholder=""')}

@@ -1,5 +1,5 @@
 {* ヘッダー部分　START *}
-	{include file="../header.tpl" head_index="1"}
+    {include file="../header.tpl" head_index="1"}
 
 <body>
 {* ヘッダー部分　END *}
@@ -16,16 +16,16 @@
       {if $err_mess !=''}<span class="label label-danger">Error : </span><label><font color=red>{$err_mess}</font></label>{/if}
     </div>
     <div class=" col-sm-offset-1 col-sm-6 col-sm-offset-5">
-      <label for="cl_email">ログインID　（メールアドレス）</label>
-      {form_input('cl_email' , set_value('cl_email', '') , 'class="form-control" placeholder="ログインID（メールアドレス）を入力してください。"')}
-      {if form_error('cl_email')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('cl_email')}</font></label>{/if}
+      <label for="cm_login">ログインID　（メールアドレス）</label>
+      {form_input('cm_login' , set_value('cm_login', '') , 'class="form-control" placeholder="ログインID（メールアドレス）を入力してください。"')}
+      {if form_error('cm_login')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('cm_login')}</font></label>{/if}
   </div>
   </div>
   <div class="form-group">
     <div class=" col-sm-offset-1 col-sm-6 col-sm-offset-5">
-      <label for="cl_password">パスワード</label>
-      {form_password('cl_password' , '' , 'class="form-control" placeholder="パスワードを入力してください。"')}
-      {if form_error('cl_password')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('cl_password')}</font></label>{/if}
+      <label for="cm_password">パスワード</label>
+      {form_password('cm_password' , '' , 'class="form-control" placeholder="パスワードを入力してください。"')}
+      {if form_error('cm_password')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('cm_password')}</font></label>{/if}
   </div>
   </div>
 

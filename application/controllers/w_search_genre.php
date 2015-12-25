@@ -1,6 +1,6 @@
 <?php
 
-class Search_list extends MY_Controller
+class Search_genre extends MY_Controller
 {
 
 	public function __construct()
@@ -64,15 +64,15 @@ class Search_list extends MY_Controller
 			if ($val['pj_word_tanka'] > 0)
 			{
 				// 難易度単価の取得
-				$tmp_diff_tanka = $this->tanka->get_difftanka($val['pj_pe_cl_id'], $val['pj_taa_difficulty_id']);
+				$tmp_diff_tanka = $this->tanka->get_difftanka($val['pj_en_cl_id'], $val['pj_taa_difficulty_id']);
 
 				$order_list[$key]['word_tanka'] =  $val['pj_word_tanka'] +  $tmp_diff_tanka['taa_price'];
 			} else {
 				// 会員単価の取得
-				$tmp_rank_tanka = $this->tanka->get_memtanka($val['pj_pe_cl_id'], $tmp_memrank);
+				$tmp_rank_tanka = $this->tanka->get_memtanka($val['pj_en_cl_id'], $tmp_memrank);
 
 				// 難易度単価の取得
-				$tmp_diff_tanka = $this->tanka->get_difftanka($val['pj_pe_cl_id'], $val['pj_taa_difficulty_id']);
+				$tmp_diff_tanka = $this->tanka->get_difftanka($val['pj_en_cl_id'], $val['pj_taa_difficulty_id']);
 
 				$order_list[$key]['word_tanka'] =  $tmp_rank_tanka['ta_price'] +  $tmp_diff_tanka['taa_price'];
 			}
@@ -92,17 +92,13 @@ class Search_list extends MY_Controller
 		$this->smarty->assign('countall',       $order_countall);
 		$this->smarty->assign('serch_item',     $this->input->post());
 
-		$this->view('writer/search_list/index.tpl');
+		$this->view('writer/search_genre/index.tpl');
 
 	}
 
 	// 一覧表示
 	public function search()
 	{
-
-		// セッションデータをクリア
-		$this->load->model('comm_auth', 'comm_auth', TRUE);
-		$this->comm_auth->delete_session('writer');
 
 		// 検索項目の保存が上手くいかない。応急的に対応！
 		// 検索項目=「pj_order_title」「pj_title」「pj_work」「pj_genre01」
@@ -156,15 +152,15 @@ class Search_list extends MY_Controller
 			if ($val['pj_word_tanka'] > 0)
 			{
 				// 難易度単価の取得
-				$tmp_diff_tanka = $this->tanka->get_difftanka($val['pj_pe_cl_id'], $val['pj_taa_difficulty_id']);
+				$tmp_diff_tanka = $this->tanka->get_difftanka($val['pj_en_cl_id'], $val['pj_taa_difficulty_id']);
 
 				$order_list[$key]['word_tanka'] =  $val['pj_word_tanka'] +  $tmp_diff_tanka['taa_price'];
 			} else {
 				// 会員単価の取得
-				$tmp_rank_tanka = $this->tanka->get_memtanka($val['pj_pe_cl_id'], $tmp_memrank);
+				$tmp_rank_tanka = $this->tanka->get_memtanka($val['pj_en_cl_id'], $tmp_memrank);
 
 				// 難易度単価の取得
-				$tmp_diff_tanka = $this->tanka->get_difftanka($val['pj_pe_cl_id'], $val['pj_taa_difficulty_id']);
+				$tmp_diff_tanka = $this->tanka->get_difftanka($val['pj_en_cl_id'], $val['pj_taa_difficulty_id']);
 
 				$order_list[$key]['word_tanka'] =  $tmp_rank_tanka['ta_price'] +  $tmp_diff_tanka['taa_price'];
 			}
@@ -183,12 +179,12 @@ class Search_list extends MY_Controller
 		$this->smarty->assign('countall',       $order_countall);
 		$this->smarty->assign('serch_item',     $tmp_inputpost);
 
-		$this->view('writer/search_list/index.tpl');
+		$this->view('writer/search_genre/index.tpl');
 
 	}
 
 	// 案件内容
-	public function detail00()
+	public function detail00($_res_mess=NULL)
 	{
 
 		// セッションからフラッシュデータ読み込み
@@ -209,7 +205,8 @@ class Search_list extends MY_Controller
 		}
 		$get_data = $this->pj->get_order($tmp_pjid);
 
-
+		// 作業件数有無チェック(作業1～3)
+		$this->_get_job_cnt($tmp_pjid);
 
 
 
@@ -240,15 +237,15 @@ class Search_list extends MY_Controller
 		if ($get_data[0]['pj_word_tanka'] > 0)
 		{
 			// 難易度単価の取得
-			$tmp_diff_tanka = $this->tanka->get_difftanka($get_data[0]['pj_pe_cl_id'], $get_data[0]['pj_taa_difficulty_id']);
+			$tmp_diff_tanka = $this->tanka->get_difftanka($get_data[0]['pj_en_cl_id'], $get_data[0]['pj_taa_difficulty_id']);
 
 			$writer_tanka =  $get_data[0]['pj_word_tanka'] +  $tmp_diff_tanka['taa_price'];
 		} else {
 			// 会員単価の取得
-			$tmp_rank_tanka = $this->tanka->get_memtanka($get_data[0]['pj_pe_cl_id'], $tmp_memrank);
+			$tmp_rank_tanka = $this->tanka->get_memtanka($get_data[0]['pj_en_cl_id'], $tmp_memrank);
 
 			// 難易度単価の取得
-			$tmp_diff_tanka = $this->tanka->get_difftanka($get_data[0]['pj_pe_cl_id'], $get_data[0]['pj_taa_difficulty_id']);
+			$tmp_diff_tanka = $this->tanka->get_difftanka($get_data[0]['pj_en_cl_id'], $get_data[0]['pj_taa_difficulty_id']);
 
 			$writer_tanka =  $tmp_rank_tanka['ta_price'] +  $tmp_diff_tanka['taa_price'];
 		}
@@ -257,9 +254,9 @@ class Search_list extends MY_Controller
 		$this->smarty->assign('writer_tanka', $writer_tanka);
 
 		// 現在の会員ランク単価を取得
-		$this->_get_member_tanka($get_data[0]['pj_pe_cl_id']);
+		$this->_get_member_tanka($get_data[0]['pj_en_cl_id']);
 		//$this->load->model('tanka', 'ta', TRUE);
-		//$tanka_list = $this->ta->get_tanka($get_data[0]['pj_pe_cl_id']);
+		//$tanka_list = $this->ta->get_tanka($get_data[0]['pj_en_cl_id']);
 		//$tmp_tankainfo = "ブロンズ=" . $tanka_list[1]['ta_price'] . " 円、シルバー=" . $tanka_list[2]['ta_price'] . " 円、ゴールド=" . $tanka_list[3]['ta_price'] . " 円";
 		//$this->smarty->assign('tanka_info', $tmp_tankainfo);
 
@@ -272,8 +269,9 @@ class Search_list extends MY_Controller
 
 		$this->smarty->assign('not_disp', FALSE);
 		$this->smarty->assign('order_no', '00');
+		$this->smarty->assign('result_mess', $_res_mess);
 
-		$this->view('writer/search_list/detail.tpl');
+		$this->view('writer/search_genre/detail.tpl');
 
 	}
 
@@ -286,6 +284,11 @@ class Search_list extends MY_Controller
 
 		// セッションからフラッシュデータ読み込み＆書き込み
 		$flash_data['w_pj_id'] = $this->session->userdata('w_pj_id');
+
+		// 作業件数有無チェック(作業1～3)
+		$this->load->model('Project', 'pj', TRUE);
+		$this->_get_job_cnt($flash_data['w_pj_id']);
+
 
 
 		print("flash_data01 == ");
@@ -305,7 +308,7 @@ class Search_list extends MY_Controller
 
 		$this->smarty->assign('not_disp', FALSE);
 		$this->smarty->assign('order_no', '01');
-		$this->view('writer/search_list/detail.tpl');
+		$this->view('writer/search_genre/detail.tpl');
 
 	}
 
@@ -316,6 +319,10 @@ class Search_list extends MY_Controller
 		// セッションからフラッシュデータ読み込み＆書き込み
 		$flash_data['w_pj_id'] = $this->session->userdata('w_pj_id');
 		//$this->session->set_flashdata( $flash_data);
+
+		// 作業件数有無チェック(作業1～3)
+		$this->load->model('Project', 'pj', TRUE);
+		$this->_get_job_cnt($flash_data['w_pj_id']);
 
 
 		print("flash_data02 == ");
@@ -342,7 +349,7 @@ class Search_list extends MY_Controller
 		//$this->form_validation->run();
 
 		$this->smarty->assign('order_no', '02');
-		$this->view('writer/search_list/detail.tpl');
+		$this->view('writer/search_genre/detail.tpl');
 
 	}
 
@@ -353,6 +360,11 @@ class Search_list extends MY_Controller
 		// セッションからフラッシュデータ読み込み＆書き込み
 		$flash_data['w_pj_id'] = $this->session->userdata('w_pj_id');
 		//$this->session->set_flashdata( $flash_data);
+
+		// 作業件数有無チェック(作業1～3)
+		$this->load->model('Project', 'pj', TRUE);
+		$this->_get_job_cnt($flash_data['w_pj_id']);
+
 
 
 		print("flash_data03 == ");
@@ -379,7 +391,7 @@ class Search_list extends MY_Controller
 		//$this->form_validation->run();
 
 		$this->smarty->assign('order_no', '03');
-		$this->view('writer/search_list/detail.tpl');
+		$this->view('writer/search_genre/detail.tpl');
 
 	}
 
@@ -414,8 +426,10 @@ class Search_list extends MY_Controller
 		if ($res_chk)
 		{
 			// エラーメッセージを出す！　または選択不可にする。
+			$_res_mess = '既に一度エントリーしています。二度エントリーすることはできません。';
 
-			redirect('/search_list/');
+			$this->detail00($_res_mess);
+			return;
 		}
 
 		// エントリー情報の書き込み
@@ -471,7 +485,17 @@ class Search_list extends MY_Controller
 			$this->_mail_send($post_data, $set_wdata, $flash_data);
 		}
 
-		redirect('/search_list/');
+		redirect('/my_entrylist/');
+
+	}
+
+	// 作業件数有無チェック(作業1～3)
+	private function _get_job_cnt($pj_id)
+	{
+
+		$get_infodata = $this->pj->get_entry_info($pj_id);
+		$tmp_arr_cnt  = count($get_infodata);
+		$this->smarty->assign('job_cnt', $tmp_arr_cnt);
 
 	}
 
@@ -536,7 +560,7 @@ class Search_list extends MY_Controller
 	private function _get_Pagination($entry_countall, $tmp_per_page)
 	{
 
-		$config['base_url']       = base_url() . '/search_list/search/';	// ページの基本URIパス。「/コントローラクラス/アクションメソッド/」
+		$config['base_url']       = base_url() . '/search_genre/search/';	// ページの基本URIパス。「/コントローラクラス/アクションメソッド/」
 		$config['per_page']       = $tmp_per_page;							// 1ページ当たりの表示件数。
 		$config['total_rows']     = $entry_countall;						// 総件数。where指定するか？
 		$config['uri_segment']    = 4;										// オフセット値がURIパスの何セグメント目とするか設定
@@ -646,50 +670,50 @@ class Search_list extends MY_Controller
 	}
 
 	// 各項目 初期値セット :: 申請案件2 and 3
-	private function _form_item_set01($pe_id)
+	private function _form_item_set01($en_id)
 	{
 		// ステータス：使用有無選択項目セット
-		$arroptions_pei_status = array (
+		$arroptions_ei_status = array (
 				'0' => '使用しない',
 				'1' => '使用する',
 		);
 
 		// レコード作成後に、格納データを表示するために必要
-		$set_val['pei_pe_id']       = $pe_id;
-		$set_val['pei_status']      = 0;
+		$set_val['ei_en_id']       = $en_id;
+		$set_val['ei_status']      = 0;
 
 		for ($i = 1; $i <= 5; $i++ )
 		{
-			$item = 'pei_t_keyword' . sprintf("%'.02d", $i);
+			$item = 'ei_t_keyword' . sprintf("%'.02d", $i);
 			$set_val[$item]    = '';
-			$item = 'pei_t_count_min' . sprintf("%'.02d", $i);
+			$item = 'ei_t_count_min' . sprintf("%'.02d", $i);
 			$set_val[$item]    = '';
-			$item = 'pei_t_count_max' . sprintf("%'.02d", $i);
+			$item = 'ei_t_count_max' . sprintf("%'.02d", $i);
 			$set_val[$item]    = '';
 		}
-		$set_val['pei_t_char_min']  = '';
-		$set_val['pei_t_char_max']  = '';
+		$set_val['ei_t_char_min']  = '';
+		$set_val['ei_t_char_max']  = '';
 
 		for ($i = 1; $i <= 10; $i++ )
 		{
-			$item = 'pei_b_word' . sprintf("%'.02d", $i);
+			$item = 'ei_b_word' . sprintf("%'.02d", $i);
 			$set_val[$item]    = '';
-			$item = 'pei_b_count_min' . sprintf("%'.02d", $i);
+			$item = 'ei_b_count_min' . sprintf("%'.02d", $i);
 			$set_val[$item]    = '';
-			$item = 'pei_b_count_max' . sprintf("%'.02d", $i);
+			$item = 'ei_b_count_max' . sprintf("%'.02d", $i);
 			$set_val[$item]    = '';
 		}
-		$set_val['pei_b_char_min']  = '';
-		$set_val['pei_b_char_max']  = '';
+		$set_val['ei_b_char_min']  = '';
+		$set_val['ei_b_char_max']  = '';
 
-		$set_val['pei_work']        = '';
-		$set_val['pei_notice']      = '';
-		$set_val['pei_example']     = '';
-		$set_val['pei_other']       = '';
-		$set_val['pei_addwork']     = '';
-		$set_val['pei_comment']     = '';
+		$set_val['ei_work']        = '';
+		$set_val['ei_notice']      = '';
+		$set_val['ei_example']     = '';
+		$set_val['ei_other']       = '';
+		$set_val['ei_addwork']     = '';
+		$set_val['ei_comment']     = '';
 
-		$this->smarty->assign('options_pei_status', $arroptions_pei_status);
+		$this->smarty->assign('options_ei_status', $arroptions_ei_status);
 		$this->smarty->assign('entry_info',         $set_val);
 
 	}
@@ -705,12 +729,12 @@ class Search_list extends MY_Controller
 						'rules'   => 'trim|numeric'
 				),
 				array(
-						'field'   => 'pj_pe_id',
+						'field'   => 'pj_en_id',
 						'label'   => '申請ID',
 						'rules'   => 'trim|numeric'
 				),
 				array(
-						'field'   => 'pj_pe_cl_id',
+						'field'   => 'pj_en_cl_id',
 						'label'   => 'クライアントID',
 						'rules'   => 'trim|numeric'
 				),
