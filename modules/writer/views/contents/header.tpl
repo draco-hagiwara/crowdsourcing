@@ -18,6 +18,20 @@
 <script src="{base_url()}../js/jquery-ui-3.0.2.custom.min.js"></script>
 <script src="{base_url()}../js/bootstrap.min.js"></script>
 
+<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1/jquery-ui.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1/i18n/jquery.ui.datepicker-ja.min.js"></script>
+<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1/themes/redmond/jquery-ui.css" >
+
+
+<script>
+  $(function() {
+    $("#datepicker_1").datepicker();
+    $("#datepicker_2").datepicker();
+    $("#datepicker_3").datepicker();
+    $("#datepicker_4").datepicker();
+  });
+</script>
+
 </head>
 
 
@@ -68,7 +82,8 @@
             <li><a href="#" class="dropdown-toggle" data-toggle="dropdown">マイページ<b class="caret"></b></a>
               <ul class="dropdown-menu right">
                 <li><a href="/writer/my_entrylist/">エントリー一覧</a></li>
-                <li><a href="/writer/my_pay/">月別明細</a></li>
+                <li><a href="/writer/my_favorite/">気になるリスト</a></li>
+                <li><a href="/writer/my_point/">獲得ポイント明細</a></li>
                 <li><a href="/writer/my_profile/">プロフィール 編集</a></li>
                 <li><a href="/writer/my_memfile/">会員情報 編集</a></li>
                 <li><a href="/writer/my_byebye/">登録解除</a></li>

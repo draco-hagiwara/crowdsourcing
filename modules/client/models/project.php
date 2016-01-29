@@ -47,6 +47,81 @@ class Project extends CI_Model
 
     }
 
+    /**
+     * 案件情報の取得
+     *
+     * @param    int
+     * @return    array()
+     */
+    public function get_order($get_pj_id)
+    {
+
+    	$set_where["pj_id"] = $get_pj_id;
+
+    	$query = $this->db->get_where('tb_project', $set_where);
+
+    	$get_data = $query->result('array');
+
+    	return $get_data;
+
+    }
+
+    /**
+     * 案件情報の取得
+     *
+     * @param    int
+     * @param    int
+     * @param    tinyint
+     * @return    array()
+     */
+    public function get_order_info($get_pj_id, $pji_seq = NULL)
+    {
+
+    	$set_where["pji_pj_id"]      = $get_pj_id;
+    	if ($pji_seq != NULL)
+    	{
+    		$set_where["pji_seq"]    = $pji_seq;
+    	}
+
+    	// view から取得
+    	$query = $this->db->get_where('vw_order_pji', $set_where);
+
+    	$get_data = $query->result('array');
+
+    	return $get_data;
+
+    }
+
+    /**
+     * 作業個別情報の取得
+     *
+     * @param    int
+     * @param    int
+     * @param    tinyint
+     * @return    array()
+     */
+    public function get_entry_info($get_pj_id, $pji_seq = NULL, $pji_status = NULL)
+    {
+
+    	$set_where["pji_pj_id"]      = $get_pj_id;
+    	if ($pji_seq != NULL)
+    	{
+    		$set_where["pji_seq"]    = $pji_seq;
+    	}
+    	if ($pji_status != NULL)
+    	{
+    		$set_where["pji_status"] = 1;
+    	}
+
+    	// view から取得
+    	$query = $this->db->get_where('vw_posting_pji', $set_where);
+
+    	$get_data = $query->result('array');
+
+    	return $get_data;
+
+    }
+
 
 
 
@@ -171,10 +246,6 @@ class Project extends CI_Model
     }
 
 
-
-
-
-
     /**
      * 投稿記事情報のリスト＆件数を取得
      *
@@ -296,65 +367,7 @@ class Project extends CI_Model
     }
 
 
-
-
-
-
-
-
-
-
-
-
-
-    /**
-     * 案件情報の取得
-     *
-     * @param    int
-     * @return    array()
-     */
-    public function get_order($get_pj_id)
-    {
-
-        $set_where["pj_id"] = $get_pj_id;
-
-        $query = $this->db->get_where('tb_project', $set_where);
-
-        $get_data = $query->result('array');
-
-        return $get_data;
-
-    }
-
-    /**
-     * 案件情報の取得
-     *
-     * @param    int
-     * @param    int
-     * @param    tinyint
-     * @return    array()
-     */
-    public function get_order_info($get_pj_id, $pji_seq = NULL)
-    {
-
-        $set_where["pji_pj_id"]      = $get_pj_id;
-        if ($pji_seq != NULL)
-        {
-            $set_where["pji_seq"]    = $pji_seq;
-        }
-
-        // view から取得
-        $query = $this->db->get_where('vw_order_pji', $set_where);
-
-        $get_data = $query->result('array');
-
-        return $get_data;
-
-    }
-
-
-
-    /**
+   /**
      * 案件情報のリスト＆件数を取得
      *
      * @param    array() : 検索項目値
@@ -393,36 +406,6 @@ class Project extends CI_Model
         $entry_list = $this->select_orderlist($set_select, $set_select_like, $set_orderby, $tmp_per_page, $tmp_offset);
 
         return $entry_list;
-
-    }
-
-    /**
-     * 作業個別情報の取得
-     *
-     * @param    int
-     * @param    int
-     * @param    tinyint
-     * @return    array()
-     */
-    public function get_entry_info($get_pj_id, $pji_seq = NULL, $pji_status = NULL)
-    {
-
-        $set_where["pji_pj_id"]      = $get_pj_id;
-        if ($pji_seq != NULL)
-        {
-            $set_where["pji_seq"]    = $pji_seq;
-        }
-        if ($pji_status != NULL)
-        {
-            $set_where["pji_status"] = 1;
-        }
-
-        // view から取得
-        $query = $this->db->get_where('vw_posting_pji', $set_where);
-
-        $get_data = $query->result('array');
-
-        return $get_data;
 
     }
 
@@ -489,6 +472,151 @@ class Project extends CI_Model
 
         return array($order_list, $order_countall);
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+    /**
+     * 獲得ポイント＆支払一覧を取得
+     *
+     * @param    array() : 検索項目値
+     * @param    int     : 1ページ当たりの表示件数(LIMIT値)
+     * @param    int     : オフセット値(ページ番号)
+     * @return   array()
+     */
+    public function get_pointlist($arr_post, $tmp_per_page, $tmp_offset=0)
+    {
+
+    	// 各SQL項目へセット
+    	// WHERE
+    	$set_select["pj_en_cl_id"]          = $arr_post['pj_en_cl_id'];
+    	$set_select["pj_pay_status"]        = $arr_post['pj_pay_status'];
+    	$set_select_like["pj_id"]           = $arr_post['pj_id'];
+    	$set_select_like["pj_title"]        = $arr_post['pj_title'];
+    	$set_select_btw["delivery_date_st"] = $arr_post['delivery_date_st'];
+    	$set_select_btw["delivery_date_ed"] = $arr_post['delivery_date_ed'];
+    	$set_select_btw["pay_date_st"]      = $arr_post['pay_date_st'];
+    	$set_select_btw["pay_date_ed"]      = $arr_post['pay_date_ed'];
+
+    	// 対象クライアントメンバーの取得
+    	$order_list = $this->select_pointlist($set_select, $set_select_like, $set_select_btw, $tmp_per_page, $tmp_offset);
+
+    	return $order_list;
+
+    }
+
+    /**
+     * 獲得ポイントリスト＆支払一覧件数を取得
+     *
+     * @param    array() : WHERE句項目
+     * @param    array() : WHERE LIKE句項目
+     * @param    array() : between句項目
+     * @param    int     : 1ページ当たりの表示件数
+     * @param    int     : オフセット値(ページ番号)
+     * @return   array()
+     */
+    public function select_pointlist($set_select, $set_select_like, $set_select_btw, $tmp_per_page, $tmp_offset=0)
+    {
+
+    	$sql  = 'SELECT * FROM `tb_project` ';
+    	$sql .= ' WHERE `pj_del_flg` = 0';                                            // 削除フラグ
+
+    	// WHERE文 作成
+    	foreach ($set_select as $key => $val)
+    	{
+    		if (isset($val) && $val != '')
+    		{
+    			$sql .= ' AND ' . $key . ' = ' . $this->db->escape($val);
+    		}
+    	}
+
+    	// WHERE-LIKE文 作成
+    	$tmp_firstitem = FALSE;
+    	foreach ($set_select_like as $key => $val)
+    	{
+    		if (isset($val) && $val != '')
+    		{
+    			if ($tmp_firstitem == FALSE)
+    			{
+    				$sql .= ' AND (' . $key . ' LIKE \'%' . $this->db->escape_like_str($val) . '%\'';
+    				$tmp_firstitem = TRUE;
+    			} else {
+    				$sql .= ' OR  ' . $key . ' LIKE \'%' . $this->db->escape_like_str($val) . '%\'';
+    			}
+    		}
+    	}
+    	if ($tmp_firstitem == TRUE)
+    	{
+    		$sql .= ')';
+    	}
+
+    	// WHERE-between文 作成
+    	if ($set_select_btw["delivery_date_st"] != null)
+    	{
+    		$sql .= ' AND pj_delivery_date >= \'' . str_replace('/', '-', $set_select_btw["delivery_date_st"]) . '\'';
+    	}
+    	if ($set_select_btw["delivery_date_ed"] != null)
+    	{
+    		$sql .= ' AND pj_delivery_date <= \'' . str_replace('/', '-', $set_select_btw["delivery_date_ed"]) . '\'';
+    	}
+    	if ($set_select_btw["pay_date_st"] != null)
+    	{
+    		$sql .= ' AND pｊ_pay_date >= \'' . str_replace('/', '-', $set_select_btw["pay_date_st"]) . '\'';
+    	}
+    	if ($set_select_btw["pay_date_ed"] != null)
+    	{
+    		$sql .= ' AND pｊ_pay_date <= \'' . str_replace('/', '-', $set_select_btw["pay_date_ed"]) . '\'';
+    	}
+
+    	// ORDER BY文 作成 : ORDERBY の優先順位があるので注意 (ステータス > 案件申請ID)
+    	//$tmp_firstitem = FALSE;
+    	//if ($tmp_firstitem == FALSE)
+    	//{
+    	//	$sql .= ' ORDER BY wi_id DESC';                                        // デフォルト：「案件ID」降順
+    		//}
+
+    		// 対象全件数を取得
+    		$query = $this->db->query($sql);
+    		$countall = $query->num_rows();
+
+    		// LIMIT ＆ OFFSET 値をセット
+    		$sql .= ' LIMIT ' . $tmp_per_page . ' OFFSET ' . $tmp_offset;
+
+    		// クエリー実行
+    		$query = $this->db->query($sql);
+    		$listall = $query->result('array');
+
+    		return array($listall, $countall);
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

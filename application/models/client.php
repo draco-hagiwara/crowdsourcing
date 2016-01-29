@@ -61,13 +61,15 @@ class Client extends CI_Model
 
             // デフォルト手数料の読み込み
             $this->config->load('config_comm');
-            $tmp_feeid = $this->config->item('CLIENT_DEF_FEEID');
-            $tmp_fee   = $this->config->item('CLIENT_DEF_FEE');
-
             $data = array(
-                    'ci_cl_id'  => $cl_getresult[0]['cl_id'],
-                    'ci_fee_id' => $tmp_feeid,
-                    'ci_fee'    => $tmp_fee,
+                    'ci_cl_id'         => $cl_getresult[0]['cl_id'],
+                    'ci_fee_id'        => $this->config->item('CLIENT_DEF_FEEID'),		// 手数料設定ID
+                    'ci_fee_fix'       => $this->config->item('CLIENT_DEF_FIX'),		// 月額固定金額
+                    'ci_fee_result'    => $this->config->item('CLIENT_DEF_RESULT'),		// 成果報酬率
+                    'ci_fee_adjust'    => $this->config->item('CLIENT_DEF_ADJUST'),		// 調整金額
+                    'ci_fee_initial'   => $this->config->item('CLIENT_DEF_INITIAL'),	// 初期導入費用
+                    'ci_agreement_st'  => date("Y-m-d H:i:s", strtotime("+1 month")),	// 契約年月日
+                    'ci_agreement_end' => date("Y-m-d H:i:s", strtotime("+1 year" )),	// 契約終了年月日
             );
             $this->db->set($data);
             $result = $this->db->insert('tb_client_info', $data);

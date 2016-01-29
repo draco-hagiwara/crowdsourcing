@@ -1,0 +1,3 @@
+*/10 * * * * php /home/cs/www/cs.com.dev/htdocs/index.php batch test
+*/10 * * * * php /home/cs/www/cs.com.dev/htdocs/index.php batch entry_timeover
+*/5 * * * * php /home/cs/www/cs.com.dev/htdocs/index.php batch reserve_unlock

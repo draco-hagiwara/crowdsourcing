@@ -120,7 +120,7 @@ class Entryorder extends MY_Controller
 
             // 案内申請情報の取得
             $this->load->model('Entry', 'ent', TRUE);                // models 読み込み
-            $get_data = $this->ent->get_entry_info($flash_data['c_en_id'], $ei_seq = 0);
+            $get_data = $this->ent->get_cl_entrylist($flash_data['c_en_id'], $ei_seq = 0);
 
             $this->smarty->assign('set_val', $get_data[0]);
 
@@ -165,7 +165,7 @@ class Entryorder extends MY_Controller
 
             // 案内申請情報の取得
             $this->load->model('Entry', 'ent', TRUE);                // models 読み込み
-            $get_data = $this->ent->get_entry_info($flash_data['c_en_id'], $ei_seq = 1);
+            $get_data = $this->ent->get_cl_entrylist($flash_data['c_en_id'], $ei_seq = 1);
 
             if (empty($get_data[0]))
             {
@@ -215,7 +215,7 @@ class Entryorder extends MY_Controller
 
             // 案内申請情報の取得
             $this->load->model('Entry', 'ent', TRUE);                // models 読み込み
-            $get_data = $this->ent->get_entry_info($flash_data['c_en_id'], $ei_seq = 2);
+            $get_data = $this->ent->get_cl_entrylist($flash_data['c_en_id'], $ei_seq = 2);
 
             if (empty($get_data[0]))
             {
@@ -348,7 +348,7 @@ class Entryorder extends MY_Controller
                     {
 
                         // 記事1 の入力チェック : 代表して「タイトルワード回数 (min)」をチェック
-                        $get_data = $this->ent->get_entry_info($flash_data['c_en_id'], 0, 1);
+                        $get_data = $this->ent->get_cl_entrylist($flash_data['c_en_id'], 0, 1);
                         if (! is_numeric($get_data[0]['ei_t_char_min']))
                         {
                             $this->smarty->assign('result_mess', '申請記事１(必須)が入力されていません。');

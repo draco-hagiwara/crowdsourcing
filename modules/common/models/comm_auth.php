@@ -43,7 +43,7 @@ class Comm_auth extends CI_Model
                 // レコードチェック
                 if ($query->num_rows() == 0)
                 {
-                    $err_mess = '入力されたログインID（メールアドレス）は登録されていません。';
+                    $err_mess = '入力されたログインID（メールアドレス）またはパスワードが間違っています。';
                     return $err_mess;
                 }
 
@@ -63,7 +63,7 @@ class Comm_auth extends CI_Model
                     $res = $this->_check_password($password);
                     if ($res == TRUE)
                     {
-                        $err_mess = '入力されたパスワードが誤っています。';
+                        $err_mess = '入力されたログインID（メールアドレス）またはパスワードが間違っています。';
                         return $err_mess;
                     } else {
                         $this->_memberID    = $arrData[0]['wr_id'];
@@ -93,7 +93,7 @@ class Comm_auth extends CI_Model
                 // レコードチェック
                 if ($query->num_rows() == 0)
                 {
-                    $err_mess = '入力されたログインID（メールアドレス）は登録されていません。';
+                    $err_mess = '入力されたログインID（メールアドレス）またはパスワードが間違っています。';
                     return $err_mess;
                 }
 
@@ -113,7 +113,7 @@ class Comm_auth extends CI_Model
                     $res = $this->_check_password($password);
                     if ($res == TRUE)
                     {
-                        $err_mess = '入力されたパスワードが誤っています。';
+                        $err_mess = '入力されたログインID（メールアドレス）またはパスワードが間違っています。';
                         return $err_mess;
                     } else {
                         $this->_memberID    = $arrData[0]['cm_cl_id'];
@@ -148,7 +148,7 @@ class Comm_auth extends CI_Model
                 // レコードチェック
                 if ($query->num_rows() == 0)
                 {
-                    $err_mess = '入力されたログインID（メールアドレス）は登録されていません。';
+                    $err_mess = '入力されたログインID（メールアドレス）またはパスワードが間違っています。';
                     return $err_mess;
                 }
 
@@ -185,7 +185,7 @@ class Comm_auth extends CI_Model
                             $this->_update_Session($login_member);
                         }
                     } else {
-                        $err_mess = '入力されたログインID（メールアドレス）は管理者IDではありません。';
+                        $err_mess = '入力されたログインID（メールアドレス）またはパスワードが間違っています。';
                         return $err_mess;
                     }
                 }
@@ -232,7 +232,7 @@ class Comm_auth extends CI_Model
             }
         }
 
-        $this->session->unset_userdata($unset_data);                            // セッションデータ削除
+        $this->session->unset_userdata($unset_data);                               // セッションデータ削除
 
         // ログイン解除
         switch ($login_member)
@@ -249,8 +249,8 @@ class Comm_auth extends CI_Model
             default:
         }
 
-        $this->session->set_userdata($setData);                                    // ログイン解除
-        //$this->session->sess_destroy();                                        // 全セッションデータ削除
+        $this->session->set_userdata($setData);                                     // ログイン解除
+        //$this->session->sess_destroy();                                           // 全セッションデータ削除
 
     }
 
@@ -267,32 +267,32 @@ class Comm_auth extends CI_Model
             case 'writer':
                 $this->session->set_userdata('w_login',   TRUE);                    // ログイン有無
                 $this->session->set_userdata('w_memID',   $this->_memberID);        // メンバーID
-                $this->session->set_userdata('w_memRANK', $this->_memberRANK);        // メンバーランキング(writerのみ)
-                $this->session->set_userdata('w_memNAME', $this->_memberNAME);        // メンバー名前(writerはニックネーム)
+                $this->session->set_userdata('w_memRANK', $this->_memberRANK);      // メンバーランキング(writerのみ)
+                $this->session->set_userdata('w_memNAME', $this->_memberNAME);      // メンバー名前(writerはニックネーム)
 
                 break;
             case 'client':
-                $this->session->set_userdata('c_login',      TRUE);                    // ログイン有無
-                $this->session->set_userdata('c_memID',      $this->_memberID);        // メンバーID
+                $this->session->set_userdata('c_login',      TRUE);                 // ログイン有無
+                $this->session->set_userdata('c_memID',      $this->_memberID);     // メンバーID
                 //$this->session->set_userdata('c_memRANK', $this->_memberRANK);    // メンバーランキング(writerのみ)
-                $this->session->set_userdata('c_memNAME',    $this->_memberNAME);    // メンバー名前(writerはニックネーム)
-                $this->session->set_userdata('c_personalID', $this->_personalID);    // 個人メンバーauthorityID
-                $this->session->set_userdata('c_authCD',     $this->_authorityCD);    // 個人メンバーauthorityCD
+                $this->session->set_userdata('c_memNAME',    $this->_memberNAME);   // メンバー名前(writerはニックネーム)
+                $this->session->set_userdata('c_personalID', $this->_personalID);   // 個人メンバーpersonalID
+                $this->session->set_userdata('c_authCD',     $this->_authorityCD);  // 個人メンバーauthorityCD
 
                 break;
             case 'admin':
-                $this->session->set_userdata('a_login',      TRUE);                    // ログイン有無
-                $this->session->set_userdata('a_memID',      $this->_memberID);        // メンバーID
+                $this->session->set_userdata('a_login',      TRUE);                 // ログイン有無
+                $this->session->set_userdata('a_memID',      $this->_memberID);     // メンバーID
                 //$this->session->set_userdata('a_memRANK', $this->_memberRANK);    // メンバーランキング(writerのみ)
-                $this->session->set_userdata('a_memNAME',    $this->_memberNAME);    // メンバー名前(writerはニックネーム)
-                $this->session->set_userdata('a_personalID', $this->_personalID);    // 個人メンバーauthorityID
-                $this->session->set_userdata('a_authCD',     $this->_authorityCD);    // 個人メンバーauthorityCD
+                $this->session->set_userdata('a_memNAME',    $this->_memberNAME);   // メンバー名前(writerはニックネーム)
+                $this->session->set_userdata('a_personalID', $this->_personalID);   // 個人メンバーpersonalID
+                $this->session->set_userdata('a_authCD',     $this->_authorityCD);  // 個人メンバーauthorityCD
 
                 break;
             default:
         }
 
-        //$this->session->set_userdata('login_mem' , $login_member);            // ログインメンバー(writer/client/admin)
+        //$this->session->set_userdata('login_mem' , $login_member);                // ログインメンバー(writer/client/admin)
     }
 
 
@@ -330,9 +330,9 @@ class Comm_auth extends CI_Model
 
                 $this->session->set_userdata('w_login',    $backup_w_login);        // ログイン有無
                 $this->session->set_userdata('w_memID',    $backup_w_memID);        // メンバーID
-                $this->session->set_userdata('w_memNAME',  $backup_w_memNAME);        // メンバーランキング(writerのみ)
-                $this->session->set_userdata('w_memRANK',  $backup_w_memRANK);        // メンバー名前(writerはニックネーム)
-                $this->session->set_userdata('w_memENTRY', $backup_w_memENTRY);        // ENTRY有無
+                $this->session->set_userdata('w_memNAME',  $backup_w_memNAME);      // メンバーランキング(writerのみ)
+                $this->session->set_userdata('w_memRANK',  $backup_w_memRANK);      // メンバー名前(writerはニックネーム)
+                $this->session->set_userdata('w_memENTRY', $backup_w_memENTRY);     // ENTRY有無
 
 
                 break;
@@ -340,6 +340,7 @@ class Comm_auth extends CI_Model
                 $backup_c_login   = $this->session->userdata('c_login');
                 $backup_c_memID   = $this->session->userdata('c_memID');
                 $backup_c_memNAME = $this->session->userdata('c_memNAME');
+                $backup_c_personalID = $this->session->userdata('c_personalID');
                 $backup_c_authCD  = $this->session->userdata('c_authCD');
 
                 $get_data = $this->session->all_userdata();
@@ -353,16 +354,18 @@ class Comm_auth extends CI_Model
                 }
                 $this->session->unset_userdata($unset_data);
 
-                $this->session->set_userdata('c_login',   $backup_c_login);            // ログイン有無
-                $this->session->set_userdata('c_memID',   $backup_c_memID);            // メンバーID
-                $this->session->set_userdata('c_memNAME', $backup_c_memNAME);        // メンバー名前
-                $this->session->set_userdata('c_authCD', $backup_c_authCD);            // 個人メンバーauthorityCD
+                $this->session->set_userdata('c_login',   $backup_c_login);         // ログイン有無
+                $this->session->set_userdata('c_memID',   $backup_c_memID);         // メンバーID
+                $this->session->set_userdata('c_memNAME', $backup_c_memNAME);       // メンバー名前
+                $this->session->set_userdata('c_personalID', $backup_c_personalID);         // 個人メンバーpersonalID
+                $this->session->set_userdata('c_authCD', $backup_c_authCD);         // 個人メンバーauthorityCD
 
                 break;
             case 'admin':
                 $backup_a_login   = $this->session->userdata('a_login');
                 $backup_a_memID   = $this->session->userdata('a_memID');
                 $backup_a_memNAME = $this->session->userdata('a_memNAME');
+                $backup_a_personalID = $this->session->userdata('a_personalID');
                 $backup_a_authCD  = $this->session->userdata('a_authCD');
 
                 $get_data = $this->session->all_userdata();
@@ -376,9 +379,10 @@ class Comm_auth extends CI_Model
                 }
                 $this->session->unset_userdata($unset_data);
 
-                $this->session->set_userdata('a_login',   $backup_a_login);            // ログイン有無
-                $this->session->set_userdata('a_memID',   $backup_a_memID);            // メンバーID
-                $this->session->set_userdata('a_memNAME', $backup_a_memNAME);        // メンバー名前
+                $this->session->set_userdata('a_login',   $backup_a_login);         // ログイン有無
+                $this->session->set_userdata('a_memID',   $backup_a_memID);         // メンバーID
+                $this->session->set_userdata('a_memNAME', $backup_a_memNAME);       // メンバー名前
+                $this->session->set_userdata('a_personalID', $backup_a_personalID);         // 個人メンバーpersonalID
                 $this->session->set_userdata('a_authCD',  $backup_a_authCD);        // 個人メンバーauthorityCD
 
                 break;

@@ -12,7 +12,7 @@ class Client extends CI_Model
      * 更新対象クライアント・個別情報の取得
      *
      * @param    int
-     * @return    array()
+     * @return   array()
      */
     public function get_client_info($tmp_clientid)
     {
@@ -31,10 +31,31 @@ class Client extends CI_Model
     }
 
     /**
+     * クライアント・個別(契約)情報の取得
+     *
+     * @param    int
+     * @return   array()
+     */
+    public function get_client_contract($tmp_clientid)
+    {
+
+    	// 各SQL項目へセット :: JOIN 個別情報
+    	$sql = 'SELECT * FROM tb_client_info';
+    	$sql .= ' WHERE ci_cl_id = ' . $tmp_clientid;
+
+    	// クエリー実行
+    	$query = $this->db->query($sql);
+    	$get_client_info = $query->result('array');
+
+    	return $get_client_info;
+
+    }
+
+    /**
      * 更新対象クライアント・メンバー情報の取得
      *
      * @param    int
-     * @return    array()
+     * @return   array()
      */
     public function get_client_memlist($tmp_clientid)
     {
@@ -64,7 +85,7 @@ class Client extends CI_Model
      *
      * @param    int
      * @param    int
-     * @return    array()
+     * @return   array()
      */
     public function get_client_member($tmp_memid, $tmp_clientid)
     {
@@ -83,6 +104,59 @@ class Client extends CI_Model
         return $get_client_mem;
 
     }
+
+
+    /**
+     * 獲得ポイント＆支払一覧を取得
+     *
+     * @param    array() : 検索項目値
+     * @param    int     : 1ページ当たりの表示件数(LIMIT値)
+     * @param    int     : オフセット値(ページ番号)
+     * @return   array()
+     */
+    public function get_paylist($arr_post, $tmp_per_page, $tmp_offset=0)
+    {
+
+    	// 各SQL項目へセット
+    	// WHERE
+    	$set_select["cp_cl_id"] = $arr_post['cp_cl_id'];
+
+    	// 対象クライアントメンバーの取得
+    	$pay_list = $this->select_paylist($set_select, $tmp_per_page, $tmp_offset);
+
+    	return $pay_list;
+
+    }
+
+    /**
+     * 支払情報のリスト＆件数を取得
+     *
+     * @param    array() : WHERE句項目
+     * @param    int     : 1ページ当たりの表示件数
+     * @param    int     : オフセット値(ページ番号)
+     * @return   array()
+     */
+    public function select_paylist($set_select, $tmp_per_page, $tmp_offset=0)
+    {
+
+    	$sql  = 'SELECT * FROM `tb_client_pay` ';
+    	$sql .= ' WHERE `cp_cl_id` = ' . $set_select['cp_cl_id'];
+   		$sql .= ' ORDER BY cp_pay_date DESC';
+
+    	// 対象全件数を取得
+    	$query = $this->db->query($sql);
+    	$pay_countall = $query->num_rows();
+
+    	// LIMIT ＆ OFFSET 値をセット
+    	$sql .= ' LIMIT ' . $tmp_per_page . ' OFFSET ' . $tmp_offset;
+
+    	// クエリー実行
+    	$query = $this->db->query($sql);
+    	$pay_list = $query->result('array');
+
+    	return array($pay_list, $pay_countall);
+    }
+
 
     // クライアント新規会員登録
     public function insert_Client($setData)
@@ -106,7 +180,7 @@ class Client extends CI_Model
      * 1レコード更新 (tb_client)
      *
      * @param    array()
-     * @return    bool
+     * @return   bool
      */
     public function update_Client($set_data)
     {
@@ -127,7 +201,7 @@ class Client extends CI_Model
      * 1レコード更新 (tb_client_mem)
      *
      * @param    array()
-     * @return    bool
+     * @return   bool
      */
     public function update_client_mem($set_data)
     {
@@ -149,7 +223,7 @@ class Client extends CI_Model
      * ログイン日時の更新
      *
      * @param    bigint
-     * @return    bool
+     * @return   bool
      */
     public function update_Logindate($cm_mem_id)
     {
@@ -169,7 +243,7 @@ class Client extends CI_Model
      * 重複データのチェック：ログインID（メールアドレス）
      *
      * @param    varchar
-     * @return    bool
+     * @return   bool
      */
     public function check_LoginID($loginid)
     {

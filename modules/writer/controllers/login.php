@@ -184,7 +184,7 @@ class Login extends MY_Controller
             $input_email = $this->input->post('wr_email');
             if ($this->wr->exist_LoginID($input_email) == FALSE)
             {
-                $this->smarty->assign('err_mess', '入力されたログインID（メールアドレス）は登録されていません。');
+                $this->smarty->assign('err_mess', '入力されたログインID（メールアドレス）またはパスワードが間違っています。');
                 $this->view('writer/login/reissue.tpl');
                 return;
             }
@@ -424,7 +424,8 @@ class Login extends MY_Controller
                 array(
                         'field'   => 'wr_password',
                         'label'   => 'パスワード',
-                        'rules'   => 'trim|required|regex_match[/^[\x21-\x7e]+$/]|min_length[8]|max_length[50]'
+                        'rules'   => 'trim|required|regex_match[/^[\x21-\x7e]+$/]|max_length[50]'
+                        //'rules'   => 'trim|required|regex_match[/^[\x21-\x7e]+$/]|min_length[8]|max_length[50]'
                 ),
         );
 
@@ -444,12 +445,14 @@ class Login extends MY_Controller
                 array(
                         'field'   => 'wr_password',
                         'label'   => 'パスワード',
-                        'rules'   => 'trim|required|regex_match[/^[\x21-\x7e]+$/]|min_length[8]|max_length[50]'
+                        'rules'   => 'trim|required|regex_match[/^[\x21-\x7e]+$/]|max_length[50]'
+                        //'rules'   => 'trim|required|regex_match[/^[\x21-\x7e]+$/]|min_length[8]|max_length[50]'
                 ),
                 array(
                         'field'   => 'retype_password',
                         'label'   => 'パスワード再入力',
-                        'rules'   => 'trim|required|regex_match[/^[\x21-\x7e]+$/]|min_length[8]|max_length[50]|matches[wr_password]'
+                        'rules'   => 'trim|required|regex_match[/^[\x21-\x7e]+$/]|max_length[50]|matches[wr_password]'
+                		//'rules'   => 'trim|required|regex_match[/^[\x21-\x7e]+$/]|min_length[8]|max_length[50]|matches[wr_password]'
                 ),
                 array(
                         'field'   => 'captcha_chr',

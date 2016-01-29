@@ -130,7 +130,7 @@ class Entryclient extends MY_Controller
         unset($this->setData["retype_password"]) ;
 
         // トランザクション・START
-        $this->db->trans_strict(FALSE);                                    // StrictモードをOFF
+        $this->db->trans_strict(FALSE);                                  // StrictモードをOFF
         $this->db->trans_start();                                        // trans_begin
 
             $this->client->insert_Client($this->setData);

@@ -67,7 +67,7 @@ class Entrylist extends MY_Controller
         // 案件申請情報のリスト＆件数を取得
         $this->load->model('Entry', 'ent', TRUE);
         $tmp_inputpost = $this->input->post();
-        list($entry_list, $entry_countall) = $this->ent->get_entrylist($flash_data['c_memID'], $tmp_inputpost, $tmp_per_page, $tmp_offset);
+        list($entry_list, $entry_countall) = $this->ent->get_cl_entrylist($flash_data['c_memID'], $tmp_inputpost, $tmp_per_page, $tmp_offset);
         $this->smarty->assign('entry_list', $entry_list);
 
         // Pagination 設定
@@ -138,7 +138,7 @@ class Entrylist extends MY_Controller
 
         // 案件申請情報のリスト＆件数を取得
         $this->load->model('Entry', 'ent', TRUE);
-        list($entry_list, $entry_countall) = $this->ent->get_entrylist($flash_data['c_memID'], $tmp_inputpost, $tmp_per_page, $tmp_offset);
+        list($entry_list, $entry_countall) = $this->ent->get_cl_entrylist($flash_data['c_memID'], $tmp_inputpost, $tmp_per_page, $tmp_offset);
         $this->smarty->assign('entry_list', $entry_list);
 
         // Pagination 設定

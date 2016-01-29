@@ -59,7 +59,7 @@ class Login extends MY_Controller
                 // ログイン日時 更新
                 $this->load->model('Client', 'cl', TRUE);
 
-                $this->cl->update_Logindate($this->session->userdata('c_personalID'));
+                $this->cl->update_mlogindate($this->session->userdata('c_personalID'));
 
                 // クライアント・マイページ画面TOPへ
                 //$this->view('client/top/index.tpl');
@@ -94,7 +94,8 @@ class Login extends MY_Controller
                 array(
                         'field'   => 'cm_password',
                         'label'   => 'パスワード',
-                        'rules'   => 'trim|required|regex_match[/^[\x21-\x7e]+$/]|min_length[8]|max_length[50]'
+                        'rules'   => 'trim|required|regex_match[/^[\x21-\x7e]+$/]|max_length[50]'
+                        //'rules'   => 'trim|required|regex_match[/^[\x21-\x7e]+$/]|min_length[8]|max_length[50]'
                 ),
         );
 

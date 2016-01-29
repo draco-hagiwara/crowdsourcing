@@ -154,8 +154,9 @@ function fmSubmit(formName, url, method, num) {
                     {else}}エラー
                     {/if}
                     <br>
-                    {if $cl.ci_fee_id == "0"}成果
-                    {elseif $cl.ci_fee_id == "1"}固定
+                    {if $cl.ci_contract_id == "0"}固定
+                    {elseif $cl.ci_contract_id == "1"}成果
+                    {else}固+成
                     {/if}
                 </td>
                 <td>
@@ -164,12 +165,12 @@ function fmSubmit(formName, url, method, num) {
                 <td>
                     {$cl.cl_email|escape}
                     <br>
-                    {$cl.ci_agreement_st}
+                    {$cl.ci_contract_st}
                 </td>
                 <td>
                     {$cl.cl_tel01|escape}
                     <br>
-                    {$cl.ci_agreement_end}
+                    {$cl.ci_contract_end}
                 </td>
             </tr>
         </tbody>

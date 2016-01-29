@@ -60,7 +60,7 @@ class My_entrylist extends MY_Controller
         $tmp_inputpost['pj_id']    = NULL;
         $tmp_inputpost['wi_pj_work_status'] = NULL;
 
-        list($entry_list, $entry_countall) = $this->wrinfo->get_entrylist($tmp_inputpost, $tmp_per_page, $tmp_offset);
+        list($entry_list, $entry_countall) = $this->wrinfo->get_entry($tmp_inputpost, $tmp_per_page, $tmp_offset);
 
         // Pagination 設定
         $set_pagination = $this->_get_Pagination($entry_countall, $tmp_per_page, NULL);
@@ -121,7 +121,7 @@ class My_entrylist extends MY_Controller
 
         // エントリーリスト＆件数を取得
         $this->load->model('Writer_info', 'wrinfo', TRUE);
-        list($entry_list, $entry_countall) = $this->wrinfo->get_entrylist($tmp_inputpost, $tmp_per_page, $tmp_offset);
+        list($entry_list, $entry_countall) = $this->wrinfo->get_entry($tmp_inputpost, $tmp_per_page, $tmp_offset);
 
         // Pagination 設定
         $set_pagination = $this->_get_Pagination($entry_countall, $tmp_per_page);
@@ -731,7 +731,7 @@ class My_entrylist extends MY_Controller
     private function _get_Pagination($entry_countall, $tmp_per_page)
     {
 
-        $config['base_url']       = base_url() . '/orderlist/search/';        // ページの基本URIパス。「/コントローラクラス/アクションメソッド/」
+        $config['base_url']       = base_url() . '/my_entrylist/search/';        // ページの基本URIパス。「/コントローラクラス/アクションメソッド/」
         $config['per_page']       = $tmp_per_page;                            // 1ページ当たりの表示件数。
         $config['total_rows']     = $entry_countall;                        // 総件数。where指定するか？
         $config['uri_segment']    = 4;                                        // オフセット値がURIパスの何セグメント目とするか設定

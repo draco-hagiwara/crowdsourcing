@@ -13,39 +13,83 @@
 
   <div class="form-group">
     <label for="cl_status" class="col-sm-2 control-label">ステータス (状態)</label>
-    <div class="col-sm-4">
+    <div class="col-sm-2">
           {form_dropdown('cl_status', $options_cl_status02, {$client_info.cl_status})}
     </div>
-    <label for="ci_fee_id" class="col-sm-2 control-label">手数料設定<font color=red>【必須】</font></label>
-    <div class="col-sm-2">
-          {form_dropdown('ci_fee_id', $options_ci_fee_id, {$ci_fee_id})}
+    <label class="col-sm-2 control-label">手数料設定<font color=red>【必須】</font></label>
+    <div class="col-sm-3">
+      初期導入費用
     </div>
     <div class="col-sm-2">
-      {form_input('ci_fee' , $ci_fee , 'class="form-control" placeholder=""')}
-      {if form_error('ci_fee')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('ci_fee')}</font></label>{/if}
+      {form_input('ci_contract_initial' , $client_info.ci_contract_initial , 'class="form-control" placeholder=""')}
+      {if form_error('ci_contract_initial')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('ci_contract_initial')}</font></label>{/if}
     </div>
   </div>
 
+
   <div class="form-group">
-    <label for="ci_agreement_st" class="col-sm-2 control-label"></label>
-    <div class="col-sm-4">
+    <label for="ci_contract_st" class="col-sm-2 control-label"></label>
+    <div class="col-sm-2">
     </div>
-    <label for="ci_agreement_end" class="col-sm-2 control-label"></label>
-    <div class="col-sm-4">
-    ※「率」は 0.00(0%) ～ 1.00(100%) 少数点第二。<br>「月額固定」は数値(円)を入力してください。
+    <label class="col-sm-2 control-label"></label>
+    <div class="col-sm-3">
+      手数料：<br>{form_dropdown('ci_contract_id', $options_ci_contract_id, {$client_info.ci_contract_id})}
+    </div>
+    <div class="col-sm-2">
+      月額固定金額：{form_input('ci_contract_fix' , $client_info.ci_contract_fix , 'class="form-control" placeholder="月額固定金額"')}
+      {if form_error('ci_contract_fix')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('ci_contract_fix')}</font></label>{/if}
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="ci_contract_st" class="col-sm-2 control-label"></label>
+    <div class="col-sm-2">
+    </div>
+    <label class="col-sm-2 control-label"></label>
+    <label class="col-sm-3 control-label"></label>
+    <div class="col-sm-2">
+      成果報酬率：{form_input('ci_contract_result' , $client_info.ci_contract_result , 'class="form-control" placeholder="成果報酬率"')}
+      {if form_error('ci_contract_result')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('ci_contract_result')}</font></label>{/if}
+    </div>
+  </div>
+  <div class="form-group">
+    <label class="col-sm-2 control-label"></label>
+    <div class="col-sm-2">
+    </div>
+    <label class="col-sm-3 control-label"></label>
+    <div class="col-sm-5">
+    ※「月額固定金額」は数値(円)を入力してください。<br>
+    ※「成果報酬率」は 0.00(0%) ～ 1.00(100%) 少数点第二まで入力できます。<br>
+    ※「月額固定+率(成果報酬)」は両方の欄に入力してください。
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="ci_contract_st" class="col-sm-2 control-label"></label>
+    <div class="col-sm-2">
+    </div>
+    <label class="col-sm-2 control-label"></label>
+    <div class="col-sm-3">
+      調整金額
+    </div>
+    <div class="col-sm-2">
+      {form_input('ci_contract_adjust' , $client_info.ci_contract_adjust , 'class="form-control" placeholder=""')}
+      {if form_error('ci_contract_adjust')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('ci_contract_adjust')}</font></label>{/if}
     </div>
   </div>
 
+
+
   <div class="form-group">
-    <label for="ci_agreement_st" class="col-sm-2 control-label">契約開始日</label>
-    <div class="col-sm-4">
-      {form_input('ci_agreement_st' , $client_info.ci_agreement_st , 'class="form-control" placeholder="20xx-xx-xx の形式で入力してください"')}
-      {if form_error('ci_agreement_st')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('ci_agreement_st')}</font></label>{/if}
+    <label for="ci_contract_st" class="col-sm-2 control-label">契約開始日<font color=red>【必須】</font></label>
+    <div class="col-sm-2">
+      {form_input('ci_contract_st' , $client_info.ci_contract_st , 'class="form-control" placeholder="20xx-xx-xx の形式で入力してください"')}
+      {if form_error('ci_contract_st')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('ci_contract_st')}</font></label>{/if}
     </div>
-    <label for="ci_agreement_end" class="col-sm-2 control-label">契約終了(予定)日</label>
-    <div class="col-sm-4">
-      {form_input('ci_agreement_end' , $client_info.ci_agreement_end , 'class="form-control" placeholder="20xx-xx-xx の形式で入力してください"')}
-      {if form_error('ci_agreement_end')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('ci_agreement_end')}</font></label>{/if}
+  </div>
+  <div class="form-group">
+    <label for="ci_contract_end" class="col-sm-2 control-label">契約終了日<font color=red>【必須】</font></label>
+    <div class="col-sm-2">
+      {form_input('ci_contract_end' , $client_info.ci_contract_end , 'class="form-control" placeholder="20xx-xx-xx の形式で入力してください"')}
+      {if form_error('ci_contract_end')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('ci_contract_end')}</font></label>{/if}
     </div>
   </div>
   <div class="form-group">

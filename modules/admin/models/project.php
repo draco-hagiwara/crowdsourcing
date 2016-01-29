@@ -8,7 +8,6 @@ class Project extends CI_Model
         parent::__construct();
     }
 
-
     /**
      * 投稿情報の取得
      *
@@ -27,8 +26,6 @@ class Project extends CI_Model
         return $get_data;
 
     }
-
-
 
     /**
      * 投稿記事情報のリスト＆件数を取得
@@ -51,7 +48,6 @@ class Project extends CI_Model
         $set_select["pj_work_status"]   = $arr_post['pj_work_status'];
         $set_select["pj_entry_status"]  = $arr_post['pj_entry_status'];
         $set_select["pj_genre01"]       = $arr_post['pj_genre01'];
-
 
         // ORDER BY
         if ($arr_post['orderid'] == '')
@@ -151,18 +147,6 @@ class Project extends CI_Model
         return array($listall, $countall);
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
     /**
      * 案件情報の取得
      *
@@ -183,7 +167,7 @@ class Project extends CI_Model
     }
 
     /**
-     * 案件情報の取得
+     * 案件個別情報の取得
      *
      * @param    int
      * @param    int
@@ -207,8 +191,6 @@ class Project extends CI_Model
         return $get_data;
 
     }
-
-
 
     /**
      * 案件情報のリスト＆件数を取得
@@ -316,8 +298,6 @@ class Project extends CI_Model
         return array($order_list, $order_countall);
     }
 
-
-
     /**
      * 案件情報：新規レード作成
      *
@@ -384,8 +364,6 @@ class Project extends CI_Model
 
     }
 
-
-
     /**
      * 1レコード更新 :: 案件内容
      *
@@ -401,18 +379,17 @@ class Project extends CI_Model
         $current_time = date("Y-m-d H:i:s", $time);
         if (strtotime($set_data['pj_start_time']) <= strtotime($current_time))
         {
-            // エントリーステータス(エントリーなし)
-            $set_data['pj_entry_status'] = 0;
+            $set_data['pj_entry_status'] = 0;                                    // エントリーステータス(エントリーなし)
 
-            // 公開設置日時をセット
-            $set_data['pj_open_date'] = date("Y-m-d H:i:s", $time);
         } else {
-            // エントリーステータス(予約)
-            $set_data['pj_entry_status'] = 2;
+            $set_data['pj_entry_status'] = 2;                                    // エントリーステータス(予約)
         }
 
         // 更新日時をセット
         $set_data['pj_update_date'] = date("Y-m-d H:i:s", $time);
+
+        // 公開設置日時をセット
+        $set_data['pj_open_date'] = date("Y-m-d H:i:s", $time);
 
         $where = array(
                 'pj_id' => $set_data['pj_id']
@@ -421,7 +398,6 @@ class Project extends CI_Model
         $result = $this->db->update('tb_project', $set_data, $where);
         return $result;
     }
-
 
     /**
      * 1レコード更新 :: 投稿記事
@@ -439,6 +415,5 @@ class Project extends CI_Model
         $result = $this->db->update('tb_project', $set_data, $where);
         return $result;
     }
-
 
 }

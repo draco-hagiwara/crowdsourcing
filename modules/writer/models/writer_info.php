@@ -165,7 +165,121 @@ class Writer_info extends CI_Model
 
             return array($listall, $countall);
 
-        }
+    }
+
+    /**
+     * 獲得ポイント＆入金一覧を取得
+     *
+     * @param    array() : 検索項目値
+     * @param    int     : 1ページ当たりの表示件数(LIMIT値)
+     * @param    int     : オフセット値(ページ番号)
+     * @return   array()
+     */
+    public function get_pointlist($arr_post, $tmp_per_page, $tmp_offset=0)
+    {
+
+    	// 各SQL項目へセット
+    	// WHERE
+    	$set_select["wi_wr_id"]          = $arr_post['wi_wr_id'];
+    	$set_select["wi_pay_status"]     = $arr_post['wi_pay_status'];
+    	$set_select_like["wi_pj_id"]     = $arr_post['wi_pj_id'];
+    	$set_select_like["pj_title"]     = $arr_post['pj_title'];
+    	$set_select_btw["check_date_st"] = $arr_post['check_date_st'];
+    	$set_select_btw["check_date_ed"] = $arr_post['check_date_ed'];
+    	$set_select_btw["pay_date_st"]   = $arr_post['pay_date_st'];
+    	$set_select_btw["pay_date_ed"]   = $arr_post['pay_date_ed'];
+
+    	// 対象クライアントメンバーの取得
+    	$order_list = $this->select_pointlist($set_select, $set_select_like, $set_select_btw, $tmp_per_page, $tmp_offset);
+
+    	return $order_list;
+
+    }
+
+    /**
+     * 獲得ポイントリスト＆入金一覧件数を取得
+     *
+     * @param    array() : WHERE句項目
+     * @param    array() : WHERE LIKE句項目
+     * @param    array() : between句項目
+     * @param    int     : 1ページ当たりの表示件数
+     * @param    int     : オフセット値(ページ番号)
+     * @return   array()
+     */
+    public function select_pointlist($set_select, $set_select_like, $set_select_btw, $tmp_per_page, $tmp_offset=0)
+    {
+
+    	$sql  = 'SELECT * FROM `vw_my_point` ';
+    	$sql .= ' WHERE `wi_del_flg` = 0';                                            // 削除フラグ
+
+    	// WHERE文 作成
+    	foreach ($set_select as $key => $val)
+    	{
+    		if (isset($val) && $val != '')
+    		{
+				$sql .= ' AND ' . $key . ' = ' . $this->db->escape($val);
+    		}
+    	}
+
+    	// WHERE-LIKE文 作成
+    	$tmp_firstitem = FALSE;
+    	foreach ($set_select_like as $key => $val)
+    	{
+    		if (isset($val) && $val != '')
+    		{
+    			if ($tmp_firstitem == FALSE)
+    			{
+    				$sql .= ' AND (' . $key . ' LIKE \'%' . $this->db->escape_like_str($val) . '%\'';
+    				$tmp_firstitem = TRUE;
+    			} else {
+    				$sql .= ' OR  ' . $key . ' LIKE \'%' . $this->db->escape_like_str($val) . '%\'';
+    			}
+    		}
+    	}
+    	if ($tmp_firstitem == TRUE)
+    	{
+    		$sql .= ')';
+    	}
+
+    	// WHERE-between文 作成
+    	if ($set_select_btw["check_date_st"] != null)
+    	{
+    		$sql .= ' AND wi_check_date >= \'' . str_replace('/', '-', $set_select_btw["check_date_st"]) . '\'';
+    	}
+    	if ($set_select_btw["check_date_ed"] != null)
+    	{
+    		$sql .= ' AND wi_check_date <= \'' . str_replace('/', '-', $set_select_btw["check_date_ed"]) . '\'';
+    	}
+    	if ($set_select_btw["pay_date_st"] != null)
+    	{
+    		$sql .= ' AND wi_pay_date >= \'' . str_replace('/', '-', $set_select_btw["pay_date_st"]) . '\'';
+    	}
+    	if ($set_select_btw["pay_date_ed"] != null)
+    	{
+    		$sql .= ' AND wi_pay_date <= \'' . str_replace('/', '-', $set_select_btw["pay_date_ed"]) . '\'';
+    	}
+
+    	// ORDER BY文 作成 : ORDERBY の優先順位があるので注意 (ステータス > 案件申請ID)
+    	//$tmp_firstitem = FALSE;
+    	//if ($tmp_firstitem == FALSE)
+    	//{
+    	//	$sql .= ' ORDER BY wi_id DESC';                                        // デフォルト：「案件ID」降順
+    	//}
+
+    	// 対象全件数を取得
+    	$query = $this->db->query($sql);
+    	$countall = $query->num_rows();
+
+    	// LIMIT ＆ OFFSET 値をセット
+    	$sql .= ' LIMIT ' . $tmp_per_page . ' OFFSET ' . $tmp_offset;
+
+    	// クエリー実行
+    	$query = $this->db->query($sql);
+    	$listall = $query->result('array');
+
+    	return array($listall, $countall);
+
+    }
 
     /**
      * ライター個別情報：新規レード作成

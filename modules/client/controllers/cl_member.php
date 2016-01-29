@@ -133,7 +133,7 @@ class Cl_member extends MY_Controller
                 $get_deta = $this->cl->get_client_member($input_post['cm_mem_id'], $flash_data['c_memID']);
                 if ($get_deta[0]['cm_login'] != $input_post['cm_login'])
                 {
-                    if ($this->cl->check_LoginID($input_post['cm_login']) == TRUE)
+                    if ($this->cl->check_mloginid($input_post['cm_login']) == TRUE)
                     {
                         $this->smarty->assign('err_email', TRUE);
                     }
@@ -165,7 +165,7 @@ class Cl_member extends MY_Controller
                 // 新規作成
 
                 // ログインIDの重複チェック
-                if ($this->cl->check_LoginID($input_post['cm_login']) == TRUE)
+                if ($this->cl->check_mloginid($input_post['cm_login']) == TRUE)
                 {
                     $this->smarty->assign('err_email', TRUE);
                 } else {

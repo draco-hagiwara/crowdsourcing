@@ -12,7 +12,7 @@ class Project extends CI_Model
      * TOP：案件検索一覧情報の取得
      *
      * @param    int
-     * @return    array()
+     * @return   array()
      */
     public function get_seachlist($limit_cnt)
     {
@@ -28,7 +28,7 @@ class Project extends CI_Model
      * 作業エントリー一覧の取得
      *
      * @param    int
-     * @return    array()
+     * @return   array()
      */
     public function get_entry_data($get_pj_id)
     {
@@ -49,7 +49,7 @@ class Project extends CI_Model
      * @param    int
      * @param    int
      * @param    tinyint
-     * @return    array()
+     * @return   array()
      */
     public function get_entry_info($get_pj_id, $pji_seq = NULL, $pji_status = NULL)
     {
@@ -77,7 +77,7 @@ class Project extends CI_Model
      * 作業情報の取得
      *
      * @param    int
-     * @return    array()
+     * @return   array()
      */
     public function get_order($get_pj_id)
     {
@@ -98,7 +98,7 @@ class Project extends CI_Model
      * @param    int
      * @param    int
      * @param    tinyint
-     * @return    array()
+     * @return   array()
      */
     public function get_order_info($get_pj_id, $pji_seq = NULL, $pji_status = NULL)
     {
@@ -128,7 +128,7 @@ class Project extends CI_Model
      * @param    array() : 検索項目値
      * @param    int     : 1ページ当たりの表示件数(LIMIT値)
      * @param    int     : オフセット値(ページ番号)
-     * @return    array()
+     * @return   array()
      */
     public function get_orderlist($arr_post, $tmp_per_page, $tmp_offset=0)
     {
@@ -171,7 +171,7 @@ class Project extends CI_Model
      * @param    array() : ORDER BY句項目
      * @param    int     : 1ページ当たりの表示件数
      * @param    int     : オフセット値(ページ番号)
-     * @return    array()
+     * @return   array()
      */
     //public function select_orderlist($set_select, $set_select_like, $set_orderby, $tmp_per_page, $tmp_offset=0)
     public function select_orderlist($set_select, $set_select_like, $tmp_per_page, $tmp_offset=0)
@@ -256,7 +256,7 @@ class Project extends CI_Model
      * 1レコード更新
      *
      * @param    array()
-     * @return    bool
+     * @return   bool
      */
     public function update_project($set_data)
     {
@@ -269,7 +269,52 @@ class Project extends CI_Model
         return $result;
     }
 
+    /**
+     * 公開案件のタイムオーバーの取得
+     *
+     * @param    datetime
+     * @return   array()
+     */
+    public function get_cron_openinglist($set_time)
+    {
 
+    	// 各SQL項目へセット
+    	// 「0：エントリーなし」「0:投稿なし」
+    	$sql = 'SELECT pj_id FROM tb_project ';
+    	$sql .= ' WHERE pj_status BETWEEN 0 AND 5';
+    	$sql .= ' AND pj_work_status = 0';
+    	$sql .= ' AND pj_entry_status = 0';
+    	$sql .= ' AND pj_end_time <= ' . '\'' . $set_time. '\'';
+    	$sql .= ' AND pj_del_flg = 0';
+
+    	$query = $this->db->query($sql);
+    	$get_reservelist = $query->result('array');
+
+    	return $get_reservelist;
+
+    }
+
+    /**
+     * 公開予約リストの取得
+     *
+     * @param    datetime
+     * @return   array()
+     */
+    public function get_cron_reservelist($set_time)
+    {
+
+    	// 各SQL項目へセット
+    	$sql = 'SELECT pj_id FROM tb_project ';
+    	$sql .= ' WHERE pj_entry_status = 2';
+    	$sql .= ' AND pj_start_time <= ' . '\'' . $set_time. '\'';
+    	$sql .= ' AND pj_del_flg = 0';
+
+    	$query = $this->db->query($sql);
+    	$get_reservelist = $query->result('array');
+
+    	return $get_reservelist;
+
+    }
 
 
 
@@ -390,6 +435,8 @@ class Project extends CI_Model
         return $get_rep_id;
 
     }
+
+
 
 
 

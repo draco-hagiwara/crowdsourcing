@@ -198,14 +198,14 @@ $config = array(
 						'rules'   => 'trim|regex_match[/^(https?)(:\/\/[-_.!~*\'()a-zA-Z0-9;\/?:\@&=+\$,%#]+)$/]|max_length[100]'
 				),
 				array(
-						'field'   => 'cl_password',
+						'field'   => 'cm_password',
 						'label'   => 'パスワード',
 						'rules'   => 'trim|required|regex_match[/^[\x21-\x7e]+$/]|min_length[8]|max_length[50]|matches[retype_password]'
 				),
 				array(
 						'field'   => 'retype_password',
 						'label'   => 'パスワード再入力',
-						'rules'   => 'trim|required|regex_match[/^[\x21-\x7e]+$/]|min_length[8]|max_length[50]|matches[cl_password]'
+						'rules'   => 'trim|required|regex_match[/^[\x21-\x7e]+$/]|min_length[8]|max_length[50]|matches[cm_password]'
 				)
 		),
 		'entryclient/confirm' => array(
@@ -330,14 +330,14 @@ $config = array(
 						'rules'   => 'trim|regex_match[/^(https?)(:\/\/[-_.!~*\'()a-zA-Z0-9;\/?:\@&=+\$,%#]+)$/]|max_length[100]'
 				),
 				array(
-						'field'   => 'cl_password',
+						'field'   => 'cm_password',
 						'label'   => 'パスワード',
 						'rules'   => 'trim|required|regex_match[/^[\x21-\x7e]+$/]|min_length[8]|max_length[50]|matches[retype_password]'
 				),
 				array(
 						'field'   => 'retype_password',
 						'label'   => 'パスワード再入力',
-						'rules'   => 'trim|required|regex_match[/^[\x21-\x7e]+$/]|min_length[8]|max_length[50]|matches[cl_password]'
+						'rules'   => 'trim|required|regex_match[/^[\x21-\x7e]+$/]|min_length[8]|max_length[50]|matches[cm_password]'
 				)
 		),
 		'entryclient/complete' => array(
@@ -462,14 +462,14 @@ $config = array(
 						'rules'   => 'trim|regex_match[/^(https?)(:\/\/[-_.!~*\'()a-zA-Z0-9;\/?:\@&=+\$,%#]+)$/]|max_length[100]'
 				),
 				array(
-						'field'   => 'cl_password',
+						'field'   => 'cm_password',
 						'label'   => 'パスワード',
 						'rules'   => 'trim|required|regex_match[/^[\x21-\x7e]+$/]|min_length[8]|max_length[50]|matches[retype_password]'
 				),
 				array(
 						'field'   => 'retype_password',
 						'label'   => 'パスワード再入力',
-						'rules'   => 'trim|required|regex_match[/^[\x21-\x7e]+$/]|min_length[8]|max_length[50]|matches[cl_password]'
+						'rules'   => 'trim|required|regex_match[/^[\x21-\x7e]+$/]|min_length[8]|max_length[50]|matches[cm_password]'
 				)
 		),
 );

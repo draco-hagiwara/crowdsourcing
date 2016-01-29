@@ -420,11 +420,14 @@ class Posting extends MY_Controller
             {
 
                 // ★「追加内容」の更新
-                $set_update_data['pj_id']          = $flash_data['a_pj_id'];                        // 案件ID
-                $set_update_data['pj_status']      = $input_post['pj_status'];                        // ステータス
-                $set_update_data['pj_addwork']     = $input_post['pj_addwork'];                        // 追加仕事情報
-                $set_update_data['pj_comment']     = $input_post['pj_comment'];                        // メモ
-                $set_update_data['pj_update_date'] = date("Y-m-d H:i", $time);                        // 更新日
+                $set_update_data['pj_id']            = $flash_data['a_pj_id'];                      // 案件ID
+                $set_update_data['pj_status']        = $input_post['pj_status'];                    // ステータス
+                $set_update_data['pj_delivery_time'] = $input_post['pj_delivery_time'];             // ライター投稿期限
+                $set_update_data['pj_start_time']    = $input_post['pj_start_time'];                // 公開(募集)開始日時
+                $set_update_data['pj_end_time']      = $input_post['pj_end_time'];                  // 公開(募集)終了日時
+                $set_update_data['pj_addwork']       = $input_post['pj_addwork'];                   // 追加仕事情報
+                $set_update_data['pj_comment']       = $input_post['pj_comment'];                   // メモ
+                $set_update_data['pj_update_date']   = date("Y-m-d H:i", $time);                    // 更新日
 
                 // UPDATE
                 $result = $this->pj->update_pj_posting($set_update_data);
@@ -443,34 +446,39 @@ class Posting extends MY_Controller
                 // ライター情報の読み込み
                 $get_data_wr = $this->pj->get_posting($flash_data['a_pj_id']);
 
-                $set_widata['wi_wr_id']          = $get_data_wr[0]['pj_wr_id'];                        // ライターID
-                $set_widata['wi_pj_id']          = $flash_data['a_pj_id'];                            // 案件ID
+                $set_widata['wi_wr_id']          = $get_data_wr[0]['pj_wr_id'];                     // ライターID
+                $set_widata['wi_pj_id']          = $flash_data['a_pj_id'];                          // 案件ID
                 $set_widata['wi_pj_work_status'] = $this->config->item('PJ_WSTATUS_CHECKOK_ID');    // 「審査OK」
                 $set_widata['wi_word_count']     = $tmp_wordcnt;                                    // 総文字数
 
                 $this->load->model('Admin', ad, TRUE);
                 $get_point = $this->ad->cal_point($tmp_wordcnt, $get_data_wr[0]['wi_word_tanka']);
-                $set_widata['wi_point'] = $get_point["val"];                                        // 獲得ポイント
+                $set_widata['wi_point']        = $get_point["val"];                                 // 獲得ポイント
+                $set_widata['wi_point_adjust'] = $input_post['wi_point_adjust'];                    // 調整ポイント
+                $set_widata['wi_pay_money']    = $get_point["val"] + $input_post['wi_point_adjust'];// 入金金額(予定)
 
-                $set_widata['wi_check_date']  = date("Y-m-d H:i", $time);                            // 審査完了日
-                $set_widata['wi_update_date'] = date("Y-m-d H:i", $time);                            // 更新日
+                $set_widata['wi_check_date']  = date("Y-m-d H:i", $time);                           // 審査完了日
+                $set_widata['wi_update_date'] = date("Y-m-d H:i", $time);                           // 更新日
 
-                $set_wdata['wr_id'] = $get_data_wr[0]['pj_wr_id'];                                    // ライターID
-                $set_wdata['wr_entry_count']  = $get_data_wr[0]['wr_entry_count'] + 1;                // エントリー回数
-                $set_wdata['wr_saiyo_count']  = $get_data_wr[0]['wr_saiyo_count'] + 1;                // 採用回数
-                $set_wdata['wr_point_total']  = $get_data_wr[0]['wr_point_total'] + $get_point["val"];    // ポイント累計
-                $set_wdata['wr_update_date']  = date("Y-m-d H:i", $time);                            // 更新日
+                $set_wdata['wr_id'] = $get_data_wr[0]['pj_wr_id'];                                  // ライターID
+                $set_wdata['wr_entry_count']  = $get_data_wr[0]['wr_entry_count'] + 1;              // エントリー回数
+                $set_wdata['wr_saiyo_count']  = $get_data_wr[0]['wr_saiyo_count'] + 1;              // 採用回数
+                $set_wdata['wr_point_total']  = $get_data_wr[0]['wr_point_total']
+                                                + $get_point["val"]
+                                                + $input_post['wi_point_adjust'];                   // ポイント累計
+                $set_wdata['wr_update_date']  = date("Y-m-d H:i", $time);                           // 更新日
 
-                $set_pdata['pj_id'] = $flash_data['a_pj_id'];                                        // 案件ID
-                $set_pdata['pj_status']        = $this->config->item('PJ_STATUS_END_ID');            // 「公開終了」
-                $set_pdata['pj_work_status']   = $this->config->item('PJ_WSTATUS_CHECKOK_ID');        // 「審査OK」
-                $set_pdata['pj_wi_point']      = $get_point["val"];                                    // 獲得ポイント
-                $set_pdata['pj_comment']       = $input_post['pj_comment'];                            // メモ
-                $set_pdata['pj_wi_check_date'] = date("Y-m-d H:i", $time);                            // 審査完了日
-                $set_pdata['pj_update_date']   = date("Y-m-d H:i", $time);                            // 更新日
+                $set_pdata['pj_id'] = $flash_data['a_pj_id'];                                       // 案件ID
+                $set_pdata['pj_status']          = $this->config->item('PJ_STATUS_END_ID');         // 「公開終了」
+                $set_pdata['pj_work_status']     = $this->config->item('PJ_WSTATUS_CHECKOK_ID');    // 「審査OK」
+                $set_pdata['pj_wi_point']        = $get_point["val"];                               // 獲得ポイント
+                $set_pdata['pj_wi_point_adjust'] = $input_post['wi_point_adjust'];                  // 調整ポイント
+                $set_pdata['pj_comment']         = $input_post['pj_comment'];                       // メモ
+                $set_pdata['pj_wi_check_date']   = date("Y-m-d H:i", $time);                        // 審査完了日
+                $set_pdata['pj_update_date']     = date("Y-m-d H:i", $time);                        // 更新日
 
                 // トランザクション・START
-                $this->db->trans_strict(FALSE);                                        // StrictモードをOFF
+                $this->db->trans_strict(FALSE);                                      // StrictモードをOFF
                 $this->db->trans_start();                                            // trans_begin
 
                     // UPDATE:ライター個別情報
@@ -493,7 +501,7 @@ class Posting extends MY_Controller
                     $set_mail['wr_nickname']    = $get_data_wr[0]['wr_nickname'];
                     $set_mail['pj_id']          = $flash_data['a_pj_id'];
                     $set_mail['pj_order_title'] = $get_data_info[0]['pj_order_title'];
-                    $set_mail['pj_wi_point']    = $get_point["val"];
+                    $set_mail['pj_wi_point']    = $get_point["val"] + $input_post['wi_point_adjust'];
                     $this->_mail_send01($set_mail, '審査合格');
                 }
 
@@ -505,35 +513,35 @@ class Posting extends MY_Controller
                 $get_data_info = $this->pjinfo->get_order_info($flash_data['a_pj_id']);
                 $get_data_wr = $this->pj->get_posting($flash_data['a_pj_id']);
 
-                $set_widata['wi_wr_id']          = $get_data_wr[0]['pj_wr_id'];                        // ライターID
-                $set_widata['wi_pj_id']          = $flash_data['a_pj_id'];                            // 案件ID
+                $set_widata['wi_wr_id']          = $get_data_wr[0]['pj_wr_id'];                     // ライターID
+                $set_widata['wi_pj_id']          = $flash_data['a_pj_id'];                          // 案件ID
                 $set_widata['wi_pj_work_status'] = $this->config->item('PJ_WSTATUS_CHECKNG_ID');    // 「審査NG」
                 $set_widata['wi_check_date']     = date("Y-m-d H:i", $time);                        // 審査完了日
                 $set_widata['wi_update_date']    = date("Y-m-d H:i", $time);                        // 更新日
 
-                $set_wdata['wr_id']          = $get_data_wr[0]['pj_wr_id'];                            // ライターID
-                $set_wdata['wr_entry_count'] = $get_data_wr[0]['wr_entry_count'] + 1;                // エントリー回数
+                $set_wdata['wr_id']          = $get_data_wr[0]['pj_wr_id'];                         // ライターID
+                $set_wdata['wr_entry_count'] = $get_data_wr[0]['wr_entry_count'] + 1;               // エントリー回数
                 $set_wdata['wr_update_date'] = date("Y-m-d H:i", $time);                            // 更新日
 
-                $set_pdata['pj_id']           = $flash_data['a_pj_id'];                                // 案件ID
-                $set_pdata['pj_status']       = $this->config->item('PJ_STATUS_REOPEN_ID');            // 「(再)公開」
-                $set_pdata['pj_entry_status'] = $this->config->item('PJ_ESTATUS_NOENTRY_ID');        // 「エントリー無」
-                $set_pdata['pj_work_status']  = $this->config->item('PJ_WSTATUS_ENTRY_ID');            // 「投稿なし」
-                $set_pdata['pj_wr_id'] = NULL;                                                        // ライターID:int
-                $set_pdata['pj_wi_id'] = NULL;                                                        // ライター個別情報ID:int
-                $set_pdata['pj_comment']      = $input_post['pj_comment'];                            // メモ
-                $set_pdata['pj_update_date']  = date("Y-m-d H:i", $time);                            // 更新日
+                $set_pdata['pj_id']           = $flash_data['a_pj_id'];                             // 案件ID
+                $set_pdata['pj_status']       = $this->config->item('PJ_STATUS_REOPEN_ID');         // 「(再)公開」
+                $set_pdata['pj_entry_status'] = $this->config->item('PJ_ESTATUS_NOENTRY_ID');       // 「エントリー無」
+                $set_pdata['pj_work_status']  = $this->config->item('PJ_WSTATUS_ENTRY_ID');         // 「投稿なし」
+                $set_pdata['pj_wr_id'] = NULL;                                                      // ライターID:int
+                $set_pdata['pj_wi_id'] = NULL;                                                      // ライター個別情報ID:int
+                $set_pdata['pj_comment']      = $input_post['pj_comment'];                          // メモ
+                $set_pdata['pj_update_date']  = date("Y-m-d H:i", $time);                           // 更新日
 
-                $set_pdata['pj_id']               = $flash_data['a_pj_id'];                            // 案件ID
-                $set_edata['rep_check_flg']       = FALSE;                                            // チェックフラグ
-                $set_edata['rep_title']           = NULL;                                            // タイトル
-                $set_edata['rep_title_wordcount'] = 0;                                                // タイトル文字数:int
-                $set_edata['rep_text_body']       = NULL;                                            // 本文
-                $set_edata['rep_body_wordcount']  = 0;                                                // 本文文字数:int
-                $set_edata['rep_update_date']     = date("Y-m-d H:i", $time);                        // 更新日
+                $set_pdata['pj_id']               = $flash_data['a_pj_id'];                         // 案件ID
+                $set_edata['rep_check_flg']       = FALSE;                                          // チェックフラグ
+                $set_edata['rep_title']           = NULL;                                           // タイトル
+                $set_edata['rep_title_wordcount'] = 0;                                              // タイトル文字数:int
+                $set_edata['rep_text_body']       = NULL;                                           // 本文
+                $set_edata['rep_body_wordcount']  = 0;                                              // 本文文字数:int
+                $set_edata['rep_update_date']     = date("Y-m-d H:i", $time);                       // 更新日
 
                 // トランザクション・START
-                $this->db->trans_strict(FALSE);                                        // StrictモードをOFF
+                $this->db->trans_strict(FALSE);                                      // StrictモードをOFF
                 $this->db->trans_start();                                            // trans_begin
 
                     // UPDATE:ライター個別情報
@@ -576,10 +584,12 @@ class Posting extends MY_Controller
                 $this->form_validation->run();
 
                 $set_pdata['pj_id']            = $flash_data['a_pj_id'];                            // 案件ID
-                $set_pdata['pj_deliver_flg']   = $this->config->item('PJ_DSTATUS_OK_ID');            // 「納品済」
-                $set_pdata['pj_delivery_date'] = date("Y-m-d H:i", $time);                            // 納品日
-                $set_pdata['pj_update_date']   = date("Y-m-d H:i", $time);                            // 更新日
-                $set_pdata['pj_comment']       = $input_post['pj_comment'];                            // メモ
+                $set_pdata['pj_pay_money']     = $input_post['wi_point']
+                                                 + $input_post['wi_point_adjust'];                  // 支払金額
+                $set_pdata['pj_deliver_flg']   = $this->config->item('PJ_DSTATUS_OK_ID');           // 「納品済」
+                $set_pdata['pj_delivery_date'] = date("Y-m-d H:i", $time);                          // 納品日
+                $set_pdata['pj_update_date']   = date("Y-m-d H:i", $time);                          // 更新日
+                $set_pdata['pj_comment']       = $input_post['pj_comment'];                         // メモ
 
                 // UPDATE:案件情報
                 $this->pj->update_pj_posting($set_pdata);
@@ -986,16 +996,26 @@ class Posting extends MY_Controller
                 //        'label'   => '個別文字単価指定',
                 //        'rules'   => 'trim|decimal|max_length[4]'
                 //),
-                //array(
-                //        'field'   => 'en_open_date',
-                //        'label'   => '案件希望公開日',
-                //        'rules'   => 'trim|required|regex_match[/^\d{4}-\d{1,2}-\d{1,2}+$/]|max_length[10]'
-                //),
-                //array(
-                //        'field'   => 'en_delivery_date',
-                //        'label'   => '案件希望納期',
-                //        'rules'   => 'trim|required|regex_match[/^\d{4}-\d{1,2}-\d{1,2}+$/]|max_length[10]'
-                //),
+                array(
+                        'field'   => 'wi_point_adjust',
+                        'label'   => '調整ポイント数',
+                        'rules'   => 'trim|numeric|max_length[9]'
+                ),
+        		array(
+                        'field'   => 'pj_delivery_time',
+                        'label'   => 'ライター投稿期限',
+                        'rules'   => 'trim|required|regex_match[/^\d{4}-\d{1,2}-\d{1,2} \d{1,2}:\d{1,2}+$/]|max_length[16]'
+                ),
+                array(
+                        'field'   => 'pj_start_time',
+                        'label'   => '公開(募集)開始日時',
+                        'rules'   => 'trim|required|regex_match[/^\d{4}-\d{1,2}-\d{1,2} \d{1,2}:\d{1,2}+$/]|max_length[16]'
+                ),
+        		array(
+                        'field'   => 'pj_end_time',
+                        'label'   => '公開(募集)終了日時',
+                        'rules'   => 'trim|required|regex_match[/^\d{4}-\d{1,2}-\d{1,2} \d{1,2}:\d{1,2}+$/]|max_length[16]'
+                ),
                 array(
                         'field'   => 'en_comment',
                         'label'   => '備考',

@@ -18,6 +18,19 @@
 <script src="{base_url()}../js/jquery-ui-3.0.2.custom.min.js"></script>
 <script src="{base_url()}../js/bootstrap.min.js"></script>
 
+<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1/jquery-ui.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1/i18n/jquery.ui.datepicker-ja.min.js"></script>
+<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1/themes/redmond/jquery-ui.css" >
+
+<script>
+  $(function() {
+    $("#datepicker_1").datepicker();
+    $("#datepicker_2").datepicker();
+    $("#datepicker_3").datepicker();
+    $("#datepicker_4").datepicker();
+  });
+</script>
+
 </head>
 
 
@@ -52,8 +65,8 @@
                 <li><a href="/client/orderlist/">案件状況管理</a></li>
                 <li><a href="#" class="dropdown-toggle" data-toggle="dropdown">支払管理<b class="caret"></b></a>
                   <ul class="dropdown-menu right">
-                    <li><a href="/client/entrylist/">支払明細</a></li>
-                    <li><a href="/client/entryorder/index/0/">契約情報</a></li>
+                    <li><a href="/client/pay_list/">支払＆請求 月次実績</a></li>
+                    <li><a href="/client/pay_detail/">支払＆請求ポイント 明細</a></li>
                   </ul>
                 </li>
               </ul>
@@ -63,6 +76,7 @@
                     <li><a href="/client/cl_member/">メンバー管理</a></li>
                     <li><a href="/client/cl_profile/">プロフィール編集</a></li>
                     <li><a href="/client/cl_info/">システム設定</a></li>
+                    <li><a href="/client/cl_contract/">契約情報</a></li>
                     <li><a href="/client/login/logout/">ログアウト</a></li>
                   </ul>
                 </li>

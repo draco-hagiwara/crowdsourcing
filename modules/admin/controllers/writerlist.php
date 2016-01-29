@@ -171,9 +171,10 @@ class Writerlist extends MY_Controller
 
         } else {
 
-            $set_data['wr_status']     = $this->input->post('wr_status');
-            $set_data['wr_id']         = $this->input->post('wr_id');
-            $set_data['wr_mm_rank_id'] = $this->input->post('wr_mm_rank_id');
+            $set_data['wr_status']         = $this->input->post('wr_status');
+            $set_data['wr_id']             = $this->input->post('wr_id');
+            $set_data['wr_mm_rank_id']     = $this->input->post('wr_mm_rank_id');
+            $set_data['wr_pay_limit_date'] = $this->input->post('wr_pay_limit_date');
 
             if ($this->wr->update_Writer($set_data))
             {
@@ -266,11 +267,20 @@ class Writerlist extends MY_Controller
                 'ASC'  => '昇順',
         );
 
+        $arroptions_paylimit = array (
+        		'0' => '日　次',
+        		'1' => '週　次',
+        		'2' => '月　次',
+        		'3' => '曜　日',
+        		'4' => '10日〆',
+        );
+
         $this->smarty->assign('options_wr_status01',   $arroptions_wrstatus01);
         $this->smarty->assign('options_wr_status02',   $arroptions_wrstatus02);
         $this->smarty->assign('options_wr_mm_rank_id', $arroptions_mrank);
         $this->smarty->assign('options_orderid',       $arroptions_id);
         $this->smarty->assign('options_orderstatus',   $arroptions_status);
+        $this->smarty->assign('options_paylimit',      $arroptions_paylimit);
 
     }
 

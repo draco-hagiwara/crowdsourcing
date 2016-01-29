@@ -21,6 +21,65 @@ class Top extends MY_Controller
 
     }
 
+
+
+
+
+    public function daily_backup()
+    {
+
+    	$time = time();
+    	$_st_time = date("Y-m-d H:i:s", $time);
+
+    	// プログラムが古いようだ！
+//        // DB ユーティリティクラスをロード
+//        $this->load->database();
+//        $this->load->dbutil();
+//        log_message('info', 'bat::バックアップ処理０１');
+//
+//        // データベース全体をバックアップしその結果を変数に代入
+//        $prefs = array(
+//                'tables'      => array('tb_writer', 'tb_writer_info'),      // バックアップするテーブルの配列。
+//                'ignore'      => array(),                                   // バックアップしないテーブルのリスト。
+//                'format'      => 'gzip',                                    // gzip, zip, txt
+//                'filename'    => 'mybackup.sql',                            // ファイル名 - ZIP ファイルのときだけ必要
+//                'add_drop'    => TRUE,                                      // バックアップファイルにDROP TABLE 文を追加するかどうか
+//                'add_insert'  => TRUE,                                      // バックアップファイルにINSERT 文を追加するかどうか
+//                'newline'     => "\n"                                       // バックアップファイルで使う改行文字
+//        );
+//        $backup =& $this->dbutil->backup();
+//        log_message('info', 'bat::バックアップ処理０２');
+//
+//        // ヘルパーをロードし、サーバにファイルを書き出す
+//        $this->load->helper('file');
+//        write_file('/home/cs/www/cs.com.dev/daily_backup/mybackup_' . $_st_time . '.gz', $backup, 'c+');
+//        log_message('info', 'bat::バックアップ処理０３');
+//
+//        // ダウンロードヘルパーをロードし、ファイルをデスクトップに送信する
+//        $this->load->helper('download');
+//        force_download('mybackup.gz', $backup);
+
+
+
+    	$strCommand = '/home/cs/www/cs.com.dev/daily_backup/backup4mysql.sh';
+    	exec( $strCommand );
+
+    	$strCommand = '/home/cs/www/cs.com.dev/daily_backup/backup4pg.sh';
+    	exec( $strCommand );
+
+
+    	// ログ出力
+    	$_ed_time = date("Y-m-d H:i:s", time());
+    	log_message('info', 'bat::バックアップ処理が実行されました。' . $_st_time . ' => ' . $_ed_time);
+
+    }
+
+
+
+
+
+
+
     public function index()
     {
 

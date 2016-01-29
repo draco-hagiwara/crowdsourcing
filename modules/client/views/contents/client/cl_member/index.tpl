@@ -10,7 +10,7 @@
 <div id="contents" class="container">
 
 <div class="jumbotron">
-  <h3>メンバー情報　　<span class="label label-success">更　新</span></h3>
+  <h3>メンバー管理　　<span class="label label-success">更　新</span></h3>
 </div>
 
 

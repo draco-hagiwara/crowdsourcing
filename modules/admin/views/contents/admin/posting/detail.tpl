@@ -114,6 +114,19 @@
     <label for="wi_point" class="col-sm-3 control-label">今回獲得ポイント数</label>
     <div class="col-sm-4">
         {$entry_info.wi_point}
+        {form_hidden('wi_point', $entry_info.wi_point)}
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="wi_point_adjust" class="col-sm-3 control-label">調整ポイント数</label>
+    <div class="col-sm-4">
+      {if ($entry_info.pj_work_status == 3)}
+        {form_input('wi_point_adjust' , set_value('wi_point_adjust', $entry_info.wi_point_adjust) , 'class="form-control" placeholder="調整ポイント数(±)を入力してください"')}
+        {if form_error('wi_point_adjust')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('wi_point_adjust')}</font></label>{/if}
+      {else}
+        {$entry_info.wi_point_adjust}
+        {form_hidden('wi_point_adjust', $entry_info.wi_point_adjust)}
+      {/if}
     </div>
   </div>
   <div class="form-group">
@@ -216,25 +229,46 @@
   <div class="form-group">
     <label for="pj_delivery_time" class="col-sm-3 control-label">ライター投稿期限</label>
     <div class="col-sm-4">
+      {if ($entry_info.pj_status == 6) AND ($entry_info.pj_entry_status == 0)}
+        {form_input('pj_delivery_time' , set_value('pj_delivery_time', $entry_info.pj_delivery_time) , 'class="form-control" placeholder="「20xx-xx-xx HH:MM」の形式で入力してください"')}
+        「20xx-xx-xx HH:MM」の形式。
+        {if form_error('pj_delivery_time')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('pj_delivery_time')}</font></label>{/if}
+      {else}
         {$entry_info.pj_delivery_time}
+        {form_hidden('pj_delivery_time', $entry_info.pj_delivery_time)}
+      {/if}
     </div>
   </div>
   <div class="form-group">
     <label for="pj_limit_time" class="col-sm-3 control-label">ライター投稿制限時間</label>
     <div class="col-sm-4">
-        {$entry_info.pj_limit_time}
+      {$entry_info.pj_limit_time}
     </div>
   </div>
   <div class="form-group">
     <label for="pj_start_time" class="col-sm-3 control-label">公開(募集)開始日時</label>
     <div class="col-sm-4">
+      {if ($entry_info.pj_status == 6) AND ($entry_info.pj_entry_status == 0)}
+        {form_input('pj_start_time' , set_value('pj_start_time', $entry_info.pj_start_time) , 'class="form-control" placeholder="「20xx-xx-xx HH:MM」の形式で入力してください"')}
+        「20xx-xx-xx HH:MM」の形式。
+        {if form_error('pj_start_time')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('pj_start_time')}</font></label>{/if}
+      {else}
         {$entry_info.pj_start_time}
+        {form_hidden('pj_start_time', $entry_info.pj_start_time)}
+      {/if}
     </div>
   </div>
   <div class="form-group">
     <label for="pj_end_time" class="col-sm-3 control-label">公開(募集)終了日時</label>
     <div class="col-sm-4">
+      {if ($entry_info.pj_status == 6) AND ($entry_info.pj_entry_status == 0)}
+        {form_input('pj_end_time' , set_value('pj_end_time', $entry_info.pj_end_time) , 'class="form-control" placeholder="「20xx-xx-xx HH:MM」の形式で入力してください"')}
+        「20xx-xx-xx HH:MM」の形式。
+        {if form_error('pj_end_time')}<span class="label label-danger">Error : </span><label><font color=red>{form_error('pj_end_time')}</font></label>{/if}
+      {else}
         {$entry_info.pj_end_time}
+        {form_hidden('pj_end_time', $entry_info.pj_end_time)}
+      {/if}
     </div>
   </div>
   <div class="form-group">
@@ -283,7 +317,7 @@
 
   <br /><br />
   {$js = 'class="btn btn-default" onClick="return cnfmAndSubmit()"'}
-  {if ($entry_info.pj_work_status <= 1) OR ($entry_info.pj_work_status >= 6)}
+  {if (($entry_info.pj_work_status <= 1) OR ($entry_info.pj_work_status >= 6) OR ($entry_info.pj_deliver_flg == 1))}
       <div class="form-group">
         <div class="col-sm-offset-3 col-sm-1">
             {$attr_sub['name']  = 'submit'}
@@ -307,7 +341,7 @@
             {form_button($attr_sub , '審査ＮＧ' , $js)}
         </div>
       </div>
-  {elseif ($entry_info.pj_work_status == 4)}
+  {elseif (($entry_info.pj_work_status == 4) AND ($entry_info.pj_deliver_flg == 0))}
       <div class="form-group">
         <div class="col-sm-offset-3 col-sm-1">
             {$attr_sub['name']  = 'submit'}

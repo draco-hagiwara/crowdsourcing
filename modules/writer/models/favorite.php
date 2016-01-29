@@ -15,7 +15,7 @@ class Favorite extends CI_Model
      * @param    array() : 検索項目値
      * @param    int     : 1ページ当たりの表示件数(LIMIT値)
      * @param    int     : オフセット値(ページ番号)
-     * @return    array()
+     * @return   array()
      */
     public function get_favist($set_data, $tmp_per_page, $tmp_offset=0)
     {
@@ -39,7 +39,7 @@ class Favorite extends CI_Model
      * @param    array() : ORDER BY句項目
      * @param    int     : 1ページ当たりの表示件数
      * @param    int     : オフセット値(ページ番号)
-     * @return    array()
+     * @return   array()
      */
     public function select_favist($set_select, $set_select_like, $tmp_per_page, $tmp_offset=0)
     {
@@ -70,7 +70,7 @@ class Favorite extends CI_Model
      * @param    int()
      * @param    int()
      * @param    array()
-     * @return    boolean
+     * @return   boolean
      */
     public function insert_favorite($wr_id, $pj_id, $post_data)
     {
@@ -95,7 +95,7 @@ class Favorite extends CI_Model
      * 気になるリスト情報：削除
      *
      * @param    int
-     * @return    array()
+     * @return   array()
      */
     public function delete_favorite($set_data)
     {

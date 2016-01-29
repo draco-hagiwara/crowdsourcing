@@ -18,6 +18,20 @@
 <script src="{base_url()}../js/jquery-ui-3.0.2.custom.min.js"></script>
 <script src="{base_url()}../js/bootstrap.min.js"></script>
 <script src="{base_url()}../js/main.js"></script>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1/jquery-ui.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1/i18n/jquery.ui.datepicker-ja.min.js"></script>
+<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1/themes/redmond/jquery-ui.css" >
+
+<script>
+  $(function() {
+    $("#datepicker_1").datepicker();
+    $("#datepicker_2").datepicker();
+    $("#datepicker_3").datepicker();
+    $("#datepicker_4").datepicker();
+  });
+</script>
+
 </head>
 
 
@@ -64,7 +78,15 @@
                     <li><a href="/admin/entryclient/">新規登録</a></li>
                   </ul>
                 </li>
-                <li><a href="">決済管理</a></li>
+                <li><a href="#" class="dropdown-toggle" data-toggle="dropdown">決済管理<b class="caret"></b></a>
+                  <ul class="dropdown-menu right">
+                    <li><a href="/admin/pay_cldetail/">クライアント請求明細</a></li>
+                    <li><a href="/admin/pay_cllist/">クライアント請求一覧</a></li>
+                    <li><a href="/admin/pay_wrdetail/">ライター入金明細</a></li>
+                    <li><a href="/admin/pay_wrlist/">ライター入金一覧</a></li>
+                    <li><a href="/admin/pay_csvup/">CSVデータ入力</a></li>
+                  </ul>
+                </li>
               </ul>
 
               <ul class="nav navbar-nav navbar-right">

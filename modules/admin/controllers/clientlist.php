@@ -150,7 +150,7 @@ class Clientlist extends MY_Controller
         $get_data = $this->cl->select_client_id($tmp_clientid);
 
         // 都道府県情報＆手数料選択設定
-        $this->set_optionitem($get_data[0]);
+        $this->_set_optionitem($get_data[0]);
 
         // 現在の会員ランク単価を取得
         $this->_get_member_tanka($tmp_clientid);
@@ -176,13 +176,14 @@ class Clientlist extends MY_Controller
         $this->load->model('Client', 'cl', TRUE);
 
         // 都道府県情報＆手数料選択設定
-        $this->set_optionitem($input_post);
+        $this->_set_optionitem($input_post);
 
         $this->_set_validation01();                                            // バリデーション設定
         if ($this->form_validation->run() == FALSE)
         {
             $this->smarty->assign('client_info', $this->input->post());
         } else {
+
             // DB書き込み
             $set_data01['cl_status']       = $this->input->post('cl_status');
             $set_data01['cl_id']           = $this->input->post('cl_id');
@@ -193,12 +194,25 @@ class Clientlist extends MY_Controller
             {
 
                 // クライアント個別情報更新
-                $set_data02['cl_id']            = $this->input->post('cl_id');
-                $set_data02['ci_fee_id']        = $this->input->post('ci_fee_id');
-                $set_data02['ci_fee']           = $this->input->post('ci_fee');
-                $set_data02['ci_agreement_st']  = $this->input->post('ci_agreement_st');
-                $set_data02['ci_agreement_end'] = $this->input->post('ci_agreement_end');
-                $set_data02['ci_comment']       = $this->input->post('ci_comment');
+                if ($input_post['ci_contract_id'] == 0)
+                {
+                   $set_data02['ci_contract_fix']    = $this->input->post('ci_contract_fix');           // 月額固定金額
+                   $set_data02['ci_contract_result'] = '0.00';
+                } elseif ($input_post['ci_contract_id'] == 1) {
+                   $set_data02['ci_contract_fix']    = '0';
+                   $set_data02['ci_contract_result'] = $this->input->post('ci_contract_result');        // 成果報酬率
+                } else {
+                   $set_data02['ci_contract_fix']    = $this->input->post('ci_contract_fix');
+                   $set_data02['ci_contract_result'] = $this->input->post('ci_contract_result');
+                }
+
+                $set_data02['cl_id']               = $this->input->post('cl_id');
+                $set_data02['ci_contract_id']      = $this->input->post('ci_contract_id');
+                $set_data02['ci_contract_initial'] = $this->input->post('ci_contract_initial');         // 初期導入費用
+                $set_data02['ci_contract_adjust']  = $this->input->post('ci_contract_adjust');          // 調整金額
+                $set_data02['ci_contract_st']      = $this->input->post('ci_contract_st');
+                $set_data02['ci_contract_end']     = $this->input->post('ci_contract_end');
+                $set_data02['ci_comment']          = $this->input->post('ci_comment');
 
                 if ($this->cl->update_Client_info($set_data02)) {
                 } else {
@@ -219,7 +233,7 @@ class Clientlist extends MY_Controller
     }
 
     // 都道府県情報＆手数料選択設定
-    private function set_optionitem($input_data)
+    private function _set_optionitem($input_data)
     {
 
         // 都道府県情報設定
@@ -229,8 +243,11 @@ class Clientlist extends MY_Controller
         $this->smarty->assign('pref_name', $this->_pref_name);
 
         // 手数料状態選択
-        $this->smarty->assign('ci_fee_id', $input_data['ci_fee_id']);
-        $this->smarty->assign('ci_fee',    $input_data['ci_fee']);
+        $this->smarty->assign('ci_contract_id',      $input_data['ci_contract_id']);
+        $this->smarty->assign('ci_contract_initial', $input_data['ci_contract_initial']);
+        $this->smarty->assign('ci_contract_fix',     $input_data['ci_contract_fix']);
+        $this->smarty->assign('ci_contract_result',  $input_data['ci_contract_result']);
+        $this->smarty->assign('ci_contract_adjust',  $input_data['ci_contract_adjust']);
 
     }
 
@@ -254,17 +271,17 @@ class Clientlist extends MY_Controller
     private function _get_Pagination($client_countall, $tmp_per_page)
     {
 
-        $config['base_url']       = base_url() . '/clientlist/search/';        // ページの基本URIパス。「/コントローラクラス/アクションメソッド/」
-        $config['per_page']       = $tmp_per_page;                            // 1ページ当たりの表示件数。
-        $config['total_rows']     = $client_countall;                        // 総件数。where指定するか？
-        $config['uri_segment']    = 4;                                        // オフセット値がURIパスの何セグメント目とするか設定
-        $config['num_links']      = 5;                                        //現在のページ番号の左右にいくつのページ番号リンクを生成するか設定
-        $config['full_tag_open']  = '<p class="pagination">';                // ページネーションリンク全体を階層化するHTMLタグの先頭タグ文字列を指定
-        $config['full_tag_close'] = '</p>';                                    // ページネーションリンク全体を階層化するHTMLタグの閉じタグ文字列を指定
-        $config['first_link']     = '最初へ';                                // 最初のページを表すテキスト。
-        $config['last_link']      = '最後へ';                                // 最後のページを表すテキスト。
-        $config['prev_link']      = '前へ';                                    // 前のページへのリンクを表わす文字列を指定
-        $config['next_link']      = '次へ';                                    // 次のページへのリンクを表わす文字列を指定
+        $config['base_url']       = base_url() . '/clientlist/search/';     // ページの基本URIパス。「/コントローラクラス/アクションメソッド/」
+        $config['per_page']       = $tmp_per_page;                          // 1ページ当たりの表示件数。
+        $config['total_rows']     = $client_countall;                       // 総件数。where指定するか？
+        $config['uri_segment']    = 4;                                      // オフセット値がURIパスの何セグメント目とするか設定
+        $config['num_links']      = 5;                                      //現在のページ番号の左右にいくつのページ番号リンクを生成するか設定
+        $config['full_tag_open']  = '<p class="pagination">';               // ページネーションリンク全体を階層化するHTMLタグの先頭タグ文字列を指定
+        $config['full_tag_close'] = '</p>';                                 // ページネーションリンク全体を階層化するHTMLタグの閉じタグ文字列を指定
+        $config['first_link']     = '最初へ';                               // 最初のページを表すテキスト。
+        $config['last_link']      = '最後へ';                               // 最後のページを表すテキスト。
+        $config['prev_link']      = '前へ';                                 // 前のページへのリンクを表わす文字列を指定
+        $config['next_link']      = '次へ';                                 // 次のページへのリンクを表わす文字列を指定
 
         $this->load->library('pagination', $config);                        // Paginationクラス読み込み
         $set_page['page_link'] = $this->pagination->create_links();
@@ -312,17 +329,20 @@ class Clientlist extends MY_Controller
                 'ASC'  => '昇順',
         );
 
-        // 手数料状態選択
-        $arroptions_ci_fee_id = array (
-                '0'    => '手数料:率',
-                '1'    => '手数料:月額固定',
-        );
+        // 契約＆手数料請求状態選択
+        $this->config->load('config_comm');
+        $arroptions_ci_contract_id = $this->config->item('CLIENT_FEE');
+        //$arroptions_ci_contract_id = array (
+        //        '0'    => '率(成果報酬)',
+        //        '1'    => '月額固定',
+        //        '2'    => '月額固定+率(成果報酬)',
+        //);
 
-        $this->smarty->assign('options_cl_status01',   $arroptions_clstatus01);
-        $this->smarty->assign('options_cl_status02',   $arroptions_clstatus02);
-        $this->smarty->assign('options_orderid',       $arroptions_id);
-        $this->smarty->assign('options_orderstatus',   $arroptions_status);
-        $this->smarty->assign('options_ci_fee_id',     $arroptions_ci_fee_id);
+        $this->smarty->assign('options_cl_status01',    $arroptions_clstatus01);
+        $this->smarty->assign('options_cl_status02',    $arroptions_clstatus02);
+        $this->smarty->assign('options_orderid',        $arroptions_id);
+        $this->smarty->assign('options_orderstatus',    $arroptions_status);
+        $this->smarty->assign('options_ci_contract_id', $arroptions_ci_contract_id);
     }
 
     // フォーム・バリデーションチェック
@@ -367,19 +387,39 @@ class Clientlist extends MY_Controller
                         'rules'   => 'trim|required'
                 ),
                 array(
-                        'field'   => 'ci_fee_id',
+                        'field'   => 'ci_contract_initial',
+                        'label'   => '初期導入費用',
+                        'rules'   => 'trim|is_natural|max_length[9]'
+                ),
+              array(
+                        'field'   => 'ci_contract_id',
                         'label'   => '手数料設定',
                         'rules'   => 'trim|required'
                 ),
                 array(
-                        'field'   => 'ci_agreement_st',
-                        'label'   => '契約開始日',
-                        'rules'   => 'trim|regex_match[/^\d{4}-\d{1,2}-\d{1,2}+$/]|max_length[10]'
+                        'field'   => 'ci_contract_fix',
+                        'label'   => '月額固定金額',
+                        'rules'   => 'trim|is_natural|max_length[9]'
                 ),
                 array(
-                        'field'   => 'ci_agreement_end',
+                        'field'   => 'ci_contract_result',
+                        'label'   => '成果報酬率',
+                        'rules'   => 'trim|regex_match[/^[0-1](\.\d{1,2})+$/]|less_than[1.01]'
+                ),
+                array(
+                        'field'   => 'ci_contract_adjust',
+                        'label'   => '調整金額',
+                        'rules'   => 'trim|numeric|max_length[9]'
+                ),
+              array(
+                        'field'   => 'ci_contract_st',
+                        'label'   => '契約開始日',
+                        'rules'   => 'trim|required|regex_match[/^\d{4}-\d{1,2}-\d{1,2}+$/]|max_length[10]'
+                ),
+                array(
+                        'field'   => 'ci_contract_end',
                         'label'   => '契約終了(予定)日',
-                        'rules'   => 'trim|regex_match[/^\d{4}-\d{1,2}-\d{1,2}+$/]|max_length[10]'
+                        'rules'   => 'trim|required|regex_match[/^\d{4}-\d{1,2}-\d{1,2}+$/]|max_length[10]'
                 ),
                 array(
                         'field'   => 'ci_comment',

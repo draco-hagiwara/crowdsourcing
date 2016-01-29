@@ -96,7 +96,8 @@ class Login extends MY_Controller
                 array(
                         'field'   => 'cm_password',
                         'label'   => 'パスワード',
-                        'rules'   => 'trim|required|regex_match[/^[\x21-\x7e]+$/]|min_length[8]|max_length[50]'
+                        'rules'   => 'trim|required|regex_match[/^[\x21-\x7e]+$/]|max_length[50]'
+                        //'rules'   => 'trim|required|regex_match[/^[\x21-\x7e]+$/]|min_length[8]|max_length[50]'
                 ),
         );
 

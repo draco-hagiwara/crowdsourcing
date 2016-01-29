@@ -41,7 +41,7 @@ class Comm_auth extends CI_Model
                 // レコードチェック
                 if ($query->num_rows() == 0)
                 {
-                    $err_mess = '入力されたログインID（メールアドレス）は登録されていません。';
+                    $err_mess = '入力されたログインID（メールアドレス）またはパスワードが間違っています。';
                     return $err_mess;
                 }
 
@@ -61,7 +61,7 @@ class Comm_auth extends CI_Model
                     $res = $this->_check_password($password);
                     if ($res == TRUE)
                     {
-                        $err_mess = '入力されたパスワードが誤っています。';
+                        $err_mess = '入力されたログインID（メールアドレス）またはパスワードが間違っています。';
                         return $err_mess;
                     } else {
                         $this->_memberID    = $arrData[0]['wr_id'];
@@ -89,7 +89,7 @@ class Comm_auth extends CI_Model
                 // レコードチェック
                 if ($query->num_rows() == 0)
                 {
-                    $err_mess = '入力されたログインID（メールアドレス）は登録されていません。';
+                    $err_mess = '入力されたログインID（メールアドレス）またはパスワードが間違っています。';
                     return $err_mess;
                 }
 
@@ -109,7 +109,7 @@ class Comm_auth extends CI_Model
                     $res = $this->_check_password($password);
                     if ($res == TRUE)
                     {
-                        $err_mess = '入力されたパスワードが誤っています。';
+                        $err_mess = '入力されたログインID（メールアドレス）またはパスワードが間違っています。';
                         return $err_mess;
                     } else {
                         $this->_memberID    = $arrData[0]['cl_id'];
@@ -140,7 +140,7 @@ class Comm_auth extends CI_Model
                 // レコードチェック
                 if ($query->num_rows() == 0)
                 {
-                    $err_mess = '入力されたログインID（メールアドレス）は登録されていません。';
+                    $err_mess = '入力されたログインID（メールアドレス）またはパスワードが間違っています。';
                     return $err_mess;
                 }
 
@@ -163,7 +163,7 @@ class Comm_auth extends CI_Model
                         $res = $this->_check_password($password);
                         if ($res == TRUE)
                         {
-                            $err_mess = '入力されたパスワードが誤っています。';
+                            $err_mess = '入力されたログインID（メールアドレス）またはパスワードが間違っています。';
                             return $err_mess;
                         } else {
                             $this->_hash_passwd = $arrData[0]['cl_password'];

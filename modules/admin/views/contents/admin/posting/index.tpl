@@ -143,7 +143,8 @@
                 <td>
                     {$list.pj_en_id}<br>
                     {if $list.pj_entry_status == "1"}<font color="#ffffff" style="background-color:hotpink">ｴﾝﾄﾘｰ</font>
-                    {else}
+                    {elseif $list.pj_entry_status == "0"}―
+                    {elseif $list.pj_entry_status == "2"}<font color="#ffffff" style="background-color:navy">予約</font>
                     {/if}
                 </td>
                 <td>
@@ -159,6 +160,7 @@
                         {elseif $list.pj_work_status == "7"}<font color="#ffffff" style="background-color:whitesmoke">ライターキャンセル</font>
                         {else}エラー
                         {/if}
+                    {else}―
                     {/if}
                 </td>
                 <td style="width: 450px; max-width: 450px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">

@@ -29,6 +29,12 @@
     </div>
   </div>
   <div class="form-group">
+    <label for="wr_pay_limit_date" class="col-sm-3 control-label">入金締日設定</label>
+    <div class="col-sm-4">
+      {form_dropdown('wr_pay_limit_date', $options_paylimit, {$writer_info.wr_pay_limit_date})}
+    </div>
+  </div>
+  <div class="form-group">
     <label for="wr_name" class="col-sm-3 control-label">お名前</label>
     <div class="col-sm-4">
       {$writer_info.wr_name01} {$writer_info.wr_name02}

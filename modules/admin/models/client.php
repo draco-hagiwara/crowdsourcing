@@ -185,19 +185,19 @@ class Client extends CI_Model
     {
 
         // 「手数料率」「月額固定」「契約日」のセット
-        if (!empty($set_data['ci_agreement_st']))
-        {
-            $set_data['ci_agreement_st']  = $set_data['ci_agreement_st'];
-        } else {
-            $set_data['ci_agreement_st']  = NULL;
-        }
-        if (!empty($set_data['ci_agreement_end']))
-        {
-            $set_data['ci_agreement_end']  = $set_data['ci_agreement_end'];
-        } else {
-            $set_data['ci_agreement_end']  = NULL;
-        }
-        $set_data['ci_comment']       = $set_data['ci_comment'];
+        //if (!empty($set_data['ci_agreement_st']))
+        //{
+        //    $set_data['ci_agreement_st']  = $set_data['ci_agreement_st'];
+        //} else {
+        //    $set_data['ci_agreement_st']  = NULL;
+        //}
+        //if (!empty($set_data['ci_agreement_end']))
+        //{
+        //    $set_data['ci_agreement_end']  = $set_data['ci_agreement_end'];
+        //} else {
+        //    $set_data['ci_agreement_end']  = NULL;
+        //}
+        //$set_data['ci_comment']       = $set_data['ci_comment'];
 
         // 更新日時をセット
         $time = time();

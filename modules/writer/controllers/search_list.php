@@ -54,7 +54,7 @@ class Search_list extends MY_Controller
 
         // 案件情報のリスト＆件数を取得
         $this->load->model('Project', 'pj', TRUE);
-        list($order_list, $order_countall) = $this->pj->get_orderlist($this->input->post(), $tmp_per_page, $tmp_offset);
+        list($order_list, $order_countall) = $this->pj->get_genrelist($this->input->post(), $tmp_per_page, $tmp_offset);
 
         // 文字単価＆文字数 計算
         $this->load->model('Tanka', 'tanka', TRUE);
@@ -146,7 +146,7 @@ class Search_list extends MY_Controller
 
         // 案件情報のリスト＆件数を取得
         $this->load->model('Project', 'pj', TRUE);
-        list($order_list, $order_countall) = $this->pj->get_orderlist($tmp_inputpost, $tmp_per_page, $tmp_offset);
+        list($order_list, $order_countall) = $this->pj->get_genrelist($tmp_inputpost, $tmp_per_page, $tmp_offset);
 
         // 文字単価 計算
         $this->load->model('Tanka', 'tanka', TRUE);
@@ -219,7 +219,7 @@ class Search_list extends MY_Controller
 
         // 案件情報のリスト＆件数を取得
         $this->load->model('Project', 'pj', TRUE);
-        list($order_list, $order_countall) = $this->pj->get_orderlist($tmp_inputpost, $tmp_per_page, $tmp_offset);
+        list($order_list, $order_countall) = $this->pj->get_genrelist($tmp_inputpost, $tmp_per_page, $tmp_offset);
 
         // 文字単価 計算
         $this->load->model('Tanka', 'tanka', TRUE);

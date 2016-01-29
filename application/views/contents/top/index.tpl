@@ -9,6 +9,23 @@
 <!--Body content-->
 
 
+
+
+
+{form_open('/top/daily_backup/' , 'name="searchForm" class="form-horizontal"')}
+  <div class="form-group">
+    <div class="col-sm-offset-4 col-sm-8">
+      {$attr['name'] = 'submit'}
+      {$attr['type'] = 'submit'}
+      {form_button($attr , '確　　認' , 'class="btn btn-default"')}
+    </div>
+  </div>
+{form_close()}
+
+
+
+
+
 {if $login_chk == TRUE}
 
   <br><br>
